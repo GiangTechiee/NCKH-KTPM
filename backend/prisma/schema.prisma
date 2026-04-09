@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Student {
+  id                   BigInt                    @id @default(autoincrement())
+  studentCode          String                    @unique(map: "sinh_vien_ma_sinh_vien_key") @map("ma_sinh_vien") @db.VarChar(20)
+  fullName             String                    @map("ho_ten") @db.VarChar(100)
+  email                String                    @unique(map: "sinh_vien_email_key") @db.VarChar(100)
+  className            String?                   @map("ten_lop") @db.VarChar(50)
+  facultyName          String?                   @map("ten_khoa") @db.VarChar(100)
+  phone                String?                   @map("so_dien_thoai") @db.VarChar(20)
+  createdAt            DateTime                  @default(now()) @map("ngay_tao")
+  updatedAt            DateTime                  @default(now()) @map("ngay_cap_nhat")
+  ledResearchGroups    ResearchGroup[]           @relation("ResearchGroupLeader")
+  researchGroupMembers ResearchGroupMember[]
+  areaRegistrations    StudentAreaRegistration[]
+
+  @@index([studentCode], map: "idx_sinh_vien_ma_sinh_vien")
+  @@map("sinh_vien")
+}
+
+model Lecturer {
+  id                BigInt          @id @default(autoincrement())
+  lecturerCode      String          @unique(map: "giang_vien_ma_giang_vien_key") @map("ma_giang_vien") @db.VarChar(20)
+  fullName          String          @map("ho_ten") @db.VarChar(100)
+  email             String          @unique(map: "giang_vien_email_key") @db.VarChar(100)
+  departmentName    String?         @map("ten_bo_mon") @db.VarChar(100)
+  specialization    String?         @map("chuyen_mon") @db.VarChar(255)
+  maxGroupQuota     Int             @default(0) @map("so_nhom_huong_dan_toi_da")
+  currentGroupCount Int             @default(0) @map("so_nhom_dang_huong_dan")
+  createdAt         DateTime        @default(now()) @map("ngay_tao")
+  updatedAt         DateTime        @default(now()) @map("ngay_cap_nhat")
+  researchGroups    ResearchGroup[]
+  researchTopics    ResearchTopic[]
+
+  @@index([lecturerCode], map: "idx_giang_vien_ma_giang_vien")
+  @@map("giang_vien")
+}
+
+model ResearchArea {
+  id                       BigInt                    @id @default(autoincrement())
+  areaCode                 String                    @unique(map: "mang_nghien_cuu_ma_mang_key") @map("ma_mang") @db.VarChar(20)
+  areaName                 String                    @unique(map: "mang_nghien_cuu_ten_mang_key") @map("ten_mang") @db.VarChar(100)
+  description              String?                   @map("mo_ta")
+  registrationStart        DateTime                  @map("thoi_gian_mo_dang_ky")
+  registrationEnd          DateTime                  @map("thoi_gian_dong_dang_ky")
+  status                   String                    @map("trang_thai") @db.VarChar(20)
+  createdAt                DateTime                  @default(now()) @map("ngay_tao")
+  updatedAt                DateTime                  @default(now()) @map("ngay_cap_nhat")
+  researchGroups           ResearchGroup[]
+  studentAreaRegistrations StudentAreaRegistration[]
+
+  @@index([status], map: "idx_mang_nghien_cuu_trang_thai")
+  @@map("mang_nghien_cuu")
+}
+
+model StudentAreaRegistration {
+  id             BigInt       @id @default(autoincrement())
+  studentId      BigInt       @map("sinh_vien_id")
+  researchAreaId BigInt       @map("mang_nghien_cuu_id")
+  registeredAt   DateTime     @default(now()) @map("thoi_gian_dang_ky")
+  status         String       @default("REGISTERED") @map("trang_thai") @db.VarChar(20)
+  createdAt      DateTime     @default(now()) @map("ngay_tao")
+  updatedAt      DateTime     @default(now()) @map("ngay_cap_nhat")
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade, map: "fk_svdkm_sinh_vien")
+  researchArea   ResearchArea @relation(fields: [researchAreaId], references: [id], onDelete: Cascade, map: "fk_svdkm_mang_nghien_cuu")
+
+  @@index([researchAreaId], map: "sinh_vien_dang_ky_mang_mang_nghien_cuu_id_idx")
+  @@map("sinh_vien_dang_ky_mang")
+}
+
+model ResearchGroup {
+  id                   BigInt                @id @default(autoincrement())
+  groupName            String                @map("ten_nhom") @db.VarChar(100)
+  researchAreaId       BigInt                @map("mang_nghien_cuu_id")
+  leaderStudentId      BigInt                @map("truong_nhom_sinh_vien_id")
+  lecturerId           BigInt?               @map("giang_vien_id")
+  status               String                @default("FORMING") @map("trang_thai") @db.VarChar(30)
+  memberCount          Int                   @default(1) @map("so_luong_thanh_vien")
+  createdAt            DateTime              @default(now()) @map("ngay_tao")
+  updatedAt            DateTime              @default(now()) @map("ngay_cap_nhat")
+  researchArea         ResearchArea          @relation(fields: [researchAreaId], references: [id], onDelete: Restrict, map: "fk_nnc_mang")
+  leader               Student               @relation("ResearchGroupLeader", fields: [leaderStudentId], references: [id], onDelete: Restrict, map: "fk_nnc_truong_nhom")
+  lecturer             Lecturer?             @relation(fields: [lecturerId], references: [id], onDelete: SetNull, map: "fk_nnc_giang_vien")
+  researchGroupMembers ResearchGroupMember[]
+  researchTopic        ResearchTopic?
+
+  @@unique([researchAreaId, groupName], map: "uq_ten_nhom_trong_mot_mang")
+  @@index([status], map: "idx_nhom_nghien_cuu_trang_thai")
+  @@index([lecturerId], map: "idx_nhom_nghien_cuu_giang_vien_id")
+  @@map("nhom_nghien_cuu")
+}
+
+model ResearchGroupMember {
+  id              BigInt        @id @default(autoincrement())
+  researchGroupId BigInt        @map("nhom_nghien_cuu_id")
+  studentId       BigInt        @map("sinh_vien_id")
+  role            String        @map("vai_tro") @db.VarChar(20)
+  joinStatus      String        @default("PENDING") @map("trang_thai_tham_gia") @db.VarChar(20)
+  joinedAt        DateTime?     @map("thoi_gian_tham_gia")
+  createdAt       DateTime      @default(now()) @map("ngay_tao")
+  updatedAt       DateTime      @default(now()) @map("ngay_cap_nhat")
+  researchGroup   ResearchGroup @relation(fields: [researchGroupId], references: [id], onDelete: Cascade, map: "fk_tvnnc_nhom")
+  student         Student       @relation(fields: [studentId], references: [id], onDelete: Cascade, map: "fk_tvnnc_sinh_vien")
+
+  @@unique([researchGroupId, studentId], map: "uq_nhom_sinh_vien")
+  @@index([joinStatus], map: "idx_thanh_vien_nhom_trang_thai_tham_gia")
+  @@map("thanh_vien_nhom_nghien_cuu")
+}
+
+model ResearchTopic {
+  id                   BigInt        @id @default(autoincrement())
+  researchGroupId      BigInt        @unique(map: "uq_moi_nhom_mot_de_tai") @map("nhom_nghien_cuu_id")
+  lecturerId           BigInt        @map("giang_vien_id")
+  topicTitle           String        @map("ten_de_tai") @db.VarChar(255)
+  topicType            String        @map("loai_de_tai") @db.VarChar(30)
+  problemDescription   String        @map("mo_ta_van_de")
+  researchObjective    String        @map("muc_tieu_nghien_cuu")
+  practicalApplication String?       @map("ung_dung_thuc_tien")
+  scopeDescription     String?       @map("pham_vi_nghien_cuu")
+  technologies         String?       @map("cong_nghe_su_dung")
+  reasonForSelection   String?       @map("ly_do_lua_chon")
+  lecturerFeedback     String?       @map("nhan_xet_giang_vien")
+  revisionNote         String?       @map("ghi_chu_chinh_sua")
+  revisionCount        Int           @default(0) @map("so_lan_chinh_sua")
+  status               String        @default("DRAFT") @map("trang_thai") @db.VarChar(30)
+  submittedAt          DateTime?     @map("thoi_gian_nop")
+  approvedAt           DateTime?     @map("thoi_gian_duyet")
+  finalizedAt          DateTime?     @map("thoi_gian_chot")
+  revisionDeadline     DateTime?     @map("han_chinh_sua")
+  createdAt            DateTime      @default(now()) @map("ngay_tao")
+  updatedAt            DateTime      @default(now()) @map("ngay_cap_nhat")
+  researchGroup        ResearchGroup @relation(fields: [researchGroupId], references: [id], onDelete: Cascade, map: "fk_dtnc_nhom")
+  lecturer             Lecturer      @relation(fields: [lecturerId], references: [id], onDelete: Restrict, map: "fk_dtnc_giang_vien")
+
+  @@index([status], map: "idx_de_tai_nghien_cuu_trang_thai")
+  @@index([lecturerId], map: "idx_de_tai_nghien_cuu_giang_vien_id")
+  @@map("de_tai_nghien_cuu")
+}
