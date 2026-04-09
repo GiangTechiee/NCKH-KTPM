@@ -91,16 +91,16 @@ Cách tổ chức này phù hợp với:
 [Backend API Server]
     |
     +--> [Auth & Access Control]
-    +--> [Research Area Module]
-    +--> [Research Group Module]
-    +--> [Matching Module]
-    +--> [Lecturer Assignment Module]
-    +--> [Topic Proposal Module]
-    +--> [Topic Submission Module]
-    +--> [Topic Review Module]
-    +--> [Workflow Module]
-    +--> [Notification Module]
-    +--> [Audit Log Module]
+    +--> [Module Dang Ky Mang Nghien Cuu]
+    +--> [Module Nhom Nghien Cuu]
+    +--> [Module Ghep Nhom]
+    +--> [Module Phan Cong Giang Vien]
+    +--> [Module De Tai De Xuat]
+    +--> [Module Nop De Tai]
+    +--> [Module Duyet De Tai]
+    +--> [Module Trang Thai Quy Trinh]
+    +--> [Module Thong Bao]
+    +--> [Module Nhat Ky Kiem Toan]
     |
     v
 [Relational Database]
@@ -248,18 +248,18 @@ Backend nên dùng kiến trúc phân lớp theo module:
 ```text
 src/
   modules/
-    auth/
-    users/
-    research-area/
-    research-group/
-    matching/
-    lecturer-assignment/
-    topic-proposal/
-    topic-submission/
-    topic-review/
-    workflow/
-    notification/
-    audit-log/
+    xac-thuc/
+    nguoi-dung/
+    dang-ky-mang-nghien-cuu/
+    nhom-nghien-cuu/
+    ghep-nhom/
+    phan-cong-giang-vien/
+    de-tai-de-xuat/
+    nop-de-tai/
+    duyet-de-tai/
+    trang-thai-quy-trinh/
+    thong-bao/
+    nhat-ky-kiem-toan/
   common/
     base/
     exceptions/
@@ -278,7 +278,7 @@ src/
 Ví dụ:
 
 ```text
-research-group/
+nhom-nghien-cuu/
   controllers/
   services/
   repositories/
@@ -311,7 +311,7 @@ research-group/
 
 ## 9. Phân rã module nghiệp vụ chính
 
-# 9.1. Auth Module
+# 9.1. Module xác thực
 ### Trách nhiệm
 - xác thực người dùng
 - gắn thông tin người dùng vào request
@@ -322,7 +322,7 @@ Module này là nền tảng, không phải trọng tâm nghiệp vụ, nhưng c
 
 ---
 
-# 9.2. Research Area Module
+# 9.2. Module đăng ký mảng nghiên cứu
 ### Trách nhiệm
 - quản lý danh sách mảng nghiên cứu
 - quản lý đợt đăng ký mảng
@@ -335,7 +335,7 @@ Module này là nền tảng, không phải trọng tâm nghiệp vụ, nhưng c
 
 ---
 
-# 9.3. Research Group Module
+# 9.3. Module nhóm nghiên cứu
 ### Trách nhiệm
 - tạo nhóm
 - thêm / xóa / cập nhật thành viên
@@ -350,7 +350,7 @@ Module này là nền tảng, không phải trọng tâm nghiệp vụ, nhưng c
 
 ---
 
-# 9.4. Matching Module
+# 9.4. Module ghép nhóm
 ### Trách nhiệm
 - tìm sinh viên chưa có nhóm
 - tìm nhóm còn thiếu thành viên
@@ -362,7 +362,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.5. Lecturer Assignment Module
+# 9.5. Module phân công giảng viên
 ### Trách nhiệm
 - cho giảng viên xem nhóm ứng viên
 - cho giảng viên nhận hướng dẫn
@@ -374,7 +374,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.6. Topic Proposal Module
+# 9.6. Module đề tài đề xuất
 ### Trách nhiệm
 - cho giảng viên tạo các đề tài đề xuất
 - quản lý danh sách đề tài đề xuất theo nhóm hoặc theo mảng
@@ -382,7 +382,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.7. Topic Submission Module
+# 9.7. Module nộp đề tài
 ### Trách nhiệm
 - cho nhóm chọn đề tài do giảng viên đề xuất
 - cho nhóm tự đề xuất đề tài riêng
@@ -394,7 +394,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.8. Topic Review Module
+# 9.8. Module duyệt đề tài
 ### Trách nhiệm
 - cho giảng viên duyệt đề tài
 - yêu cầu chỉnh sửa
@@ -404,7 +404,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.9. Workflow Module
+# 9.9. Module trạng thái quy trình
 ### Trách nhiệm
 - tính toán và trả trạng thái tiến trình
 - cung cấp timeline trạng thái cho frontend
@@ -415,7 +415,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.10. Notification Module
+# 9.10. Module thông báo
 ### Trách nhiệm
 - tạo thông báo nội bộ
 - trả danh sách thông báo cho người dùng
@@ -424,7 +424,7 @@ Module này chỉ **gợi ý**, không tự động ép ghép.
 
 ---
 
-# 9.11. Audit Log Module
+# 9.11. Module nhật ký kiểm toán
 ### Trách nhiệm
 - ghi nhật ký thao tác
 - lưu trạng thái cũ / mới nếu cần

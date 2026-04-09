@@ -20,8 +20,8 @@
 | ORM | Prisma |
 
 **Tài liệu tham chiếu bắt buộc:**
-- `kien_truc_he_thong_agent_coding.md` — kiến trúc tổng thể
-- `phan_tich_thiet_ke_luong_backend_frontend.md` — phân tích & thiết kế luồng nghiệp vụ
+- `kien_truc_he_thong_lap_trinh.md` — kiến trúc tổng thể
+- `phan_tich_thiet_ke_luong_ung_dung.md` — phân tích & thiết kế luồng nghiệp vụ
 
 ---
 
@@ -102,7 +102,7 @@ Mọi trạng thái phải được định nghĩa bằng **enum rõ ràng**.
 
 | Loại | Quy ước | Ví dụ |
 |---|---|---|
-| Module backend | danh từ nghiệp vụ | `research-group`, `topic-review` |
+| Module backend | danh từ nghiệp vụ, tiếng Việt không dấu, kebab-case | `nhom-nghien-cuu`, `duyet-de-tai` |
 | Service | `<ModuleName>Service` | `ResearchGroupService` |
 | Repository | `<EntityName>Repository` | `GroupInvitationRepository` |
 | DTO | `<Action><Entity>Dto` | `CreateGroupDto`, `SubmitTopicDto` |
@@ -132,18 +132,18 @@ Mọi trạng thái phải được định nghĩa bằng **enum rõ ràng**.
 ```
 src/
   modules/
-    auth/
-    users/
-    research-area/
-    research-group/
-    matching/
-    lecturer-assignment/
-    topic-proposal/
-    topic-submission/
-    topic-review/
-    workflow/
-    notification/
-    audit-log/
+    xac-thuc/
+    nguoi-dung/
+    dang-ky-mang-nghien-cuu/
+    nhom-nghien-cuu/
+    ghep-nhom/
+    phan-cong-giang-vien/
+    de-tai-de-xuat/
+    nop-de-tai/
+    duyet-de-tai/
+    trang-thai-quy-trinh/
+    thong-bao/
+    nhat-ky-kiem-toan/
   common/
     exceptions/
     guards/
@@ -159,13 +159,13 @@ src/
 ### 4.2. Cấu trúc bên trong mỗi module
 
 ```
-research-group/
+nhom-nghien-cuu/
   controllers/
-    research-group.controller.ts
+    nhom-nghien-cuu.controller.ts
   services/
-    research-group.service.ts
+    nhom-nghien-cuu.service.ts
   repositories/
-    research-group.repository.ts
+    nhom-nghien-cuu.repository.ts
   dto/
     create-group.dto.ts
     update-group.dto.ts
@@ -599,8 +599,8 @@ Bạn có xác nhận không?
 
 | Tài liệu | Mục đích |
 |---|---|
-| `kien_truc_he_thong_agent_coding.md` | Kiến trúc tổng thể, module, nguyên tắc, state machine |
-| `phan_tich_thiet_ke_luong_backend_frontend.md` | Use case chi tiết, luồng frontend/backend, business rules |
+| `kien_truc_he_thong_lap_trinh.md` | Kiến trúc tổng thể, module, nguyên tắc, state machine |
+| `phan_tich_thiet_ke_luong_ung_dung.md` | Use case chi tiết, luồng frontend/backend, business rules |
 
 > Khi có bất kỳ mâu thuẫn nào, ưu tiên hỏi chủ dự án hơn là tự suy luận.
 

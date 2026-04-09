@@ -1,4 +1,4 @@
-# Frontend React Project
+# Hướng dẫn Frontend React
 
 ## Cài đặt
 
@@ -27,13 +27,13 @@ frontend/
 ├── public/
 │   └── index.html
 ├── src/
-│   ├── App.js
-│   ├── App.css
+│   ├── UngDung.js
+│   ├── ung_dung.css
 │   ├── index.js
 │   └── index.css
 ├── package.json
 ├── .gitignore
-└── README.md
+└── huong_dan_frontend.md
 ```
 
 ## Kết nối với Backend

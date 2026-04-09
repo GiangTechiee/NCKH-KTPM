@@ -164,7 +164,7 @@ Thiết kế này vẫn giữ tinh thần của báo cáo gốc: hệ thống qu
 1. Module quản lý đợt đăng ký  
 2. Module quản lý mảng nghiên cứu  
 3. Module quản lý nhóm  
-4. Module matching / gợi ý ghép nhóm  
+4. Module ghép nhóm / gợi ý ghép nhóm  
 5. Module phân công giảng viên  
 6. Module quản lý đề tài đề xuất  
 7. Module đăng ký đề tài nhóm  
@@ -822,15 +822,15 @@ Mỗi feature gồm:
 ## 15.2. Backend
 Có thể chia module:
 - `research-area`
-- `group`
-- `matching`
-- `lecturer-assignment`
-- `topic-proposal`
-- `topic-submission`
-- `topic-review`
-- `workflow`
-- `notification`
-- `audit`
+- `nhom-nghien-cuu`
+- `ghep-nhom`
+- `phan-cong-giang-vien`
+- `de-tai-de-xuat`
+- `nop-de-tai`
+- `duyet-de-tai`
+- `trang-thai-quy-trinh`
+- `thong-bao`
+- `nhat-ky-kiem-toan`
 
 Mỗi module gồm:
 - controller
