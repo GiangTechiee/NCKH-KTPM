@@ -1,0 +1,11 @@
+const MAX_GROUP_MEMBERS = 3;
+
+const TOPIC_SOURCE = Object.freeze({
+  GIANG_VIEN_DE_XUAT: 'GIANG_VIEN_DE_XUAT',
+  NHOM_DE_XUAT: 'NHOM_DE_XUAT',
+});
+
+module.exports = {
+  MAX_GROUP_MEMBERS,
+  TOPIC_SOURCE,
+};

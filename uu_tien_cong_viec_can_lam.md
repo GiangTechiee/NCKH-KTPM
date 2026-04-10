@@ -119,13 +119,13 @@ Bạn có xác nhận cho tôi tiến hành không?
 
 ## 4. Công việc ưu tiên cao nhất
 
-## [ ] Ưu tiên 1: Hoàn thiện nền tảng backend
+## [~] Ưu tiên 1: Hoàn thiện nền tảng backend
 
 Đây là phần cần làm đầu tiên vì toàn bộ business rule phải nằm ở backend.
 
-### [ ] Việc cần làm
+### [~] Việc cần làm
 
-- [ ] Chuẩn hóa cấu trúc backend theo module:
+- [x] Chuẩn hóa cấu trúc backend theo module:
   - `xac-thuc`
   - `nguoi-dung`
   - `dang-ky-mang-nghien-cuu`
@@ -138,22 +138,22 @@ Bạn có xác nhận cho tôi tiến hành không?
   - `trang-thai-quy-trinh`
   - `thong-bao`
   - `nhat-ky-kiem-toan`
-- [ ] Tạo `common` cho exception, middleware, utils, constants.
-- [ ] Tạo Prisma client singleton trong `infrastructure/database`.
-- [ ] Chuẩn hóa response format thành:
+- [x] Tạo `common` cho exception, middleware, utils, constants.
+- [x] Tạo Prisma client singleton trong `infrastructure/database`.
+- [x] Chuẩn hóa response format thành:
   - `success`
   - `message`
   - `data`
   - `errors`
-- [ ] Tạo error handling thống nhất.
-- [ ] Tạo constants/enums tập trung để tránh hard-code string.
-- [ ] Nếu được xác nhận, chuyển backend sang TypeScript ngay từ đầu.
+- [x] Tạo error handling thống nhất.
+- [x] Tạo constants/enums tập trung để tránh hard-code string.
+- [!] Nếu được xác nhận, chuyển backend sang TypeScript ngay từ đầu.
 
-### [ ] Kết quả mong muốn
+### [~] Kết quả mong muốn
 
-- [ ] Backend có khung chuẩn để phát triển tiếp.
-- [ ] Không còn viết API kiểu dồn toàn bộ logic vào một file.
-- [ ] Có nền rõ ràng cho controller -> service -> repository.
+- [x] Backend có khung chuẩn để phát triển tiếp.
+- [x] Không còn viết API kiểu dồn toàn bộ logic vào một file.
+- [x] Có nền rõ ràng cho controller -> service -> repository.
 
 ---
 
