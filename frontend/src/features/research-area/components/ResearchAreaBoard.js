@@ -4,9 +4,11 @@ import SelectedAreaBanner from './SelectedAreaBanner';
 
 function ResearchAreaBoard({
   areas,
+  areaStatusFilter,
   canCancelRegistration,
   closeAt,
   onAreaQueryChange,
+  onAreaStatusFilterChange,
   onCancelRegistration,
   onRefresh,
   onSelectArea,
@@ -37,6 +39,15 @@ function ResearchAreaBoard({
               onChange={(event) => onAreaQueryChange(event.target.value)}
             />
           </label>
+
+          <select
+            value={areaStatusFilter}
+            onChange={(event) => onAreaStatusFilterChange(event.target.value)}
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 outline-none transition hover:bg-slate-100"
+          >
+            <option value="ALL">Tất cả mảng</option>
+            <option value="SAP_DONG">Sắp đóng (≤ 3 ngày)</option>
+          </select>
 
           <button
             type="button"

@@ -12,6 +12,7 @@ export function useResearchArea(studentCode) {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [areaQuery, setAreaQuery] = useState('');
+  const [areaStatusFilter, setAreaStatusFilter] = useState('ALL');
   const [selectedAreaId, setSelectedAreaId] = useState('');
 
   const loadJourney = useCallback(async () => {
@@ -34,6 +35,7 @@ export function useResearchArea(studentCode) {
   useEffect(() => {
     setSelectedAreaId('');
     setAreaQuery('');
+    setAreaStatusFilter('ALL');
     setJourney(null);
   }, [studentCode]);
 
@@ -47,13 +49,20 @@ export function useResearchArea(studentCode) {
     }
 
     const normalizedQuery = areaQuery.trim().toLowerCase();
+    const now = Date.now();
+    const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
     const matchingAreas = journey.researchAreas.filter((area) => {
       const searchable = `${area.title} ${area.shortCode} ${area.description}`.toLowerCase();
-      if (!normalizedQuery) {
-        return true;
+      if (normalizedQuery && !searchable.includes(normalizedQuery)) {
+        return false;
       }
 
-      return searchable.includes(normalizedQuery);
+      if (areaStatusFilter === 'SAP_DONG') {
+        const closeTime = new Date(area.closeAt).getTime();
+        return closeTime - now <= THREE_DAYS_MS && closeTime >= now;
+      }
+
+      return true;
     });
 
     return [...matchingAreas].sort((areaA, areaB) => {
@@ -67,7 +76,7 @@ export function useResearchArea(studentCode) {
 
       return areaA.title.localeCompare(areaB.title, 'vi');
     });
-  }, [areaQuery, journey, selectedAreaId]);
+  }, [areaQuery, areaStatusFilter, journey, selectedAreaId]);
 
   const selectedArea = useMemo(() => {
     if (!journey) {
@@ -151,7 +160,9 @@ export function useResearchArea(studentCode) {
     selectedAreaId,
     successMessage,
     summary,
+    areaStatusFilter,
     onAreaQueryChange: setAreaQuery,
+    onAreaStatusFilterChange: setAreaStatusFilter,
     onCancelAreaRegistration: handleCancelAreaRegistration,
     onConfirmAreaRegistration: handleConfirmAreaRegistration,
     onRefresh: loadJourney,

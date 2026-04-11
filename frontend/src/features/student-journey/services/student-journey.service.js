@@ -221,6 +221,7 @@ function mapStudentTopicOverview(payload) {
     permissions: {
       canSubmit: Boolean(payload.quyenThaoTac?.coTheNop),
       canEdit: Boolean(payload.quyenThaoTac?.coTheChinhSua),
+      canDelete: Boolean(payload.quyenThaoTac?.coTheXoa),
     },
   };
 }
@@ -245,14 +246,23 @@ function taoPayloadDeTai(topicDraft) {
   };
 }
 
-async function nopDeTai(studentCode, topicDraft) {
-  return apiClient.postJson('/api/nop-de-tai/nop-de-tai', taoPayloadDeTai(topicDraft), {
+async function nopDeTai(studentCode, topicDraft, xacNhanChuyenDeTai = false) {
+  return apiClient.postJson('/api/nop-de-tai/nop-de-tai', {
+    ...taoPayloadDeTai(topicDraft),
+    xacNhanChuyenDeTai,
+  }, {
     headers: taoHeadersSinhVien(studentCode),
   });
 }
 
 async function capNhatDeTai(studentCode, topicId, topicDraft) {
   return apiClient.putJson(`/api/nop-de-tai/nop-de-tai/${topicId}`, taoPayloadDeTai(topicDraft), {
+    headers: taoHeadersSinhVien(studentCode),
+  });
+}
+
+async function xoaDeTai(studentCode, topicId) {
+  return apiClient.deleteJson(`/api/nop-de-tai/nop-de-tai/${topicId}`, {
     headers: taoHeadersSinhVien(studentCode),
   });
 }
@@ -287,10 +297,10 @@ async function layDanhSachDeTaiDeXuat(studentCode) {
   return (response.data || []).map(mapProposedTopic);
 }
 
-async function chonDeTaiDeXuat(studentCode, proposedTopicId) {
+async function chonDeTaiDeXuat(studentCode, proposedTopicId, xacNhanChuyenDeTai = false) {
   return apiClient.postJson(
     `/api/de-tai-de-xuat/${proposedTopicId}/chon`,
-    {},
+    { xacNhanChuyenDeTai },
     {
       headers: taoHeadersSinhVien(studentCode),
     }
@@ -457,6 +467,7 @@ export {
   taoNhomNghienCuu,
   tuChoiDeTai,
   tuChoiLoiMoi,
+  xoaDeTai,
   xoaNhom,
   yeuCauChinhSuaDeTai,
 };

@@ -875,6 +875,7 @@ Mỗi module gồm:
 - TopicProposalList
 - TopicSubmissionForm
 - TopicStatusBanner
+- TopicSubTabs (`Đề tài giảng viên đề xuất` / `Tự đề xuất đề tài`)
 
 ### Chỉnh sửa đề tài
 - TopicEditorForm
@@ -897,6 +898,15 @@ Mỗi module gồm:
 ## 17. Kịch bản end-to-end tổng thể
 
 1. Sinh viên vào hệ thống và chọn mảng nghiên cứu.
+
+## 17.1. Ghi chú cập nhật cho luồng đề tài
+
+- Trong trang **Đề tài nghiên cứu**, giao diện nên tách 2 tab con:
+  - **Đề tài giảng viên đề xuất**
+  - **Tự đề xuất đề tài**
+- **Đề tài giảng viên đề xuất** được lấy từ catalog riêng theo giảng viên hướng dẫn và mảng nghiên cứu.
+- Khi nhóm đang có đề tài ở trạng thái chưa chốt mà muốn đổi sang loại đề tài còn lại, hệ thống phải yêu cầu **modal xác nhận chuyển đề tài** trước khi thực hiện.
+- Dữ liệu đề tài giảng viên đề xuất không nên lưu trực tiếp như đề tài hiện tại của nhóm; cần tách riêng khỏi bản ghi đề tài đang sở hữu của nhóm.
 2. Sinh viên tạo nhóm hoặc tham gia nhóm cùng mảng.
 3. Nếu nhóm chưa đủ người, hệ thống gợi ý các sinh viên phù hợp.
 4. Giảng viên xem danh sách nhóm và nhận hướng dẫn một nhóm phù hợp.

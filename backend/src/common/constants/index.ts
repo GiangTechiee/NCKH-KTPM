@@ -7,6 +7,7 @@ export {
   InvitationStatus,
   GroupMemberRole,
   MemberJoinStatus,
+  TopicCatalogStatus,
   TopicSource,
   RegistrationStatus,
   ResearchAreaStatus,

@@ -156,6 +156,7 @@ function App() {
   } = useAccountSelector();
 
   const [activeNavId, setActiveNavId] = useState('research-area');
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const studentJourney = useStudentJourneyDemo(selectedStudentCode);
   const {
@@ -163,15 +164,16 @@ function App() {
     createGroupName,
     filteredCandidates,
     group,
+    groupAction,
     groupErrorMessage,
     inviteStudentCode,
-    isSubmitting,
     matching,
     matchingAction,
     matchingErrorMessage,
     proposedTopics,
     selectedAreaTitle,
     successMessage,
+    topicAction,
     topicDraft,
     topicErrorMessage,
     topicOverview,
@@ -181,6 +183,7 @@ function App() {
     onCreateGroup,
     onCreateGroupNameChange,
     onDeleteGroup,
+    onDeleteTopic,
     onInvite,
     onInviteCandidateFromMatching,
     onInviteStudentCodeChange,
@@ -228,7 +231,7 @@ function App() {
     onSelectTopic,
   } = useLecturerTopicReview(selectedRole === ROLES.LECTURER, selectedLecturerCode);
 
-  const studentProgress = useStudentProgress(selectedStudentCode, group, topicOverview);
+  const studentProgress = useStudentProgress(selectedStudentCode);
 
   const lecturerProgress = useLecturerProgress(
     selectedRole === ROLES.LECTURER ? selectedLecturerCode : ''
@@ -385,6 +388,81 @@ function App() {
   return (
     <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
       <div className="mx-auto flex max-w-[1520px] gap-0">
+        {isMobileNavOpen ? (
+          <div className="fixed inset-0 z-50 xl:hidden">
+            <div
+              className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"
+              onClick={() => setIsMobileNavOpen(false)}
+            />
+            <aside className="absolute left-0 top-0 flex h-full w-[280px] flex-col overflow-y-auto border-r border-slate-200 bg-white px-4 py-5 shadow-2xl">
+              <div className="flex items-center justify-between">
+                <div className="rounded-2xl bg-[#0b4a7a] px-4 py-3 text-white flex-1">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 text-sm font-bold">H</div>
+                    <div>
+                      <p className="text-sm font-semibold leading-tight">Hanoi Open University</p>
+                      <p className="mt-0.5 text-xs text-sky-200">Hệ thống NCKH</p>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsMobileNavOpen(false)}
+                  className="ml-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"
+                  aria-label="Đóng menu"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <nav className="mt-5 flex-1 space-y-1">
+                <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Điều hướng</p>
+                {navigationItems.map((item) => {
+                  const isActive = item.id === activeNavId;
+                  const unreadCount = getNavUnreadCount(
+                    item.id,
+                    selectedRole,
+                    ROLES,
+                    studentNotifications,
+                    lecturerNotifications
+                  );
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => { setActiveNavId(item.id); setIsMobileNavOpen(false); }}
+                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${
+                        isActive
+                          ? 'bg-[#edf5ff] text-[#0b4a7a]'
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      }`}
+                    >
+                      <NavIcon type={item.icon} />
+                      <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                      {unreadCount > 0 ? (
+                        <span
+                          className={`inline-flex min-w-[1.4rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${
+                            isActive ? 'bg-[#0b4a7a] text-white' : 'bg-rose-100 text-rose-700'
+                          }`}
+                        >
+                          {unreadCount > 99 ? '99+' : unreadCount}
+                        </span>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="mt-auto rounded-2xl bg-slate-50 px-4 py-4">
+                <p className="text-xs font-semibold text-slate-700">Hỗ trợ</p>
+                <p className="mt-1 text-xs text-slate-500">nckh@hou.edu.vn</p>
+              </div>
+            </aside>
+          </div>
+        ) : null}
+
         <aside className="hidden w-[260px] shrink-0 xl:flex xl:flex-col" style={{ position: 'sticky', top: 0, height: '100vh' }}>
           <div className="flex flex-1 flex-col overflow-y-auto border-r border-slate-200 bg-white px-4 py-5">
             <div className="rounded-2xl bg-[#0b4a7a] px-4 py-4 text-white">
@@ -509,6 +587,16 @@ function App() {
               </div>
 
               <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileNavOpen(true)}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:bg-slate-50 xl:hidden"
+                  aria-label="Mở menu điều hướng"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
                 <div className="flex items-center gap-2 xl:hidden">
                   <select
                     className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-600 outline-none"
@@ -610,7 +698,7 @@ function App() {
 
                     {activeNavId === 'research-group' ? (
                       <>
-                        <ResearchGroupBoard createGroupName={createGroupName} currentStudentCode={selectedStudentCode} group={group} inviteStudentCode={inviteStudentCode} isCreating={isSubmitting} isDeleting={isSubmitting} isInviting={isSubmitting} isLeaving={isSubmitting} onCreateGroup={onCreateGroup} onCreateGroupNameChange={onCreateGroupNameChange} onDeleteGroup={onDeleteGroup} onInvite={onInvite} onInviteStudentCodeChange={onInviteStudentCodeChange} onLeaveGroup={onLeaveGroup} studentSuggestions={matching.matchingCandidates} />
+                        <ResearchGroupBoard createGroupName={createGroupName} currentStudentCode={selectedStudentCode} group={group} inviteStudentCode={inviteStudentCode} isCreating={groupAction.type === 'create-group'} isDeleting={groupAction.type === 'delete-group' && groupAction.targetId === String(group?.id || '')} isInviting={groupAction.type === 'invite-member'} isLeaving={groupAction.type === 'leave-group' && groupAction.targetId === String(group?.id || '')} onCreateGroup={onCreateGroup} onCreateGroupNameChange={onCreateGroupNameChange} onDeleteGroup={onDeleteGroup} onInvite={onInvite} onInviteStudentCodeChange={onInviteStudentCodeChange} onLeaveGroup={onLeaveGroup} studentSuggestions={matching.matchingCandidates} />
                         {groupErrorMessage ? <p className="mt-5 text-sm text-rose-600">{groupErrorMessage}</p> : null}
                       </>
                     ) : null}
@@ -624,7 +712,7 @@ function App() {
 
                     {activeNavId === 'topic' ? (
                       <>
-                        <TopicBoard isSubmitting={isSubmitting} onChooseProposedTopic={onChooseProposedTopic} onRefresh={onLoadTopic} onSubmit={onSubmitTopic} onTopicDraftChange={onTopicDraftChange} proposedTopics={proposedTopics} topicDraft={topicDraft} topicOverview={topicOverview} />
+                        <TopicBoard isChoosingTopic={(topicId) => topicAction.type === 'choose-proposed-topic' && topicAction.targetId === String(topicId)} isDeletingTopic={topicAction.type === 'delete-topic'} isSubmittingTopic={topicAction.type === 'submit-topic' || topicAction.type === 'edit-topic'} onChooseProposedTopic={onChooseProposedTopic} onDeleteTopic={onDeleteTopic} onRefresh={onLoadTopic} onSubmit={onSubmitTopic} onTopicDraftChange={onTopicDraftChange} proposedTopics={proposedTopics} topicDraft={topicDraft} topicOverview={topicOverview} />
                         {topicErrorMessage ? <p className="mt-5 text-sm text-rose-600">{topicErrorMessage}</p> : null}
                       </>
                     ) : null}

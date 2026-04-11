@@ -1,6 +1,7 @@
 import { ValidationError } from '../../../common/exceptions';
 import { chuyenSangBigInt } from '../../../common/utils/chuyen-sang-bigint';
 import { TaoDeTaiDeXuatDto } from '../dto/tao-de-tai-de-xuat.dto';
+import { ChonDeTaiDeXuatDto } from '../types/de-tai-de-xuat.types';
 
 function layChuoiHopLe(giaTri: unknown): string {
   return typeof giaTri === 'string' ? giaTri.trim() : '';
@@ -54,4 +55,15 @@ function xacThucTaoDeTaiDeXuat(body: unknown): TaoDeTaiDeXuatDto {
   };
 }
 
-export { xacThucTaoDeTaiDeXuat };
+function xacThucChonDeTaiDeXuat(body: unknown): ChonDeTaiDeXuatDto {
+  if (!body || typeof body !== 'object') {
+    return { xacNhanChuyenDeTai: false };
+  }
+
+  const duLieu = body as Record<string, unknown>;
+  return {
+    xacNhanChuyenDeTai: duLieu.xacNhanChuyenDeTai === true,
+  };
+}
+
+export { xacThucChonDeTaiDeXuat, xacThucTaoDeTaiDeXuat };

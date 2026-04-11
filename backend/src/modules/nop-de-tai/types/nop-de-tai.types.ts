@@ -31,5 +31,6 @@ export interface DeTaiCuaToiResponse {
   quyenThaoTac: {
     coTheNop: boolean;
     coTheChinhSua: boolean;
+    coTheXoa: boolean;
   };
 }

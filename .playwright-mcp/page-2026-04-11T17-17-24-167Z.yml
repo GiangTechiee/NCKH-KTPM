@@ -1,0 +1,119 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: H
+          - generic [ref=e12]:
+            - paragraph [ref=e13]: Hanoi Open University
+            - paragraph [ref=e14]: Hệ thống NCKH
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: Vai trò
+          - combobox [ref=e17]:
+            - option "Sinh viên" [selected]
+            - option "Giảng viên"
+            - option "Quản trị viên"
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: Sinh viên
+          - combobox [ref=e20]:
+            - option "SV001 — Nguyễn Minh Anh" [selected]
+            - option "SV002 — Trần Thu Hà"
+            - option "SV003 — Lê Quang Huy"
+            - option "SV004 — Phạm Gia Hân"
+            - option "SV005 — Đỗ Đức Minh"
+            - option "SV006 — Trần Hoàng Phúc"
+            - option "SV007 — Phan Ngọc Linh"
+            - option "SV008 — Hoàng Mai Phương"
+            - option "SV009 — Nguyễn Anh Khoa"
+            - option "SV010 — Tạ Bảo Châu"
+            - option "SV011 — Phạm Ngọc An"
+            - option "SV012 — Nguyễn Hoài Thu"
+            - option "SV013 — Lê Thu Trang"
+            - option "SV014 — Trịnh Khánh Vy"
+            - option "SV015 — Dương Quốc Bảo"
+        - navigation [ref=e21]:
+          - paragraph [ref=e22]: Điều hướng
+          - button "Đăng ký mảng nghiên cứu" [ref=e23] [cursor=pointer]:
+            - img [ref=e24]
+            - generic [ref=e26]: Đăng ký mảng nghiên cứu
+          - button "Nhóm nghiên cứu" [ref=e27] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: Nhóm nghiên cứu
+          - button "Ghép nhóm / lời mời" [ref=e31] [cursor=pointer]:
+            - img [ref=e32]
+            - generic [ref=e34]: Ghép nhóm / lời mời
+          - button "Đề tài nghiên cứu" [ref=e35] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e38]: Đề tài nghiên cứu
+          - button "Tiến trình thực hiện" [ref=e39] [cursor=pointer]:
+            - img [ref=e40]
+            - generic [ref=e42]: Tiến trình thực hiện
+          - button "Thông báo" [ref=e43] [cursor=pointer]:
+            - img [ref=e44]
+            - generic [ref=e46]: Thông báo
+        - generic [ref=e47]:
+          - paragraph [ref=e48]: Hỗ trợ
+          - paragraph [ref=e49]: nckh@hou.edu.vn
+    - generic [ref=e50]:
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Quản lý Nghiên cứu Khoa học
+          - heading "Đề tài nghiên cứu" [level=1] [ref=e55]
+        - generic [ref=e57]:
+          - generic [ref=e58]: MA
+          - generic [ref=e59]:
+            - paragraph [ref=e60]: Nguyễn Minh Anh
+            - paragraph [ref=e61]: CNTT01-K17
+      - generic [ref=e62]:
+        - generic [ref=e64]:
+          - heading "Đề tài nghiên cứu" [level=2] [ref=e65]
+          - paragraph [ref=e66]: Nhóm tự đề xuất đề tài để gửi giảng viên duyệt.
+        - generic [ref=e67]:
+          - article [ref=e68]:
+            - paragraph [ref=e69]: Nhóm hiện tại
+            - paragraph [ref=e70]: Nhóm Web HOU Alpha
+            - paragraph [ref=e71]: "Trạng thái: Chờ duyệt đề tài"
+          - article [ref=e72]:
+            - paragraph [ref=e73]: Giảng viên hướng dẫn
+            - paragraph [ref=e74]: TS. Nguyễn Thị Lan
+            - paragraph [ref=e75]: Đề tài chỉ gửi khi đã có giảng viên.
+          - article [ref=e76]:
+            - paragraph [ref=e77]: Trạng thái đề tài
+            - paragraph [ref=e78]: Chờ giảng viên duyệt
+            - paragraph [ref=e79]: "Số lần chỉnh sửa: 0"
+        - generic [ref=e81]:
+          - generic [ref=e83]:
+            - button "Đề tài giảng viên đề xuất 1 đề tài có sẵn" [ref=e84] [cursor=pointer]:
+              - paragraph [ref=e85]: Đề tài giảng viên đề xuất
+              - paragraph [ref=e86]: 1 đề tài có sẵn
+            - button "Tự đề xuất đề tài Tạo, sửa hoặc xóa đề tài nhóm tự đề xuất" [ref=e87] [cursor=pointer]:
+              - paragraph [ref=e88]: Tự đề xuất đề tài
+              - paragraph [ref=e89]: Tạo, sửa hoặc xóa đề tài nhóm tự đề xuất
+          - article [ref=e148]:
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - paragraph [ref=e151]: Đề tài giảng viên đề xuất
+                - heading "1 đề tài có sẵn" [level=3] [ref=e152]
+                - paragraph [ref=e153]: Giảng viên đã đề xuất các đề tài bên dưới. Chọn một đề tài phù hợp hoặc tự đề xuất đề tài riêng.
+              - generic [ref=e154]: Đã có đề tài
+            - generic [ref=e156]:
+              - generic [ref=e157]:
+                - generic [ref=e158]:
+                  - heading "Cổng quản lý tiến độ nghiên cứu khoa học sinh viên theo thời gian thực" [level=4] [ref=e159]
+                  - generic [ref=e160]: Giảng viên đề xuất
+                - generic [ref=e161]: Sẵn sàng chọn
+              - paragraph [ref=e162]: Xây dựng cổng web giúp giảng viên và sinh viên theo dõi tiến độ nghiên cứu, mốc công việc, phản hồi và cảnh báo chậm tiến độ.
+              - generic [ref=e163]:
+                - generic [ref=e164]:
+                  - text: "Mục tiêu:"
+                  - generic [ref=e165]: Thiết kế hệ thống web hỗ trợ quản lý tiến độ đề tài, cộng tác nhóm và phản hồi giữa sinh viên với giảng viên.
+                - generic [ref=e166]: "Công nghệ: React, Node.js, TypeScript, Prisma, PostgreSQL"
+              - button "Chuyển sang đề tài này" [active] [ref=e167] [cursor=pointer]
+          - generic [ref=e169]:
+            - paragraph [ref=e170]: Xác nhận chuyển đề tài
+            - heading "Chuyển sang đề tài giảng viên đề xuất" [level=3] [ref=e171]
+            - paragraph [ref=e172]: Bạn đang có một đề tài hiện tại. Nếu tiếp tục, hệ thống sẽ thay thế đề tài hiện tại bằng đề tài do giảng viên đề xuất mà bạn chọn.
+            - generic [ref=e173]: Đề tài hiện tại "Nền tảng cộng tác nghiên cứu web cho sinh viên HOU" sẽ bị thay thế. Nếu đề tài đang chờ giảng viên duyệt thì yêu cầu duyệt hiện tại cũng sẽ bị hủy.
+            - generic [ref=e174]:
+              - button "Hủy" [ref=e175] [cursor=pointer]
+              - button "Xác nhận chuyển" [ref=e176] [cursor=pointer]

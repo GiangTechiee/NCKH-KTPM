@@ -46,7 +46,6 @@ const registeredModules = [
   { path: '/trang-thai-quy-trinh', key: 'trang-thai-quy-trinh' },
   { path: '/thong-bao', key: 'thong-bao' },
   { path: '/audit-logs/:entityType/:entityId', key: 'nhat-ky-kiem-toan' },
-  { path: '/nhat-ky-kiem-toan', key: 'nhat-ky-kiem-toan' },
 ];
 
 router.get('/', (_req, res) => {
@@ -70,6 +69,5 @@ router.use('/duyet-de-tai', topicReviewRouter);
 router.use('/trang-thai-quy-trinh', workflowStatusRouter);
 router.use('/thong-bao', notificationRouter);
 router.use('/audit-logs', auditLogRouter);
-router.use('/nhat-ky-kiem-toan', auditLogRouter);
 
 export default router;

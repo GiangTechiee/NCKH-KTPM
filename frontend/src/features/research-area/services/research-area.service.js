@@ -21,7 +21,7 @@ function mapResearchArea(area) {
     description: area.moTa || 'Chưa có mô tả chi tiết cho mảng nghiên cứu này.',
     tags: [area.maMang, 'Nghiên cứu khoa học'],
     slotsFilled: area.soLuongDaDangKy || 0,
-    slotLimit: Math.max((area.soLuongDaDangKy || 0) + 10, 10),
+    slotLimit: area.soLuongToiDa || null,
     trend: area.trangThai === 'OPEN' ? 'Mở đăng ký' : area.trangThai,
     openAt: area.thoiGianMoDangKy,
     closeAt: area.thoiGianDongDangKy,
@@ -69,11 +69,6 @@ async function getRegistrationPageData(studentCode) {
   const closeAt = researchAreas[0]?.closeAt || registrationAnchorArea?.closeAt || new Date().toISOString();
 
   return {
-    student: {
-      fullName: 'Người dùng hiện tại',
-      studentCode: studentCode || '',
-      major: 'Sinh viên nghiên cứu khoa học',
-    },
     registrationWindow: {
       openAt,
       closeAt,

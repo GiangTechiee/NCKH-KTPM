@@ -5,7 +5,7 @@ import { layMaGiangVienTuYeuCau } from '../../../common/utils/lay-ma-giang-vien-
 import { layMaSinhVienTuYeuCau } from '../../../common/utils/lay-ma-sinh-vien-tu-yeu-cau';
 import { nguoiDungService } from '../../nguoi-dung/services/nguoi-dung.service';
 import { deTaiDeXuatService } from '../services/de-tai-de-xuat.service';
-import { xacThucTaoDeTaiDeXuat } from '../validators/de-tai-de-xuat.validator';
+import { xacThucChonDeTaiDeXuat, xacThucTaoDeTaiDeXuat } from '../validators/de-tai-de-xuat.validator';
 
 class DeTaiDeXuatController {
   async layDanhSachDeTaiDeXuat(request: Request, response: Response): Promise<Response> {
@@ -36,7 +36,8 @@ class DeTaiDeXuatController {
     const maSinhVien = layMaSinhVienTuYeuCau(request);
     const sinhVien = await nguoiDungService.laySinhVienTheoMa(maSinhVien);
     const deTaiId = chuyenSangBigInt(request.params.id, 'id');
-    const data = await deTaiDeXuatService.chonDeTaiDeXuat(sinhVien.id, deTaiId);
+    const input = xacThucChonDeTaiDeXuat(request.body);
+    const data = await deTaiDeXuatService.chonDeTaiDeXuat(sinhVien.id, deTaiId, input);
 
     return sendSuccess(response, {
       message: 'Chọn đề tài đề xuất thành công',

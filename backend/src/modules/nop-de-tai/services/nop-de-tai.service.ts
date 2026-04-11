@@ -39,7 +39,35 @@ function mapDeTai(deTai: NonNullable<DeTaiCuaToiResponse['deTai']>): DeTaiCuaToi
 }
 
 function coTheChinhSuaDeTai(trangThai: string): boolean {
-  return trangThai === TopicSubmissionStatus.CAN_CHINH_SUA || trangThai === TopicSubmissionStatus.TU_CHOI;
+  return (
+    trangThai === TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET
+    || trangThai === TopicSubmissionStatus.CAN_CHINH_SUA
+    || trangThai === TopicSubmissionStatus.TU_CHOI
+  );
+}
+
+function coTheXoaDeTai(loaiDeTai: string, trangThai: string): boolean {
+  if (loaiDeTai !== TopicSource.NHOM_DE_XUAT) {
+    return false;
+  }
+
+  return (
+    trangThai === TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET
+    || trangThai === TopicSubmissionStatus.CAN_CHINH_SUA
+    || trangThai === TopicSubmissionStatus.TU_CHOI
+  );
+}
+
+function coTheChuyenDeTai(loaiDeTai: string, trangThai: string): boolean {
+  if (loaiDeTai === TopicSource.GIANG_VIEN_DE_XUAT) {
+    return (
+      trangThai === TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET
+      || trangThai === TopicSubmissionStatus.CAN_CHINH_SUA
+      || trangThai === TopicSubmissionStatus.TU_CHOI
+    );
+  }
+
+  return coTheXoaDeTai(loaiDeTai, trangThai);
 }
 
 class NopDeTaiService {
@@ -88,15 +116,31 @@ class NopDeTaiService {
         quyenThaoTac: {
           coTheNop: false,
           coTheChinhSua: false,
+          coTheXoa: false,
         },
       };
     }
 
     const { nhomNghienCuu } = thanhVien;
-    const coTheNop = Boolean(nhomNghienCuu.giangVienId) && !nhomNghienCuu.deTai;
+    const coTheNop = Boolean(
+      nhomNghienCuu.giangVienId
+      && (
+        !nhomNghienCuu.deTai
+        || (
+          nhomNghienCuu.deTai.loaiDeTai === TopicSource.GIANG_VIEN_DE_XUAT
+          && coTheChuyenDeTai(nhomNghienCuu.deTai.loaiDeTai, nhomNghienCuu.deTai.trangThai)
+          && (!nhomNghienCuu.deTai.hanChinhSua || nhomNghienCuu.deTai.hanChinhSua.getTime() >= Date.now())
+        )
+      )
+    );
     const coTheChinhSua = Boolean(
       nhomNghienCuu.deTai
       && coTheChinhSuaDeTai(nhomNghienCuu.deTai.trangThai)
+      && (!nhomNghienCuu.deTai.hanChinhSua || nhomNghienCuu.deTai.hanChinhSua.getTime() >= Date.now())
+    );
+    const coTheXoa = Boolean(
+      nhomNghienCuu.deTai
+      && coTheXoaDeTai(nhomNghienCuu.deTai.loaiDeTai, nhomNghienCuu.deTai.trangThai)
       && (!nhomNghienCuu.deTai.hanChinhSua || nhomNghienCuu.deTai.hanChinhSua.getTime() >= Date.now())
     );
 
@@ -113,6 +157,7 @@ class NopDeTaiService {
       quyenThaoTac: {
         coTheNop,
         coTheChinhSua,
+        coTheXoa,
       },
     };
   }
@@ -126,15 +171,44 @@ class NopDeTaiService {
     const nhom = thanhVien.nhomNghienCuu;
     this.kiemTraNhomCoTheLamDeTai(nhom);
 
-    if (nhom.deTai) {
+    const deTaiHienTai = nhom.deTai;
+    const dangChuyenTuDeTaiGiangVien = Boolean(
+      deTaiHienTai && deTaiHienTai.loaiDeTai === TopicSource.GIANG_VIEN_DE_XUAT
+    );
+
+    if (deTaiHienTai && !dangChuyenTuDeTaiGiangVien) {
       throw new ConflictError({
         message: 'Nhóm đã có đề tài, hãy dùng chức năng chỉnh sửa nếu cần',
         errorCode: 'TOPIC_ALREADY_EXISTS',
       });
     }
 
+    if (dangChuyenTuDeTaiGiangVien) {
+      const deTaiGiangVienHienTai = deTaiHienTai!;
+
+      if (!coTheChuyenDeTai(deTaiGiangVienHienTai.loaiDeTai, deTaiGiangVienHienTai.trangThai)) {
+        throw new ConflictError({
+          message: 'Đề tài hiện tại đã được duyệt/chốt nên không thể chuyển',
+          errorCode: 'TOPIC_NOT_SWITCHABLE',
+        });
+      }
+
+      this.kiemTraDeTaiConHanChinhSua(deTaiGiangVienHienTai.hanChinhSua);
+
+      if (!input.xacNhanChuyenDeTai) {
+        throw new ConflictError({
+          message: 'Cần xác nhận trước khi chuyển sang đề tài tự đề xuất',
+          errorCode: 'TOPIC_SWITCH_CONFIRMATION_REQUIRED',
+        });
+      }
+    }
+
     const thoiDiemHienTai = new Date();
     const deTaiMoi = await this.prisma.$transaction(async (giaoDich) => {
+      if (deTaiHienTai) {
+        await this.nopDeTaiRepository.xoaDeTai(deTaiHienTai.id, giaoDich);
+      }
+
       const deTai = await this.nopDeTaiRepository.taoDeTai(
         {
           nhomNghienCuuId: nhom.id,
@@ -175,8 +249,10 @@ class NopDeTaiService {
         {
           nguoiNhanId: nhom.giangVienId!,
           loaiNguoiNhan: UserRole.GIANG_VIEN,
-          tieuDe: 'Có đề tài mới chờ duyệt',
-          noiDung: `Nhóm ${nhom.tenNhom} vừa nộp đề tài "${deTaiMoi.tenDeTai}".`,
+          tieuDe: dangChuyenTuDeTaiGiangVien ? 'Nhóm đã chuyển sang đề tài tự đề xuất' : 'Có đề tài mới chờ duyệt',
+          noiDung: dangChuyenTuDeTaiGiangVien
+            ? `Nhóm ${nhom.tenNhom} đã chuyển từ đề tài giảng viên đề xuất sang đề tài tự đề xuất "${deTaiMoi.tenDeTai}".`
+            : `Nhóm ${nhom.tenNhom} vừa nộp đề tài "${deTaiMoi.tenDeTai}".`,
           loaiThongBao: 'NHOM_NOP_DE_TAI',
           loaiDoiTuong: AuditEntityType.DE_TAI_NGHIEN_CUU,
           doiTuongId: deTaiMoi.id,
@@ -263,6 +339,67 @@ class NopDeTaiService {
     ]);
 
     return mapDeTai(deTaiDaCapNhat);
+  }
+
+  async xoaDeTai(sinhVienId: bigint, deTaiId: bigint) {
+    const thanhVien = await this.nopDeTaiRepository.timNhomCuaSinhVien(sinhVienId);
+    if (!thanhVien) {
+      throw new NotFoundError('Sinh viên chưa thuộc nhóm nghiên cứu nào');
+    }
+
+    const nhom = thanhVien.nhomNghienCuu;
+    this.kiemTraNhomCoTheLamDeTai(nhom);
+
+    const deTaiHienTai = await this.nopDeTaiRepository.timDeTaiTheoId(deTaiId);
+    if (!deTaiHienTai || deTaiHienTai.nhomNghienCuuId !== nhom.id) {
+      throw new NotFoundError('Không tìm thấy đề tài của nhóm');
+    }
+
+    if (!coTheXoaDeTai(deTaiHienTai.loaiDeTai, deTaiHienTai.trangThai)) {
+      throw new ForbiddenError({
+        message: 'Đề tài hiện tại không ở trạng thái cho phép xóa',
+        errorCode: 'TOPIC_NOT_DELETABLE',
+      });
+    }
+
+    this.kiemTraDeTaiConHanChinhSua(deTaiHienTai.hanChinhSua);
+
+    await this.prisma.$transaction(async (giaoDich) => {
+      await this.nopDeTaiRepository.xoaDeTai(deTaiId, giaoDich);
+      await this.nopDeTaiRepository.capNhatTrangThaiNhom(nhom.id, GroupStatus.DANG_CHON_DE_TAI, giaoDich);
+    });
+
+    await Promise.all([
+      nhatKyKiemToanService.taoBanGhi({
+        nguoiThucHienId: sinhVienId,
+        vaiTroNguoiThucHien: UserRole.SINH_VIEN,
+        hanhDong: AuditAction.XOA_DE_TAI,
+        loaiDoiTuong: AuditEntityType.DE_TAI_NGHIEN_CUU,
+        doiTuongId: deTaiHienTai.id,
+        trangThaiTruoc: {
+          trangThai: deTaiHienTai.trangThai,
+          loaiDeTai: deTaiHienTai.loaiDeTai,
+        },
+        trangThaiSau: null,
+        duLieuBoSung: {
+          nhomNghienCuuId: nhom.id.toString(),
+          trigger: 'STUDENT_DELETED_OWN_PROPOSAL',
+        },
+      }),
+      thongBaoService.taoNhieuThongBao([
+        {
+          nguoiNhanId: nhom.giangVienId!,
+          loaiNguoiNhan: UserRole.GIANG_VIEN,
+          tieuDe: 'Nhóm đã xóa đề tài tự đề xuất',
+          noiDung: `Nhóm ${nhom.tenNhom} đã xóa đề tài "${deTaiHienTai.tenDeTai}" trước khi được duyệt.`,
+          loaiThongBao: 'NHOM_XOA_DE_TAI',
+          loaiDoiTuong: AuditEntityType.DE_TAI_NGHIEN_CUU,
+          doiTuongId: deTaiHienTai.id,
+        },
+      ]),
+    ]);
+
+    return { message: 'Xóa đề tài thành công' };
   }
 }
 

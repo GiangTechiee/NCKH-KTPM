@@ -1,7 +1,8 @@
 import React from 'react';
 
 function ResearchAreaCard({ area, hasSelectedArea, isSelected, onSelect, onViewDetail }) {
-  const progress = Math.round((area.slotsFilled / area.slotLimit) * 100);
+  const hasSlotLimit = area.slotLimit !== null;
+  const progress = hasSlotLimit ? Math.round((area.slotsFilled / area.slotLimit) * 100) : 0;
   const cardStateLabel = isSelected ? 'Đã đăng ký' : hasSelectedArea ? 'Có thể chuyển' : 'Chưa đăng ký';
 
   return (
@@ -80,7 +81,7 @@ function ResearchAreaCard({ area, hasSelectedArea, isSelected, onSelect, onViewD
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Sinh viên</p>
             <p className="mt-2 font-semibold text-slate-900">
-              {area.slotsFilled}/{area.slotLimit}
+              {hasSlotLimit ? `${area.slotsFilled}/${area.slotLimit}` : area.slotsFilled}
             </p>
           </div>
           <div>
@@ -95,12 +96,14 @@ function ResearchAreaCard({ area, hasSelectedArea, isSelected, onSelect, onViewD
           </div>
         </div>
 
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
-          <div 
-            className={`h-full rounded-full ${isSelected ? 'bg-emerald-500' : 'bg-[#0b4a7a]'}`}
-            style={{ width: `${progress}%` }} 
-          />
-        </div>
+        {hasSlotLimit ? (
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
+            <div
+              className={`h-full rounded-full ${isSelected ? 'bg-emerald-500' : 'bg-[#0b4a7a]'}`}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        ) : null}
 
         <div className="mt-5 flex gap-3">
           <button

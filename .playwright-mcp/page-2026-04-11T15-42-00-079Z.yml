@@ -1,0 +1,126 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: H
+          - generic [ref=e12]:
+            - paragraph [ref=e13]: Hanoi Open University
+            - paragraph [ref=e14]: Hệ thống NCKH
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: Vai trò
+          - combobox [ref=e17]:
+            - option "Sinh viên" [selected]
+            - option "Giảng viên"
+            - option "Quản trị viên"
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: Sinh viên
+          - combobox [ref=e20]:
+            - option "SV001 — Nguyễn Minh Anh"
+            - option "SV002 — Trần Thu Hà"
+            - option "SV003 — Lê Quang Huy"
+            - option "SV004 — Phạm Gia Hân"
+            - option "SV005 — Đỗ Đức Minh"
+            - option "SV006 — Vũ Khánh Linh"
+            - option "SV007 — Bùi Nhật Nam"
+            - option "SV008 — Hoàng Mai Phương"
+            - option "SV009 — Nguyễn Anh Khoa"
+            - option "SV010 — Tạ Bảo Châu"
+            - option "SV011 — Phạm Ngọc An"
+            - option "SV012 — Nguyễn Hoài Thu"
+            - option "SV013 — Lê Thu Trang"
+            - option "SV014 — Trịnh Khánh Vy"
+            - option "SV015 — Dương Quốc Bảo" [selected]
+        - navigation [ref=e21]:
+          - paragraph [ref=e22]: Điều hướng
+          - button "Đăng ký mảng nghiên cứu" [ref=e23] [cursor=pointer]:
+            - img [ref=e24]
+            - generic [ref=e26]: Đăng ký mảng nghiên cứu
+          - button "Nhóm nghiên cứu" [active] [ref=e27] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: Nhóm nghiên cứu
+          - button "Ghép nhóm / lời mời" [ref=e31] [cursor=pointer]:
+            - img [ref=e32]
+            - generic [ref=e34]: Ghép nhóm / lời mời
+          - button "Đề tài nghiên cứu" [ref=e35] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e38]: Đề tài nghiên cứu
+          - button "Tiến trình thực hiện" [ref=e39] [cursor=pointer]:
+            - img [ref=e40]
+            - generic [ref=e42]: Tiến trình thực hiện
+          - button "Thông báo 1" [ref=e43] [cursor=pointer]:
+            - img [ref=e44]
+            - generic [ref=e46]: Thông báo
+            - generic [ref=e47]: "1"
+        - generic [ref=e48]:
+          - paragraph [ref=e49]: Hỗ trợ
+          - paragraph [ref=e50]: nckh@hou.edu.vn
+    - generic [ref=e51]:
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - paragraph [ref=e55]: Quản lý Nghiên cứu Khoa học
+          - heading "Nhóm nghiên cứu" [level=1] [ref=e276]
+        - generic [ref=e58]:
+          - generic [ref=e59]: QB
+          - generic [ref=e60]:
+            - paragraph [ref=e61]: Dương Quốc Bảo
+            - paragraph [ref=e62]: CNTT08-K17
+      - generic [ref=e63]:
+        - generic [ref=e65]:
+          - heading "Nhóm nghiên cứu" [level=2] [ref=e277]
+          - paragraph [ref=e67]: Tạo nhóm, xem nhóm hiện tại và mời thành viên cùng mảng vào nhóm nghiên cứu.
+        - generic [ref=e278]:
+          - article [ref=e279]:
+            - paragraph [ref=e280]: Trạng thái nhóm
+            - paragraph [ref=e281]: Đang tuyển thành viên
+            - paragraph [ref=e282]: Nhóm XINCHAOXINCHAO — 1/3 thành viên.
+          - article [ref=e283]:
+            - paragraph [ref=e284]: Mảng đã chọn
+            - paragraph [ref=e285]: Trí tuệ nhân tạo ứng dụng
+            - paragraph [ref=e286]: Chỉ sinh viên cùng mảng mới được vào cùng nhóm.
+          - article [ref=e287]:
+            - paragraph [ref=e288]: Lời mời đã gửi
+            - paragraph [ref=e289]: "0"
+            - paragraph [ref=e290]: Theo dõi các lời mời đang chờ phản hồi.
+        - generic [ref=e291]:
+          - generic [ref=e292]:
+            - generic [ref=e293]:
+              - paragraph [ref=e294]: Mảng đã đăng ký
+              - paragraph [ref=e295]: Trí tuệ nhân tạo ứng dụng
+            - generic [ref=e296]:
+              - paragraph [ref=e297]: Trạng thái nhóm
+              - generic [ref=e298]: Đang tuyển thành viên
+            - generic [ref=e299]:
+              - paragraph [ref=e300]: Số thành viên
+              - paragraph [ref=e301]: 1/3
+            - generic [ref=e304]:
+              - paragraph [ref=e305]: Giảng viên
+              - paragraph [ref=e306]: Chưa có
+          - generic [ref=e307]:
+            - article [ref=e308]:
+              - generic [ref=e309]:
+                - generic [ref=e310]:
+                  - paragraph [ref=e311]: Nhóm của tôi (XINCHAOXINCHAO)
+                  - paragraph [ref=e312]: Quản lý thành viên và mời thêm sinh viên cùng mảng.
+                - generic [ref=e313]:
+                  - generic [ref=e314]: Còn trống 2 vị trí
+                  - button "Xóa nhóm" [ref=e315] [cursor=pointer]
+              - generic [ref=e316]:
+                - generic [ref=e317]:
+                  - generic [ref=e318]:
+                    - generic [ref=e319]: QB
+                    - generic [ref=e320]:
+                      - paragraph [ref=e321]: Dương Quốc Bảo
+                      - paragraph [ref=e322]: SV015
+                  - generic [ref=e323]:
+                    - generic [ref=e324]: Trưởng nhóm
+                    - generic [ref=e325]: Đã xác nhận
+                - generic [ref=e326]: Còn trống 2 vị trí để hoàn tất nhóm.
+                - generic [ref=e327]:
+                  - textbox "Tìm theo MSSV, tên hoặc lớp để mời..." [ref=e329]
+                  - button "Mời thêm thành viên" [ref=e330] [cursor=pointer]
+            - article [ref=e331]:
+              - generic [ref=e332]:
+                - paragraph [ref=e333]: Lời mời đã gửi
+                - paragraph [ref=e334]: Theo dõi các lời mời đang chờ phản hồi.
+              - generic [ref=e336]: Chưa có lời mời nào được gửi.

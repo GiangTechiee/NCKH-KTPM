@@ -3,6 +3,7 @@ import {
   AuditAction,
   AuditEntityType,
   GroupStatus,
+  TopicCatalogStatus,
   TopicSource,
   TopicSubmissionStatus,
   UserRole,
@@ -13,7 +14,7 @@ import { nhatKyKiemToanService } from '../../nhat-ky-kiem-toan/services/nhat-ky-
 import { thongBaoService } from '../../thong-bao/services/thong-bao.service';
 import { TaoDeTaiDeXuatDto } from '../dto/tao-de-tai-de-xuat.dto';
 import { DeTaiDeXuatRepository } from '../repositories/de-tai-de-xuat.repository';
-import { ChonDeTaiDeXuatResponse, DeTaiDeXuatResponse } from '../types/de-tai-de-xuat.types';
+import { ChonDeTaiDeXuatDto, ChonDeTaiDeXuatResponse, DeTaiDeXuatResponse } from '../types/de-tai-de-xuat.types';
 
 function mapDeTaiDeXuat(
   deTai: {
@@ -68,9 +69,17 @@ function mapDeTaiDeXuat(
 
 class DeTaiDeXuatService {
   private readonly prisma: PrismaClient;
-  private readonly danhSachTrangThaiNhomHopLe = new Set<string>([
+  private readonly danhSachTrangThaiNhomCoTheChon = new Set<string>([
     GroupStatus.DA_CO_GIANG_VIEN,
     GroupStatus.DANG_CHON_DE_TAI,
+    GroupStatus.CHO_DUYET_DE_TAI,
+    GroupStatus.CAN_CHINH_SUA_DE_TAI,
+  ]);
+  private readonly danhSachTrangThaiDeTaiCoTheChuyen = new Set<string>([
+    TopicSubmissionStatus.NHAP,
+    TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET,
+    TopicSubmissionStatus.CAN_CHINH_SUA,
+    TopicSubmissionStatus.TU_CHOI,
   ]);
 
   constructor(
@@ -79,16 +88,18 @@ class DeTaiDeXuatService {
     this.prisma = getPrismaClient();
   }
 
-  private kiemTraNhomCoTheNhanDeTaiDeXuat(nhom: {
-    id: bigint;
-    tenNhom: string;
-    trangThai: string;
-    giangVienId: bigint | null;
-    deTai: { id: bigint; trangThai: string } | null;
-  }, giangVienId: bigint) {
+  private kiemTraNhomThuocGiangVien(
+    nhom: {
+      id: bigint;
+      tenNhom: string;
+      trangThai: string;
+      giangVienId: bigint | null;
+    },
+    giangVienId: bigint
+  ) {
     if (!nhom.giangVienId) {
       throw new ConflictError({
-        message: 'Nhóm chưa có giảng viên hướng dẫn nên chưa thể nhận đề tài đề xuất',
+        message: 'Nhóm chưa có giảng viên hướng dẫn',
         errorCode: 'GROUP_HAS_NO_LECTURER',
       });
     }
@@ -102,28 +113,13 @@ class DeTaiDeXuatService {
 
     if (nhom.trangThai === GroupStatus.DA_CHOT_DE_TAI) {
       throw new ConflictError({
-        message: 'Nhóm đã chốt đề tài nên không thể tạo đề tài đề xuất mới',
+        message: 'Nhóm đã chốt đề tài nên không thể cấu hình danh mục đề tài đề xuất',
         errorCode: 'GROUP_TOPIC_ALREADY_FINALIZED',
-      });
-    }
-
-    if (!this.danhSachTrangThaiNhomHopLe.has(nhom.trangThai)) {
-      throw new ConflictError({
-        message: 'Trạng thái nhóm hiện tại chưa phù hợp để tạo đề tài đề xuất',
-        errorCode: 'GROUP_STATUS_NOT_ELIGIBLE_FOR_PROPOSAL',
-      });
-    }
-
-    if (nhom.deTai) {
-      throw new ConflictError({
-        message: 'Nhóm đã có đề tài nên không thể tạo thêm đề tài đề xuất',
-        errorCode: 'TOPIC_ALREADY_EXISTS',
       });
     }
   }
 
   private kiemTraNhomCoTheChonDeTaiDeXuat(nhom: {
-    id: bigint;
     trangThai: string;
     giangVienId: bigint | null;
   }) {
@@ -134,10 +130,19 @@ class DeTaiDeXuatService {
       });
     }
 
-    if (nhom.trangThai !== GroupStatus.DA_CO_GIANG_VIEN && nhom.trangThai !== GroupStatus.DANG_CHON_DE_TAI) {
+    if (!this.danhSachTrangThaiNhomCoTheChon.has(nhom.trangThai)) {
       throw new ConflictError({
         message: 'Trạng thái nhóm hiện tại chưa phù hợp để chọn đề tài đề xuất',
         errorCode: 'GROUP_STATUS_NOT_ELIGIBLE_FOR_PROPOSAL_SELECTION',
+      });
+    }
+  }
+
+  private kiemTraCoTheChuyenDeTai(trangThai: string) {
+    if (!this.danhSachTrangThaiDeTaiCoTheChuyen.has(trangThai)) {
+      throw new ConflictError({
+        message: 'Đề tài đã được duyệt hoặc chốt nên không thể thay đổi',
+        errorCode: 'TOPIC_NOT_SWITCHABLE',
       });
     }
   }
@@ -148,13 +153,13 @@ class DeTaiDeXuatService {
       throw new NotFoundError('Không tìm thấy nhóm nghiên cứu');
     }
 
-    this.kiemTraNhomCoTheNhanDeTaiDeXuat(nhom, giangVienId);
+    this.kiemTraNhomThuocGiangVien(nhom, giangVienId);
 
-    const deTaiDaTao = await this.prisma.$transaction(async (giaoDich) => {
-      const deTai = await this.deTaiDeXuatRepository.taoDeTaiDeXuat(
+    const deTaiDaTao = await this.prisma.$transaction(async (giaoDich) =>
+      this.deTaiDeXuatRepository.taoDanhMucDeTaiGiangVien(
         {
-          nhomNghienCuuId: nhom.id,
           giangVienId,
+          mangNghienCuuId: nhom.mangNghienCuuId,
           tenDeTai: input.tenDeTai,
           moTaVanDe: input.moTaVanDe,
           mucTieuNghienCuu: input.mucTieuNghienCuu,
@@ -164,12 +169,8 @@ class DeTaiDeXuatService {
           lyDoLuaChon: input.lyDoLuaChon || null,
         },
         giaoDich
-      );
-
-      await this.deTaiDeXuatRepository.capNhatTrangThaiNhom(nhom.id, giaoDich);
-
-      return deTai;
-    });
+      )
+    );
 
     await Promise.all([
       nhatKyKiemToanService.taoBanGhi({
@@ -180,13 +181,11 @@ class DeTaiDeXuatService {
         doiTuongId: deTaiDaTao.id,
         trangThaiTruoc: {
           nhomNghienCuuId: nhom.id.toString(),
-          trangThaiNhom: nhom.trangThai,
-          deTaiId: null,
+          mangNghienCuuId: nhom.mangNghienCuuId.toString(),
         },
         trangThaiSau: {
           loaiDeTai: TopicSource.GIANG_VIEN_DE_XUAT,
-          trangThaiDeTai: TopicSubmissionStatus.NHAP,
-          trangThaiNhom: GroupStatus.DANG_CHON_DE_TAI,
+          trangThaiDeTai: TopicCatalogStatus.ACTIVE,
         },
       }),
       thongBaoService.taoNhieuThongBao(
@@ -194,7 +193,7 @@ class DeTaiDeXuatService {
           nguoiNhanId: thanhVien.sinhVienId,
           loaiNguoiNhan: UserRole.SINH_VIEN,
           tieuDe: 'Có đề tài giảng viên đề xuất mới',
-          noiDung: `Giảng viên đã đề xuất đề tài "${deTaiDaTao.tenDeTai}" cho nhóm ${nhom.tenNhom}.`,
+          noiDung: `Giảng viên đã bổ sung đề tài "${deTaiDaTao.tenDeTai}" vào danh mục đề tài của mảng ${nhom.mangNghienCuu.tenMang}.`,
           loaiThongBao: 'CO_DE_TAI_GIANG_VIEN_DE_XUAT',
           loaiDoiTuong: AuditEntityType.DE_TAI_NGHIEN_CUU,
           doiTuongId: deTaiDaTao.id,
@@ -204,10 +203,12 @@ class DeTaiDeXuatService {
 
     return mapDeTaiDeXuat({
       ...deTaiDaTao,
+      loaiDeTai: TopicSource.GIANG_VIEN_DE_XUAT,
+      thoiGianNop: null,
       nhom: {
         id: nhom.id,
         tenNhom: nhom.tenNhom,
-        trangThai: GroupStatus.DANG_CHON_DE_TAI,
+        trangThai: nhom.trangThai,
         thanhVien: nhom.thanhVien,
       },
     });
@@ -220,40 +221,102 @@ class DeTaiDeXuatService {
     }
 
     const nhom = thanhVien.nhomNghienCuu;
-    const danhSach = await this.deTaiDeXuatRepository.timDanhSachDeTaiDeXuatTheoNhom(nhom.id);
+    if (!nhom.giangVienId) {
+      return [];
+    }
+
+    const danhSach = await this.deTaiDeXuatRepository.timDanhSachDeTaiDeXuatTheoMangVaGiangVien(
+      nhom.mangNghienCuuId,
+      nhom.giangVienId
+    );
+
     return danhSach.map((deTai) =>
       mapDeTaiDeXuat({
         ...deTai,
-        nhom: deTai.nhomNghienCuu,
+        loaiDeTai: TopicSource.GIANG_VIEN_DE_XUAT,
+        thoiGianNop: null,
+        nhom: {
+          id: nhom.id,
+          tenNhom: nhom.tenNhom,
+          trangThai: nhom.trangThai,
+          thanhVien: nhom.thanhVien,
+        },
       })
     );
   }
 
-  async chonDeTaiDeXuat(sinhVienId: bigint, deTaiId: bigint): Promise<ChonDeTaiDeXuatResponse> {
-    const deTai = await this.deTaiDeXuatRepository.timDeTaiDeXuatTheoId(deTaiId);
+  async chonDeTaiDeXuat(
+    sinhVienId: bigint,
+    deTaiId: bigint,
+    input: ChonDeTaiDeXuatDto
+  ): Promise<ChonDeTaiDeXuatResponse> {
+    const thanhVien = await this.deTaiDeXuatRepository.timNhomCuaSinhVien(sinhVienId);
+    if (!thanhVien) {
+      throw new NotFoundError('Sinh viên chưa thuộc nhóm nghiên cứu nào');
+    }
+
+    const nhom = thanhVien.nhomNghienCuu;
+    const deTai = await this.deTaiDeXuatRepository.timDanhMucDeTaiTheoId(deTaiId);
     if (!deTai) {
       throw new NotFoundError('Không tìm thấy đề tài đề xuất');
     }
 
-    const laThanhVienCuaNhom = deTai.nhomNghienCuu.thanhVien.some((thanhVien) => thanhVien.sinhVienId === sinhVienId);
-    if (!laThanhVienCuaNhom) {
+    this.kiemTraNhomCoTheChonDeTaiDeXuat(nhom);
+
+    if (deTai.giangVienId !== nhom.giangVienId || deTai.mangNghienCuuId !== nhom.mangNghienCuuId) {
       throw new ForbiddenError({
-        message: 'Sinh viên không thuộc nhóm được đề xuất đề tài này',
-        errorCode: 'STUDENT_NOT_IN_PROPOSED_GROUP',
+        message: 'Đề tài đề xuất này không áp dụng cho nhóm hiện tại',
+        errorCode: 'PROPOSED_TOPIC_NOT_AVAILABLE_FOR_GROUP',
       });
     }
 
-    this.kiemTraNhomCoTheChonDeTaiDeXuat(deTai.nhomNghienCuu);
+    if (nhom.deTai?.danhMucDeTaiGiangVienId === deTai.id) {
+      throw new ConflictError({
+        message: 'Nhóm đã chọn đề tài giảng viên đề xuất này',
+        errorCode: 'TOPIC_ALREADY_SELECTED',
+      });
+    }
+
+    if (nhom.deTai) {
+      this.kiemTraCoTheChuyenDeTai(nhom.deTai.trangThai);
+
+      if (!input.xacNhanChuyenDeTai) {
+        throw new ConflictError({
+          message: 'Cần xác nhận trước khi chuyển sang đề tài giảng viên đề xuất',
+          errorCode: 'TOPIC_SWITCH_CONFIRMATION_REQUIRED',
+        });
+      }
+    }
 
     const deTaiDaChon = await this.prisma.$transaction(async (giaoDich) => {
-      const deTaiCapNhat = await this.deTaiDeXuatRepository.capNhatDeTaiSauKhiChon(deTai.id, giaoDich);
+      if (nhom.deTai) {
+        await this.deTaiDeXuatRepository.xoaDeTaiHienTai(nhom.deTai.id, giaoDich);
+      }
+
+      const deTaiMoi = await this.deTaiDeXuatRepository.taoDeTaiNghienCuuTuDanhMuc(
+        {
+          nhomNghienCuuId: nhom.id,
+          giangVienId: nhom.giangVienId!,
+          danhMucDeTaiGiangVienId: deTai.id,
+          tenDeTai: deTai.tenDeTai,
+          moTaVanDe: deTai.moTaVanDe,
+          mucTieuNghienCuu: deTai.mucTieuNghienCuu,
+          ungDungThucTien: deTai.ungDungThucTien,
+          phamViNghienCuu: deTai.phamViNghienCuu,
+          congNgheSuDung: deTai.congNgheSuDung,
+          lyDoLuaChon: deTai.lyDoLuaChon,
+          thoiGianNop: new Date(),
+        },
+        giaoDich
+      );
+
       await this.deTaiDeXuatRepository.capNhatTrangThaiNhomTheoGiaTri(
-        deTai.nhomNghienCuu.id,
+        nhom.id,
         GroupStatus.CHO_DUYET_DE_TAI,
         giaoDich
       );
 
-      return deTaiCapNhat;
+      return deTaiMoi;
     });
 
     await Promise.all([
@@ -262,10 +325,11 @@ class DeTaiDeXuatService {
         vaiTroNguoiThucHien: UserRole.SINH_VIEN,
         hanhDong: AuditAction.NOP_DE_TAI,
         loaiDoiTuong: AuditEntityType.DE_TAI_NGHIEN_CUU,
-        doiTuongId: deTai.id,
+        doiTuongId: deTaiDaChon.id,
         trangThaiTruoc: {
-          trangThaiDeTai: deTai.trangThai,
-          trangThaiNhom: deTai.nhomNghienCuu.trangThai,
+          trangThaiDeTai: nhom.deTai?.trangThai || null,
+          loaiDeTai: nhom.deTai?.loaiDeTai || null,
+          trangThaiNhom: nhom.trangThai,
         },
         trangThaiSau: {
           loaiDeTai: TopicSource.GIANG_VIEN_DE_XUAT,
@@ -275,13 +339,13 @@ class DeTaiDeXuatService {
       }),
       thongBaoService.taoNhieuThongBao([
         {
-          nguoiNhanId: deTai.giangVienId!,
+          nguoiNhanId: nhom.giangVienId!,
           loaiNguoiNhan: UserRole.GIANG_VIEN,
           tieuDe: 'Nhóm đã chọn đề tài giảng viên đề xuất',
-          noiDung: `Nhóm ${deTai.nhomNghienCuu.tenNhom} đã chọn đề tài "${deTai.tenDeTai}" và gửi để chờ duyệt.`,
+          noiDung: `Nhóm ${nhom.tenNhom} đã chọn đề tài "${deTai.tenDeTai}" và gửi để chờ duyệt.`,
           loaiThongBao: 'NHOM_CHON_DE_TAI_GIANG_VIEN_DE_XUAT',
           loaiDoiTuong: AuditEntityType.DE_TAI_NGHIEN_CUU,
-          doiTuongId: deTai.id,
+          doiTuongId: deTaiDaChon.id,
         },
       ]),
     ]);
@@ -290,8 +354,10 @@ class DeTaiDeXuatService {
       ...mapDeTaiDeXuat({
         ...deTaiDaChon,
         nhom: {
-          ...deTai.nhomNghienCuu,
+          id: nhom.id,
+          tenNhom: nhom.tenNhom,
           trangThai: GroupStatus.CHO_DUYET_DE_TAI,
+          thanhVien: nhom.thanhVien,
         },
       }),
       daChon: true,

@@ -5,7 +5,8 @@ function ResearchAreaDetailModal({ area, onClose }) {
     return null;
   }
 
-  const progress = Math.round((area.slotsFilled / area.slotLimit) * 100);
+  const hasSlotLimit = area.slotLimit !== null;
+  const progress = hasSlotLimit ? Math.round((area.slotsFilled / area.slotLimit) * 100) : 0;
   const openDate = new Date(area.openAt).toLocaleDateString('vi-VN');
   const closeDate = new Date(area.closeAt).toLocaleDateString('vi-VN');
 
@@ -53,16 +54,20 @@ function ResearchAreaDetailModal({ area, onClose }) {
               </p>
               <p className="mt-2 text-xl font-semibold text-slate-900">
                 {area.slotsFilled}
-                <span className="text-sm font-normal text-slate-400">
-                  /{area.slotLimit}
-                </span>
+                {hasSlotLimit ? (
+                  <span className="text-sm font-normal text-slate-400">
+                    /{area.slotLimit}
+                  </span>
+                ) : null}
               </p>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200">
-                <div
-                  className="h-full rounded-full bg-[#0b4a7a]"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+              {hasSlotLimit ? (
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200">
+                  <div
+                    className="h-full rounded-full bg-[#0b4a7a]"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              ) : null}
             </div>
 
             <div className="rounded-2xl bg-slate-50 px-4 py-3">

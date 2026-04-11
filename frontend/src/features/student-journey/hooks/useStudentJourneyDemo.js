@@ -14,6 +14,7 @@ import {
   thamGiaNhom,
   taoNhomNghienCuu,
   tuChoiLoiMoi,
+  xoaDeTai,
   xoaNhom,
 } from '../services/student-journey.service';
 
@@ -35,7 +36,15 @@ export function useStudentJourneyDemo(studentCode) {
     receivedInvitations: [],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [groupAction, setGroupAction] = useState({
+    type: '',
+    targetId: '',
+  });
   const [matchingAction, setMatchingAction] = useState({
+    type: '',
+    targetId: '',
+  });
+  const [topicAction, setTopicAction] = useState({
     type: '',
     targetId: '',
   });
@@ -205,6 +214,10 @@ export function useStudentJourneyDemo(studentCode) {
     }
 
     setIsSubmitting(true);
+    setGroupAction({
+      type: 'create-group',
+      targetId: 'create-group',
+    });
     setGroupErrorMessage('');
     setSuccessMessage('');
 
@@ -217,6 +230,7 @@ export function useStudentJourneyDemo(studentCode) {
       setGroupErrorMessage(error.message || 'Tạo nhóm nghiên cứu thất bại.');
     } finally {
       setIsSubmitting(false);
+      setGroupAction({ type: '', targetId: '' });
     }
   }
 
@@ -232,6 +246,10 @@ export function useStudentJourneyDemo(studentCode) {
     }
 
     setIsSubmitting(true);
+    setGroupAction({
+      type: 'invite-member',
+      targetId: inviteStudentCode.trim(),
+    });
     setGroupErrorMessage('');
     setSuccessMessage('');
 
@@ -244,6 +262,7 @@ export function useStudentJourneyDemo(studentCode) {
       setGroupErrorMessage(error.message || 'Gửi lời mời thất bại.');
     } finally {
       setIsSubmitting(false);
+      setGroupAction({ type: '', targetId: '' });
     }
   }
 
@@ -280,6 +299,10 @@ export function useStudentJourneyDemo(studentCode) {
     }
 
     setIsSubmitting(true);
+    setGroupAction({
+      type: 'delete-group',
+      targetId: String(group.id),
+    });
     setGroupErrorMessage('');
     setSuccessMessage('');
 
@@ -291,6 +314,7 @@ export function useStudentJourneyDemo(studentCode) {
       setGroupErrorMessage(error.message || 'Xóa nhóm thất bại.');
     } finally {
       setIsSubmitting(false);
+      setGroupAction({ type: '', targetId: '' });
     }
   }
 
@@ -327,6 +351,10 @@ export function useStudentJourneyDemo(studentCode) {
     }
 
     setIsSubmitting(true);
+    setGroupAction({
+      type: 'leave-group',
+      targetId: String(group.id),
+    });
     setGroupErrorMessage('');
     setSuccessMessage('');
 
@@ -338,6 +366,7 @@ export function useStudentJourneyDemo(studentCode) {
       setGroupErrorMessage(error.message || 'Rời nhóm thất bại.');
     } finally {
       setIsSubmitting(false);
+      setGroupAction({ type: '', targetId: '' });
     }
   }
 
@@ -383,7 +412,7 @@ export function useStudentJourneyDemo(studentCode) {
     }
   }
 
-  async function handleSubmitTopic() {
+  async function handleSubmitTopic(xacNhanChuyenDeTai = false) {
     if (!studentCode.trim()) {
       setTopicErrorMessage('Bạn cần nhập MSSV trước khi nộp đề tài.');
       return;
@@ -394,17 +423,29 @@ export function useStudentJourneyDemo(studentCode) {
       return;
     }
 
+    const dangSuaDeTaiTuDeXuat = Boolean(
+      topicOverview.topic
+      && topicOverview.topic.type === 'NHOM_DE_XUAT'
+      && topicOverview.permissions.canEdit
+    );
+
     setIsSubmitting(true);
+    setTopicAction({
+      type: dangSuaDeTaiTuDeXuat ? 'edit-topic' : 'submit-topic',
+      targetId: topicOverview.topic?.id ? String(topicOverview.topic.id) : 'new-topic',
+    });
     setTopicErrorMessage('');
     setSuccessMessage('');
 
     try {
-      if (topicOverview.topic && topicOverview.permissions.canEdit) {
+      if (dangSuaDeTaiTuDeXuat) {
         await capNhatDeTai(studentCode.trim(), topicOverview.topic.id, topicDraft);
         setSuccessMessage('Cập nhật và gửi lại đề tài thành công.');
       } else {
-        await nopDeTai(studentCode.trim(), topicDraft);
-        setSuccessMessage('Nộp đề tài thành công.');
+        await nopDeTai(studentCode.trim(), topicDraft, xacNhanChuyenDeTai);
+        setSuccessMessage(
+          xacNhanChuyenDeTai ? 'Chuyển sang đề tài tự đề xuất thành công.' : 'Nộp đề tài thành công.'
+        );
       }
 
       await loadTopic();
@@ -412,27 +453,61 @@ export function useStudentJourneyDemo(studentCode) {
       setTopicErrorMessage(error.message || 'Nộp đề tài thất bại.');
     } finally {
       setIsSubmitting(false);
+      setTopicAction({ type: '', targetId: '' });
     }
   }
 
-  async function handleChooseProposedTopic(proposedTopicId) {
+  async function handleChooseProposedTopic(proposedTopicId, xacNhanChuyenDeTai = false) {
     if (!studentCode.trim()) {
       setTopicErrorMessage('Bạn cần nhập MSSV trước khi chọn đề tài.');
       return;
     }
 
     setIsSubmitting(true);
+    setTopicAction({
+      type: 'choose-proposed-topic',
+      targetId: String(proposedTopicId),
+    });
     setTopicErrorMessage('');
     setSuccessMessage('');
 
     try {
-      await chonDeTaiDeXuat(studentCode.trim(), proposedTopicId);
-      setSuccessMessage('Chọn đề tài giảng viên đề xuất thành công.');
+      await chonDeTaiDeXuat(studentCode.trim(), proposedTopicId, xacNhanChuyenDeTai);
+      setSuccessMessage(
+        xacNhanChuyenDeTai ? 'Chuyển sang đề tài giảng viên đề xuất thành công.' : 'Chọn đề tài giảng viên đề xuất thành công.'
+      );
       await loadTopic();
     } catch (error) {
       setTopicErrorMessage(error.message || 'Chọn đề tài thất bại.');
     } finally {
       setIsSubmitting(false);
+      setTopicAction({ type: '', targetId: '' });
+    }
+  }
+
+  async function handleDeleteTopic() {
+    if (!studentCode.trim() || !topicOverview.topic) {
+      setTopicErrorMessage('Không tìm thấy đề tài để xóa.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setTopicAction({
+      type: 'delete-topic',
+      targetId: String(topicOverview.topic.id),
+    });
+    setTopicErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await xoaDeTai(studentCode.trim(), topicOverview.topic.id);
+      setSuccessMessage('Xóa đề tài thành công.');
+      await loadTopic();
+    } catch (error) {
+      setTopicErrorMessage(error.message || 'Xóa đề tài thất bại.');
+    } finally {
+      setIsSubmitting(false);
+      setTopicAction({ type: '', targetId: '' });
     }
   }
 
@@ -441,6 +516,7 @@ export function useStudentJourneyDemo(studentCode) {
     createGroupName,
     filteredCandidates,
     group,
+    groupAction,
     groupErrorMessage,
     inviteStudentCode,
     isSubmitting,
@@ -451,6 +527,7 @@ export function useStudentJourneyDemo(studentCode) {
     selectedAreaTitle,
     studentCode,
     successMessage,
+    topicAction,
     topicDraft,
     topicErrorMessage,
     topicOverview,
@@ -460,6 +537,7 @@ export function useStudentJourneyDemo(studentCode) {
     onCreateGroup: handleCreateGroup,
     onCreateGroupNameChange: setCreateGroupName,
     onDeleteGroup: handleDeleteGroup,
+    onDeleteTopic: handleDeleteTopic,
     onInvite: handleInviteMember,
     onInviteCandidateFromMatching: handleInviteCandidateFromMatching,
     onInviteStudentCodeChange: setInviteStudentCode,

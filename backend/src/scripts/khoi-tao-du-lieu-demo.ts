@@ -458,6 +458,47 @@ async function seedDemoData(prisma: PrismaClient): Promise<void> {
       },
     });
 
+    await tx.danhMucDeTaiGiangVien.createMany({
+      data: [
+        {
+          giangVienId: lecturerOne.id,
+          mangNghienCuuId: webArea.id,
+          tenDeTai: 'Cổng quản lý tiến độ nghiên cứu khoa học sinh viên theo thời gian thực',
+          moTaVanDe: 'Xây dựng cổng web giúp giảng viên và sinh viên theo dõi tiến độ nghiên cứu, mốc công việc, phản hồi và cảnh báo chậm tiến độ.',
+          mucTieuNghienCuu: 'Thiết kế hệ thống web hỗ trợ quản lý tiến độ đề tài, cộng tác nhóm và phản hồi giữa sinh viên với giảng viên.',
+          ungDungThucTien: 'Hỗ trợ quản lý đề tài khoa học sinh viên tập trung, minh bạch và thuận tiện hơn cho khoa CNTT.',
+          phamViNghienCuu: 'Tập trung vào nhóm nghiên cứu sinh viên trong nội bộ trường với workflow từ đăng ký đến duyệt đề tài.',
+          congNgheSuDung: 'React, Node.js, TypeScript, Prisma, PostgreSQL',
+          lyDoLuaChon: 'Đề tài bám sát bài toán của hệ thống demo hiện tại và phù hợp mảng phát triển ứng dụng web.',
+          trangThai: 'ACTIVE',
+        },
+        {
+          giangVienId: lecturerTwo.id,
+          mangNghienCuuId: aiArea.id,
+          tenDeTai: 'Hệ thống gợi ý lộ trình học tập cá nhân hóa cho sinh viên HOU bằng AI',
+          moTaVanDe: 'Xây dựng mô hình gợi ý học phần, tài nguyên học tập và tiến độ nghiên cứu cá nhân hóa dựa trên dữ liệu học tập của sinh viên.',
+          mucTieuNghienCuu: 'Đề xuất kiến trúc dữ liệu và thuật toán gợi ý giúp sinh viên lựa chọn lộ trình học tập phù hợp với năng lực và mục tiêu nghiên cứu.',
+          ungDungThucTien: 'Hỗ trợ cố vấn học tập, giảng viên và sinh viên theo dõi tiến độ, đề xuất học phần và giảm nguy cơ chậm tiến độ.',
+          phamViNghienCuu: 'Tập trung vào dữ liệu học tập nội bộ, dashboard giám sát và mô hình gợi ý mức cơ bản đến trung bình.',
+          congNgheSuDung: 'Python, FastAPI, PostgreSQL, scikit-learn, React',
+          lyDoLuaChon: 'Phù hợp định hướng AI ứng dụng và có giá trị thực tế rõ ràng trong môi trường đại học mở.',
+          trangThai: 'ACTIVE',
+        },
+        {
+          giangVienId: lecturerTwo.id,
+          mangNghienCuuId: iotArea.id,
+          tenDeTai: 'Nền tảng thu thập dữ liệu cảm biến phục vụ giám sát lớp học thông minh',
+          moTaVanDe: 'Nghiên cứu nền tảng thu thập dữ liệu từ cảm biến môi trường để giám sát điều kiện học tập và hỗ trợ vận hành lớp học thông minh.',
+          mucTieuNghienCuu: 'Thiết kế giải pháp cảm biến, truyền dữ liệu và dashboard hiển thị theo thời gian thực cho bối cảnh đại học mở.',
+          ungDungThucTien: 'Có thể ứng dụng trong phòng học, phòng thực hành và không gian nghiên cứu để cảnh báo điều kiện bất thường.',
+          phamViNghienCuu: 'Tập trung vào nhiệt độ, độ ẩm, tiếng ồn, ánh sáng và mô phỏng hạ tầng IoT cỡ nhỏ.',
+          congNgheSuDung: 'ESP32, MQTT, Node.js, React, PostgreSQL',
+          lyDoLuaChon: 'Đề tài giúp demo tốt tính ứng dụng của IoT trong môi trường giáo dục và dễ mở rộng về sau.',
+          trangThai: 'ACTIVE',
+        },
+      ],
+    });
+
     const notifications = [
       {
         nguoiNhanId: webLeader.id,

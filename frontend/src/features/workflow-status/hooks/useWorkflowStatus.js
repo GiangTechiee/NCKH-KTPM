@@ -249,7 +249,7 @@ function emptyResult() {
   };
 }
 
-export function useStudentProgress(studentCode, _groupData, _topicOverview) {
+export function useStudentProgress(studentCode) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [backendData, setBackendData] = useState(null);

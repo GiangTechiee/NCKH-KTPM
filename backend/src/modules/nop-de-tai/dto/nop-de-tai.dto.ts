@@ -6,4 +6,5 @@ export interface NopDeTaiDto {
   phamViNghienCuu?: string | null;
   congNgheSuDung?: string | null;
   lyDoLuaChon?: string | null;
+  xacNhanChuyenDeTai?: boolean;
 }

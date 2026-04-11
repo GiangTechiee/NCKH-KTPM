@@ -1,0 +1,155 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: H
+          - generic [ref=e12]:
+            - paragraph [ref=e13]: Hanoi Open University
+            - paragraph [ref=e14]: Hệ thống NCKH
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: Vai trò
+          - combobox [ref=e17]:
+            - option "Sinh viên" [selected]
+            - option "Giảng viên"
+            - option "Quản trị viên"
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: Sinh viên
+          - combobox [ref=e20]:
+            - option "SV001 — Nguyễn Minh Anh" [selected]
+            - option "SV002 — Trần Thu Hà"
+            - option "SV003 — Lê Quang Huy"
+            - option "SV004 — Phạm Gia Hân"
+            - option "SV005 — Đỗ Đức Minh"
+            - option "SV006 — Trần Hoàng Phúc"
+            - option "SV007 — Phan Ngọc Linh"
+            - option "SV008 — Hoàng Mai Phương"
+            - option "SV009 — Nguyễn Anh Khoa"
+            - option "SV010 — Tạ Bảo Châu"
+            - option "SV011 — Phạm Ngọc An"
+            - option "SV012 — Nguyễn Hoài Thu"
+            - option "SV013 — Lê Thu Trang"
+            - option "SV014 — Trịnh Khánh Vy"
+            - option "SV015 — Dương Quốc Bảo"
+        - navigation [ref=e21]:
+          - paragraph [ref=e22]: Điều hướng
+          - button "Đăng ký mảng nghiên cứu" [ref=e23] [cursor=pointer]:
+            - img [ref=e24]
+            - generic [ref=e26]: Đăng ký mảng nghiên cứu
+          - button "Nhóm nghiên cứu" [ref=e27] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: Nhóm nghiên cứu
+          - button "Ghép nhóm / lời mời" [ref=e31] [cursor=pointer]:
+            - img [ref=e32]
+            - generic [ref=e34]: Ghép nhóm / lời mời
+          - button "Đề tài nghiên cứu" [ref=e35] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e38]: Đề tài nghiên cứu
+          - button "Tiến trình thực hiện" [ref=e39] [cursor=pointer]:
+            - img [ref=e40]
+            - generic [ref=e42]: Tiến trình thực hiện
+          - button "Thông báo" [ref=e43] [cursor=pointer]:
+            - img [ref=e44]
+            - generic [ref=e46]: Thông báo
+        - generic [ref=e47]:
+          - paragraph [ref=e48]: Hỗ trợ
+          - paragraph [ref=e49]: nckh@hou.edu.vn
+    - generic [ref=e50]:
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Quản lý Nghiên cứu Khoa học
+          - heading "Đề tài nghiên cứu" [level=1] [ref=e55]
+        - generic [ref=e57]:
+          - generic [ref=e58]: MA
+          - generic [ref=e59]:
+            - paragraph [ref=e60]: Nguyễn Minh Anh
+            - paragraph [ref=e61]: CNTT01-K17
+      - generic [ref=e62]:
+        - generic [ref=e64]:
+          - heading "Đề tài nghiên cứu" [level=2] [ref=e65]
+          - paragraph [ref=e66]: Nhóm tự đề xuất đề tài để gửi giảng viên duyệt.
+        - generic [ref=e67]:
+          - article [ref=e68]:
+            - paragraph [ref=e69]: Nhóm hiện tại
+            - paragraph [ref=e70]: Nhóm Web HOU Alpha
+            - paragraph [ref=e71]: "Trạng thái: Chờ duyệt đề tài"
+          - article [ref=e72]:
+            - paragraph [ref=e73]: Giảng viên hướng dẫn
+            - paragraph [ref=e74]: TS. Nguyễn Thị Lan
+            - paragraph [ref=e75]: Đề tài chỉ gửi khi đã có giảng viên.
+          - article [ref=e76]:
+            - paragraph [ref=e77]: Trạng thái đề tài
+            - paragraph [ref=e78]: Chờ giảng viên duyệt
+            - paragraph [ref=e79]: "Số lần chỉnh sửa: 0"
+        - generic [ref=e81]:
+          - generic [ref=e83]:
+            - button "Đề tài giảng viên đề xuất 1 đề tài có sẵn" [ref=e84] [cursor=pointer]:
+              - paragraph [ref=e85]: Đề tài giảng viên đề xuất
+              - paragraph [ref=e86]: 1 đề tài có sẵn
+            - button "Tự đề xuất đề tài Tạo, sửa hoặc xóa đề tài nhóm tự đề xuất" [active] [ref=e87] [cursor=pointer]:
+              - paragraph [ref=e88]: Tự đề xuất đề tài
+              - paragraph [ref=e89]: Tạo, sửa hoặc xóa đề tài nhóm tự đề xuất
+          - generic [ref=e177]:
+            - article [ref=e178]:
+              - generic [ref=e179]:
+                - generic [ref=e180]:
+                  - paragraph [ref=e181]: Nhóm hiện tại
+                  - heading "Nhóm Web HOU Alpha" [level=3] [ref=e182]
+                  - paragraph [ref=e183]: Mảng Phát triển ứng dụng web • 2 thành viên • Giảng viên TS. Nguyễn Thị Lan
+                - button "Làm mới" [ref=e184] [cursor=pointer]
+              - generic [ref=e185]: Đây là khu vực cho đề tài sinh viên tự đề xuất. Nếu giảng viên chưa duyệt thì bạn vẫn có thể sửa hoặc xóa đề tài này.
+              - generic [ref=e186]:
+                - generic [ref=e187]:
+                  - generic [ref=e188]:
+                    - paragraph [ref=e189]: Đề tài hiện tại
+                    - heading "Nền tảng cộng tác nghiên cứu web cho sinh viên HOU" [level=4] [ref=e190]
+                    - paragraph [ref=e191]: Đề tài sinh viên tự đề xuất
+                  - generic [ref=e192]: Chờ giảng viên duyệt
+                - generic [ref=e193]:
+                  - generic [ref=e194]:
+                    - paragraph [ref=e195]: Mô tả vấn đề
+                    - paragraph [ref=e196]: Xây dựng nền tảng cộng tác giúp nhóm nghiên cứu sinh viên phối hợp công việc, phản hồi và theo dõi tiến độ đề tài một cách tập trung.
+                  - generic [ref=e197]:
+                    - paragraph [ref=e198]: Mục tiêu nghiên cứu
+                    - paragraph [ref=e199]: Thiết kế quy trình cộng tác, giao việc và phản hồi theo thời gian thực cho nhóm nghiên cứu khoa học sinh viên.
+                  - generic [ref=e200]:
+                    - paragraph [ref=e201]: Phạm vi nghiên cứu
+                    - paragraph [ref=e202]: Tập trung vào workflow cộng tác của nhóm Web HOU Alpha trong môi trường demo.
+                  - generic [ref=e203]:
+                    - paragraph [ref=e204]: Công nghệ sử dụng
+                    - paragraph [ref=e205]: React, Node.js, WebSocket, PostgreSQL
+                - generic [ref=e206]:
+                  - generic [ref=e207]:
+                    - paragraph [ref=e208]: Ứng dụng thực tiễn
+                    - paragraph [ref=e209]: Hỗ trợ nhóm nghiên cứu phối hợp hiệu quả hơn với giảng viên hướng dẫn.
+                  - generic [ref=e210]:
+                    - paragraph [ref=e211]: Lý do lựa chọn
+                    - paragraph [ref=e212]: Bài toán phù hợp với nhu cầu cộng tác của nhóm nghiên cứu web.
+                - button "Xóa đề tài" [ref=e214] [cursor=pointer]
+            - article [ref=e215]:
+              - paragraph [ref=e216]: Chỉnh sửa đề tài tự đề xuất
+              - heading "Gửi lại nội dung đã chỉnh sửa" [level=3] [ref=e217]
+              - paragraph [ref=e218]: Giữ form ngắn gọn, rõ vấn đề nghiên cứu và hướng triển khai để giảng viên duyệt nhanh hơn.
+              - generic [ref=e219]:
+                - generic [ref=e220]:
+                  - text: Tên đề tài
+                  - textbox "Tên đề tài" [ref=e221]: Nền tảng cộng tác nghiên cứu web cho sinh viên HOU
+                - generic [ref=e222]:
+                  - text: Mô tả vấn đề
+                  - textbox "Mô tả vấn đề" [ref=e223]: Xây dựng nền tảng cộng tác giúp nhóm nghiên cứu sinh viên phối hợp công việc, phản hồi và theo dõi tiến độ đề tài một cách tập trung.
+                - generic [ref=e224]:
+                  - text: Mục tiêu nghiên cứu
+                  - textbox "Mục tiêu nghiên cứu" [ref=e225]: Thiết kế quy trình cộng tác, giao việc và phản hồi theo thời gian thực cho nhóm nghiên cứu khoa học sinh viên.
+                - generic [ref=e226]:
+                  - text: Ứng dụng thực tiễn
+                  - textbox "Ứng dụng thực tiễn" [ref=e227]: Hỗ trợ nhóm nghiên cứu phối hợp hiệu quả hơn với giảng viên hướng dẫn.
+                - generic [ref=e228]:
+                  - text: Phạm vi nghiên cứu
+                  - textbox "Phạm vi nghiên cứu" [ref=e229]: Tập trung vào workflow cộng tác của nhóm Web HOU Alpha trong môi trường demo.
+                - generic [ref=e230]:
+                  - text: Công nghệ sử dụng
+                  - textbox "Công nghệ sử dụng" [ref=e231]: React, Node.js, WebSocket, PostgreSQL
+                - generic [ref=e232]:
+                  - text: Lý do lựa chọn
+                  - textbox "Lý do lựa chọn" [ref=e233]: Bài toán phù hợp với nhu cầu cộng tác của nhóm nghiên cứu web.
+              - button "Gửi lại đề tài" [ref=e234] [cursor=pointer]

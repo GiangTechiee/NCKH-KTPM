@@ -158,6 +158,11 @@ cd backend
 npm run db:seed:demo:additive
 ```
 
+Script additive hiện bổ sung thêm:
+- nhóm demo bổ sung cho Web / AI / IoT,
+- đề tài giảng viên đề xuất theo từng mảng nghiên cứu,
+- lời mời, thông báo và dữ liệu giao diện phục vụ kiểm thử nhanh.
+
 Ngoài ra trong repo hiện có script chuẩn hóa lại dữ liệu demo có dấu:
 
 ```text
@@ -236,6 +241,24 @@ Danh sách tài khoản này được tải từ backend qua:
 ---
 
 ## 12. Ghi chú quan trọng
+
+- Từ migration `add_lecturer_topic_catalog`, hệ thống dùng thêm bảng:
+
+```text
+backend/prisma/schema.prisma -> danh_muc_de_tai_giang_vien
+```
+
+  Bảng này lưu **catalog đề tài giảng viên đề xuất** theo giảng viên + mảng nghiên cứu.
+  Bảng `de_tai_nghien_cuu` tiếp tục dùng cho **đề tài hiện tại của nhóm**.
+
+- Trong frontend, trang **Đề tài nghiên cứu** hiện có 2 tab con:
+
+```text
+1. Đề tài giảng viên đề xuất
+2. Tự đề xuất đề tài
+```
+
+- Khi nhóm chuyển giữa đề tài giảng viên đề xuất và đề tài tự đề xuất, frontend sẽ yêu cầu xác nhận trước khi gửi request chuyển đề tài.
 
 - Backend entrypoint hiện tại là:
 

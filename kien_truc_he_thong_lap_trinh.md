@@ -277,6 +277,13 @@ src/
 ## 8.3. Cấu trúc bên trong mỗi module
 Ví dụ:
 
+### Ghi chú bổ sung cho module đề tài
+
+- `de-tai-de-xuat/` nên quản lý **catalog đề tài giảng viên đề xuất** theo giảng viên và mảng nghiên cứu.
+- `nop-de-tai/` nên quản lý **đề tài hiện tại của nhóm** (đề tài đang chọn / đang nộp / đang duyệt).
+- Không dùng chung một thực thể để vừa làm catalog đề tài giảng viên vừa làm đề tài hiện tại của nhóm.
+- Luồng **chọn đề tài giảng viên đề xuất** nên clone nội dung từ catalog sang đề tài hiện tại của nhóm trong transaction.
+
 ```text
 nhom-nghien-cuu/
   controllers/

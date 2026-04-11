@@ -65,6 +65,13 @@ export const TopicSource = Object.freeze({
 
 export type TopicSource = (typeof TopicSource)[keyof typeof TopicSource];
 
+export const TopicCatalogStatus = Object.freeze({
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+} as const);
+
+export type TopicCatalogStatus = (typeof TopicCatalogStatus)[keyof typeof TopicCatalogStatus];
+
 export const ResearchAreaStatus = Object.freeze({
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',

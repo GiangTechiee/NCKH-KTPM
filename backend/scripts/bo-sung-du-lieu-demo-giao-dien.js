@@ -27,6 +27,22 @@ const STUDENTS = [
     soDienThoai: '0900000005',
   },
   {
+    maSinhVien: 'SV006',
+    hoTen: 'Trần Hoàng Phúc',
+    email: 'sv006@nckh-demo.hou.edu.vn',
+    tenLop: 'IOT01-K17',
+    tenKhoa: 'Điện tử viễn thông',
+    soDienThoai: '0900000006',
+  },
+  {
+    maSinhVien: 'SV007',
+    hoTen: 'Phan Ngọc Linh',
+    email: 'sv007@nckh-demo.hou.edu.vn',
+    tenLop: 'IOT02-K17',
+    tenKhoa: 'Điện tử viễn thông',
+    soDienThoai: '0900000007',
+  },
+  {
     maSinhVien: 'SV008',
     hoTen: 'Hoàng Mai Phương',
     email: 'sv008@nckh-demo.hou.edu.vn',
@@ -92,6 +108,11 @@ const RESEARCH_AREAS = [
     maMang: 'AI-HOU',
     tenMang: 'Trí tuệ nhân tạo ứng dụng',
     moTa: 'Ứng dụng AI vào tư vấn học tập, phân tích dữ liệu học vụ và đánh giá tiến độ đề tài.',
+  },
+  {
+    maMang: 'IOT-HOU',
+    tenMang: 'Internet of Things và hệ thống nhúng',
+    moTa: 'Nghiên cứu các giải pháp IoT, thu thập dữ liệu và tự động hóa trong môi trường đại học mở.',
   },
 ];
 
@@ -426,6 +447,80 @@ async function ensureTopic(client, input) {
   return inserted.rows[0].id;
 }
 
+async function ensureLecturerTopicCatalog(client, input) {
+  const existing = await client.query(
+    `
+      select id
+      from danh_muc_de_tai_giang_vien
+      where giang_vien_id = $1 and mang_nghien_cuu_id = $2 and ten_de_tai = $3
+      limit 1
+    `,
+    [input.lecturerId, input.areaId, input.tenDeTai]
+  );
+
+  if (existing.rowCount > 0) {
+    await client.query(
+      `
+        update danh_muc_de_tai_giang_vien
+        set
+          mo_ta_van_de = $2,
+          muc_tieu_nghien_cuu = $3,
+          ung_dung_thuc_tien = $4,
+          pham_vi_nghien_cuu = $5,
+          cong_nghe_su_dung = $6,
+          ly_do_lua_chon = $7,
+          trang_thai = $8
+        where id = $1
+      `,
+      [
+        existing.rows[0].id,
+        input.moTaVanDe,
+        input.mucTieuNghienCuu,
+        input.ungDungThucTien,
+        input.phamViNghienCuu,
+        input.congNgheSuDung,
+        input.lyDoLuaChon,
+        input.trangThai,
+      ]
+    );
+
+    return existing.rows[0].id;
+  }
+
+  const inserted = await client.query(
+    `
+      insert into danh_muc_de_tai_giang_vien (
+        giang_vien_id,
+        mang_nghien_cuu_id,
+        ten_de_tai,
+        mo_ta_van_de,
+        muc_tieu_nghien_cuu,
+        ung_dung_thuc_tien,
+        pham_vi_nghien_cuu,
+        cong_nghe_su_dung,
+        ly_do_lua_chon,
+        trang_thai
+      )
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      returning id
+    `,
+    [
+      input.lecturerId,
+      input.areaId,
+      input.tenDeTai,
+      input.moTaVanDe,
+      input.mucTieuNghienCuu,
+      input.ungDungThucTien,
+      input.phamViNghienCuu,
+      input.congNgheSuDung,
+      input.lyDoLuaChon,
+      input.trangThai,
+    ]
+  );
+
+  return inserted.rows[0].id;
+}
+
 async function ensureNotification(client, input) {
   const existing = await client.query(
     `
@@ -539,6 +634,8 @@ async function main() {
     await ensureRegistration(client, studentIds.SV001, areaIds['WEB-HOU']);
     await ensureRegistration(client, studentIds.SV004, areaIds['AI-HOU']);
     await ensureRegistration(client, studentIds.SV005, areaIds['AI-HOU']);
+    await ensureRegistration(client, studentIds.SV006, areaIds['IOT-HOU']);
+    await ensureRegistration(client, studentIds.SV007, areaIds['IOT-HOU']);
     await ensureRegistration(client, studentIds.SV009, areaIds['WEB-HOU']);
     await ensureRegistration(client, studentIds.SV013, areaIds['WEB-HOU']);
 
@@ -560,6 +657,24 @@ async function main() {
       soLuongThanhVien: 1,
     });
 
+    const webProposalGroupId = await ensureGroup(client, {
+      tenNhom: 'Nhóm Web HOU Beta',
+      areaId: areaIds['WEB-HOU'],
+      truongNhomSinhVienId: studentIds.SV009,
+      giangVienId: lecturerIds.GV001,
+      trangThai: 'DA_CO_GIANG_VIEN',
+      soLuongThanhVien: 1,
+    });
+
+    const iotGroupId = await ensureGroup(client, {
+      tenNhom: 'Nhóm IoT HOU Pioneer',
+      areaId: areaIds['IOT-HOU'],
+      truongNhomSinhVienId: studentIds.SV006,
+      giangVienId: lecturerIds.GV003,
+      trangThai: 'DA_CO_GIANG_VIEN',
+      soLuongThanhVien: 2,
+    });
+
     await ensureGroupMember(client, {
       groupId: webGroupId,
       studentId: studentIds.SV001,
@@ -578,6 +693,27 @@ async function main() {
       groupId: aiGroupId,
       studentId: studentIds.SV004,
       vaiTro: 'TRUONG_NHOM',
+      trangThaiThamGia: 'DA_CHAP_NHAN',
+      thoiGianThamGia: new Date(),
+    });
+    await ensureGroupMember(client, {
+      groupId: webProposalGroupId,
+      studentId: studentIds.SV009,
+      vaiTro: 'TRUONG_NHOM',
+      trangThaiThamGia: 'DA_CHAP_NHAN',
+      thoiGianThamGia: new Date(),
+    });
+    await ensureGroupMember(client, {
+      groupId: iotGroupId,
+      studentId: studentIds.SV006,
+      vaiTro: 'TRUONG_NHOM',
+      trangThaiThamGia: 'DA_CHAP_NHAN',
+      thoiGianThamGia: new Date(),
+    });
+    await ensureGroupMember(client, {
+      groupId: iotGroupId,
+      studentId: studentIds.SV007,
+      vaiTro: 'THANH_VIEN',
       trangThaiThamGia: 'DA_CHAP_NHAN',
       thoiGianThamGia: new Date(),
     });
@@ -608,6 +744,45 @@ async function main() {
       thoiGianNop: new Date(),
     });
 
+    const aiProposalTopicId = await ensureLecturerTopicCatalog(client, {
+      areaId: areaIds['AI-HOU'],
+      lecturerId: lecturerIds.GV002,
+      tenDeTai: 'Hệ thống gợi ý lộ trình học tập cá nhân hóa cho sinh viên HOU bằng AI',
+      moTaVanDe: 'Xây dựng mô hình gợi ý học phần, tài nguyên học tập và tiến độ nghiên cứu cá nhân hóa dựa trên dữ liệu học tập của sinh viên.',
+      mucTieuNghienCuu: 'Đề xuất kiến trúc dữ liệu và thuật toán gợi ý giúp sinh viên lựa chọn lộ trình học tập phù hợp với năng lực và mục tiêu nghiên cứu.',
+      ungDungThucTien: 'Hỗ trợ cố vấn học tập, giảng viên và sinh viên theo dõi tiến độ, đề xuất học phần và giảm nguy cơ chậm tiến độ.',
+      phamViNghienCuu: 'Tập trung vào dữ liệu học tập nội bộ, dashboard giám sát và mô hình gợi ý mức cơ bản đến trung bình.',
+      congNgheSuDung: 'Python, FastAPI, PostgreSQL, scikit-learn, React',
+      lyDoLuaChon: 'Phù hợp định hướng AI ứng dụng và có giá trị thực tế rõ ràng trong môi trường đại học mở.',
+      trangThai: 'ACTIVE',
+    });
+
+    const webProposalTopicId = await ensureLecturerTopicCatalog(client, {
+      areaId: areaIds['WEB-HOU'],
+      lecturerId: lecturerIds.GV001,
+      tenDeTai: 'Cổng quản lý tiến độ nghiên cứu khoa học sinh viên theo thời gian thực',
+      moTaVanDe: 'Xây dựng cổng web giúp giảng viên và sinh viên theo dõi tiến độ nghiên cứu, mốc công việc, phản hồi và cảnh báo chậm tiến độ.',
+      mucTieuNghienCuu: 'Thiết kế hệ thống web hỗ trợ quản lý tiến độ đề tài, cộng tác nhóm và phản hồi giữa sinh viên với giảng viên.',
+      ungDungThucTien: 'Hỗ trợ quản lý đề tài khoa học sinh viên tập trung, minh bạch và thuận tiện hơn cho khoa CNTT.',
+      phamViNghienCuu: 'Tập trung vào nhóm nghiên cứu sinh viên trong nội bộ trường với workflow từ đăng ký đến duyệt đề tài.',
+      congNgheSuDung: 'React, Node.js, TypeScript, Prisma, PostgreSQL',
+      lyDoLuaChon: 'Đề tài bám sát bài toán của hệ thống demo hiện tại và phù hợp mảng phát triển ứng dụng web.',
+      trangThai: 'ACTIVE',
+    });
+
+    const iotProposalTopicId = await ensureLecturerTopicCatalog(client, {
+      areaId: areaIds['IOT-HOU'],
+      lecturerId: lecturerIds.GV003,
+      tenDeTai: 'Hệ thống giám sát môi trường phòng thí nghiệm thông minh bằng IoT',
+      moTaVanDe: 'Xây dựng hệ thống cảm biến theo dõi nhiệt độ, độ ẩm, ánh sáng và cảnh báo bất thường trong phòng thí nghiệm phục vụ đào tạo.',
+      mucTieuNghienCuu: 'Đề xuất mô hình thu thập dữ liệu cảm biến, dashboard giám sát và cơ chế cảnh báo tự động trong môi trường đại học.',
+      ungDungThucTien: 'Hỗ trợ quản lý phòng thí nghiệm, tiết kiệm năng lượng và nâng cao chất lượng bảo quản thiết bị nghiên cứu.',
+      phamViNghienCuu: 'Tập trung vào một phòng thí nghiệm mô phỏng với tập cảm biến phổ biến và dashboard theo dõi thời gian thực.',
+      congNgheSuDung: 'ESP32, MQTT, Node.js, React, InfluxDB',
+      lyDoLuaChon: 'Phù hợp chuyên môn IoT và hệ thống nhúng, đồng thời có giá trị demo trực quan cao.',
+      trangThai: 'ACTIVE',
+    });
+
     await ensureNotification(client, {
       nguoiNhanId: studentIds.SV005,
       loaiNguoiNhan: 'SINH_VIEN',
@@ -626,6 +801,36 @@ async function main() {
       loaiThongBao: 'NOP_DE_TAI',
       loaiDoiTuong: 'DE_TAI_NGHIEN_CUU',
       doiTuongId: topicId,
+    });
+
+    await ensureNotification(client, {
+      nguoiNhanId: studentIds.SV004,
+      loaiNguoiNhan: 'SINH_VIEN',
+      tieuDe: 'Có đề tài giảng viên đề xuất mới',
+      noiDung: 'Giảng viên đã đề xuất đề tài AI mới cho nhóm AI HOU Vision.',
+      loaiThongBao: 'CO_DE_TAI_GIANG_VIEN_DE_XUAT',
+      loaiDoiTuong: 'DE_TAI_NGHIEN_CUU',
+      doiTuongId: aiProposalTopicId,
+    });
+
+    await ensureNotification(client, {
+      nguoiNhanId: studentIds.SV009,
+      loaiNguoiNhan: 'SINH_VIEN',
+      tieuDe: 'Có đề tài giảng viên đề xuất mới',
+      noiDung: 'Giảng viên đã đề xuất đề tài web mới cho nhóm Web HOU Beta.',
+      loaiThongBao: 'CO_DE_TAI_GIANG_VIEN_DE_XUAT',
+      loaiDoiTuong: 'DE_TAI_NGHIEN_CUU',
+      doiTuongId: webProposalTopicId,
+    });
+
+    await ensureNotification(client, {
+      nguoiNhanId: studentIds.SV006,
+      loaiNguoiNhan: 'SINH_VIEN',
+      tieuDe: 'Có đề tài giảng viên đề xuất mới',
+      noiDung: 'Giảng viên đã đề xuất đề tài IoT mới cho nhóm IoT HOU Pioneer.',
+      loaiThongBao: 'CO_DE_TAI_GIANG_VIEN_DE_XUAT',
+      loaiDoiTuong: 'DE_TAI_NGHIEN_CUU',
+      doiTuongId: iotProposalTopicId,
     });
 
     await ensureAuditLog(client, {
@@ -663,11 +868,14 @@ async function main() {
         {
           message: 'Đã bổ sung dữ liệu demo giao diện thành công',
           quickAccess: {
-            noAreaStudent: 'SV008',
-            registeredNoGroupStudent: 'SV009',
-            activeGroupLeader: 'SV001',
-            pendingInvitationStudent: 'SV005',
-            lecturerPendingReview: 'GV001',
+          noAreaStudent: 'SV008',
+          registeredNoGroupStudent: 'SV009',
+          activeGroupLeader: 'SV001',
+          webProposalStudent: 'SV009',
+          aiProposalStudent: 'SV004',
+          iotProposalStudent: 'SV006',
+          pendingInvitationStudent: 'SV005',
+          lecturerPendingReview: 'GV001',
             lecturerAssignedGroup: 'GV002',
           },
         },

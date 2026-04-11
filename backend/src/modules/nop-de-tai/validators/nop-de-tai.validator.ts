@@ -13,6 +13,10 @@ function layChuoiTuyChon(giaTri: unknown): string | null {
   return giaTriDaChuanHoa || null;
 }
 
+function layCoXacNhanChuyenDeTai(giaTri: unknown): boolean {
+  return giaTri === true;
+}
+
 function xacThucNoiDungDeTai(body: unknown): Omit<NopDeTaiDto, 'deTaiId'> {
   if (!body || typeof body !== 'object') {
     throw new ValidationError('Thiếu dữ liệu đề tài', [
@@ -51,6 +55,7 @@ function xacThucNoiDungDeTai(body: unknown): Omit<NopDeTaiDto, 'deTaiId'> {
     phamViNghienCuu: layChuoiTuyChon(duLieu.phamViNghienCuu),
     congNgheSuDung: layChuoiTuyChon(duLieu.congNgheSuDung),
     lyDoLuaChon: layChuoiTuyChon(duLieu.lyDoLuaChon),
+    xacNhanChuyenDeTai: layCoXacNhanChuyenDeTai(duLieu.xacNhanChuyenDeTai),
   };
 }
 

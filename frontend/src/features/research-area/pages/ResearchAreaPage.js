@@ -20,7 +20,9 @@ function ResearchAreaPage({ studentCode }) {
     selectedArea,
     selectedAreaId,
     successMessage,
+    areaStatusFilter,
     onAreaQueryChange,
+    onAreaStatusFilterChange,
     onCancelAreaRegistration,
     onConfirmAreaRegistration,
     onRefresh,
@@ -141,8 +143,10 @@ function ResearchAreaPage({ studentCode }) {
 
       <ResearchAreaBoard
         areas={filteredAreas}
+        areaStatusFilter={areaStatusFilter}
         closeAt={journey?.registrationWindow?.closeAt}
         onAreaQueryChange={onAreaQueryChange}
+        onAreaStatusFilterChange={onAreaStatusFilterChange}
         onCancelRegistration={() => setShowCancelModal(true)}
         onRefresh={onRefresh}
         onSelectArea={handleSelectArea}

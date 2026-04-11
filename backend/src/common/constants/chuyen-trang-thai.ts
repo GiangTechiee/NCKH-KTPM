@@ -16,12 +16,13 @@ export const GROUP_STATUS_TRANSITIONS: Record<GroupStatus, readonly GroupStatus[
 export const TOPIC_SUBMISSION_STATUS_TRANSITIONS: Record<TopicSubmissionStatus, readonly TopicSubmissionStatus[]> = Object.freeze({
   [TopicSubmissionStatus.NHAP]: [TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET],
   [TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET]: [
+    TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET,
     TopicSubmissionStatus.CAN_CHINH_SUA,
     TopicSubmissionStatus.DA_DUYET,
     TopicSubmissionStatus.TU_CHOI,
   ],
   [TopicSubmissionStatus.CAN_CHINH_SUA]: [TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET],
   [TopicSubmissionStatus.DA_DUYET]: [TopicSubmissionStatus.DA_CHOT],
-  [TopicSubmissionStatus.TU_CHOI]: [],
+  [TopicSubmissionStatus.TU_CHOI]: [TopicSubmissionStatus.CHO_GIANG_VIEN_DUYET],
   [TopicSubmissionStatus.DA_CHOT]: [],
 });

@@ -26,3 +26,7 @@ export interface DeTaiDeXuatResponse {
 export interface ChonDeTaiDeXuatResponse extends DeTaiDeXuatResponse {
   daChon: boolean;
 }
+
+export interface ChonDeTaiDeXuatDto {
+  xacNhanChuyenDeTai?: boolean;
+}

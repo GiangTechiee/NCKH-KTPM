@@ -3,7 +3,7 @@ import { sendSuccess } from '../../../common/utils/phan-hoi';
 import { layMaSinhVienTuYeuCau } from '../../../common/utils/lay-ma-sinh-vien-tu-yeu-cau';
 import { nguoiDungService } from '../../nguoi-dung/services/nguoi-dung.service';
 import { nopDeTaiService } from '../services/nop-de-tai.service';
-import { xacThucCapNhatDeTai, xacThucNopDeTai } from '../validators/nop-de-tai.validator';
+import { layDeTaiIdTuRequest, xacThucCapNhatDeTai, xacThucNopDeTai } from '../validators/nop-de-tai.validator';
 
 class NopDeTaiController {
   async layDeTaiCuaToi(request: Request, response: Response): Promise<Response> {
@@ -38,6 +38,18 @@ class NopDeTaiController {
 
     return sendSuccess(response, {
       message: 'Cập nhật đề tài thành công',
+      data,
+    });
+  }
+
+  async xoaDeTai(request: Request, response: Response): Promise<Response> {
+    const maSinhVien = layMaSinhVienTuYeuCau(request);
+    const sinhVien = await nguoiDungService.laySinhVienTheoMa(maSinhVien);
+    const deTaiId = layDeTaiIdTuRequest(request);
+    const data = await nopDeTaiService.xoaDeTai(sinhVien.id, deTaiId);
+
+    return sendSuccess(response, {
+      message: 'Xóa đề tài thành công',
       data,
     });
   }

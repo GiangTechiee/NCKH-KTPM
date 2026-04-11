@@ -122,6 +122,12 @@ class NopDeTaiRepository {
       data: { trangThai },
     });
   }
+
+  async xoaDeTai(deTaiId: bigint, coSoDuLieu: CoSoDuLieu) {
+    return coSoDuLieu.deTaiNghienCuu.delete({
+      where: { id: deTaiId },
+    });
+  }
 }
 
 export { CoSoDuLieu, NopDeTaiRepository };
