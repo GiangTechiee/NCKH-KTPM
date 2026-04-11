@@ -1,0 +1,71 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: H
+          - generic [ref=e12]:
+            - paragraph [ref=e13]: Hanoi Open University
+            - paragraph [ref=e14]: Hệ thống NCKH
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: Vai trò
+          - combobox [ref=e17]:
+            - option "Sinh viên" [selected]
+            - option "Giảng viên"
+            - option "Quản trị viên"
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: Sinh viên
+          - combobox [ref=e20]:
+            - option "SV001 — Nguyễn Minh Anh"
+            - option "SV002 — Trần Thu Hà"
+            - option "SV003 — Lê Quang Huy"
+            - option "SV004 — Phạm Gia Hân"
+            - option "SV005 — Đỗ Đức Minh"
+            - option "SV006 — Vũ Khánh Linh"
+            - option "SV007 — Bùi Nhật Nam"
+            - option "SV008 — Hoàng Mai Phương"
+            - option "SV009 — Nguyễn Anh Khoa"
+            - option "SV010 — Tạ Bảo Châu"
+            - option "SV011 — Phạm Ngọc An"
+            - option "SV012 — Nguyễn Hoài Thu"
+            - option "SV013 — Lê Thu Trang"
+            - option "SV014 — Trịnh Khánh Vy"
+            - option "SV015 — Dương Quốc Bảo" [selected]
+        - navigation [ref=e21]:
+          - paragraph [ref=e22]: Điều hướng
+          - button "Đăng ký mảng nghiên cứu" [ref=e98] [cursor=pointer]:
+            - img [ref=e99]
+            - generic [ref=e101]: Đăng ký mảng nghiên cứu
+          - button "Nhóm nghiên cứu" [ref=e102] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e105]: Nhóm nghiên cứu
+          - button "Ghép nhóm / lời mời" [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - generic [ref=e109]: Ghép nhóm / lời mời
+          - button "Đề tài nghiên cứu" [ref=e110] [cursor=pointer]:
+            - img [ref=e111]
+            - generic [ref=e113]: Đề tài nghiên cứu
+          - button "Tiến trình thực hiện" [ref=e114] [cursor=pointer]:
+            - img [ref=e115]
+            - generic [ref=e117]: Tiến trình thực hiện
+          - button "Thông báo" [ref=e118] [cursor=pointer]:
+            - img [ref=e119]
+            - generic [ref=e121]: Thông báo
+        - generic [ref=e44]:
+          - paragraph [ref=e45]: Hỗ trợ
+          - paragraph [ref=e46]: nckh@hou.edu.vn
+    - generic [ref=e47]:
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - paragraph [ref=e51]: Quản lý Nghiên cứu Khoa học
+          - heading "Đăng ký mảng nghiên cứu" [level=1] [ref=e122]
+        - generic [ref=e54]:
+          - generic [ref=e55]: QB
+          - generic [ref=e56]:
+            - paragraph [ref=e57]: Dương Quốc Bảo
+            - paragraph [ref=e58]: CNTT08-K17
+      - generic [ref=e59]:
+        - generic [ref=e61]:
+          - heading "Đăng ký mảng nghiên cứu" [level=2] [ref=e123]
+          - paragraph [ref=e63]: Chọn một mảng nghiên cứu phù hợp để tham gia đợt nghiên cứu khoa học hiện tại.
+        - paragraph [ref=e128]: Đang tải dữ liệu...

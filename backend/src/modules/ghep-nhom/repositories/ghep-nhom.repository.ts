@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { InvitationStatus, MAX_GROUP_MEMBERS, MemberJoinStatus } from '../../../common/constants';
+import { GroupStatus, InvitationStatus, MAX_GROUP_MEMBERS, MemberJoinStatus, RegistrationStatus, ResearchAreaStatus } from '../../../common/constants';
 import { getPrismaClient } from '../../../infrastructure/database/trinh-khach-prisma';
 
 type CoSoDuLieu = PrismaClient | Prisma.TransactionClient;
@@ -8,8 +8,18 @@ class GhepNhomRepository {
   private readonly prisma = getPrismaClient();
 
   async timDangKyMangGanNhat(sinhVienId: bigint) {
+    const thoiDiem = new Date();
+
     return this.prisma.sinhVienDangKyMang.findFirst({
-      where: { sinhVienId },
+      where: {
+        sinhVienId,
+        trangThai: RegistrationStatus.REGISTERED,
+        mangNghienCuu: {
+          trangThai: ResearchAreaStatus.OPEN,
+          thoiGianMoDangKy: { lte: thoiDiem },
+          thoiGianDongDangKy: { gte: thoiDiem },
+        },
+      },
       orderBy: { thoiGianDangKy: 'desc' },
     });
   }
@@ -26,6 +36,15 @@ class GhepNhomRepository {
     });
   }
 
+  async timNhomTheoId(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.nhomNghienCuu.findUnique({
+      where: { id: nhomNghienCuuId },
+      include: {
+        truongNhom: true,
+      },
+    });
+  }
+
   async timSinhVienPhuHop(mangNghienCuuId: bigint, sinhVienLoaiTruId: bigint) {
     return this.prisma.sinhVien.findMany({
       where: {
@@ -33,6 +52,10 @@ class GhepNhomRepository {
         dangKyMang: {
           some: {
             mangNghienCuuId,
+            trangThai: RegistrationStatus.REGISTERED,
+            mangNghienCuu: {
+              trangThai: ResearchAreaStatus.OPEN,
+            },
           },
         },
         thanhVienNhom: {
@@ -51,6 +74,9 @@ class GhepNhomRepository {
       where: {
         mangNghienCuuId,
         soLuongThanhVien: { lt: MAX_GROUP_MEMBERS },
+        trangThai: {
+          in: [GroupStatus.DANG_TUYEN_THANH_VIEN, GroupStatus.DA_DU_THANH_VIEN],
+        },
         thanhVien: {
           none: {
             sinhVienId: sinhVienLoaiTruId,
@@ -152,6 +178,41 @@ class GhepNhomRepository {
     });
   }
 
+  async xoaThanhVienKhoiNhom(nhomNghienCuuId: bigint, sinhVienId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.thanhVienNhomNghienCuu.delete({
+      where: {
+        nhomNghienCuuId_sinhVienId: {
+          nhomNghienCuuId,
+          sinhVienId,
+        },
+      },
+    });
+  }
+
+  async huyLoiMoiDangChoCuaNhom(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.loiMoiNhom.updateMany({
+      where: {
+        nhomNghienCuuId,
+        trangThai: InvitationStatus.CHO_XAC_NHAN,
+      },
+      data: {
+        trangThai: InvitationStatus.DA_HUY,
+      },
+    });
+  }
+
+  async xoaTatCaThanhVienNhom(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.thanhVienNhomNghienCuu.deleteMany({
+      where: { nhomNghienCuuId },
+    });
+  }
+
+  async xoaNhom(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.nhomNghienCuu.delete({
+      where: { id: nhomNghienCuuId },
+    });
+  }
+
   async huyCacLoiMoiChoPhanHoiKhacCuaSinhVien(
     sinhVienId: bigint,
     loiMoiDangXuLyId: bigint,
@@ -161,6 +222,18 @@ class GhepNhomRepository {
       where: {
         sinhVienDuocMoiId: sinhVienId,
         id: { not: loiMoiDangXuLyId },
+        trangThai: InvitationStatus.CHO_XAC_NHAN,
+      },
+      data: {
+        trangThai: InvitationStatus.DA_HUY,
+      },
+    });
+  }
+
+  async huyTatCaLoiMoiChoPhanHoiCuaSinhVien(sinhVienId: bigint, coSoDuLieu: CoSoDuLieu) {
+    await coSoDuLieu.loiMoiNhom.updateMany({
+      where: {
+        sinhVienDuocMoiId: sinhVienId,
         trangThai: InvitationStatus.CHO_XAC_NHAN,
       },
       data: {

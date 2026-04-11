@@ -7,9 +7,7 @@ import LecturerGroupDetailModal from '../features/student-journey/components/Lec
 import LecturerCurrentGroupsBoard from '../features/student-journey/components/LecturerCurrentGroupsBoard';
 import LecturerGroupSelectionBoard from '../features/student-journey/components/LecturerGroupSelectionBoard';
 import LecturerTopicReviewBoard from '../features/student-journey/components/LecturerTopicReviewBoard';
-import RegistrationConfirmationModal from '../features/student-journey/components/RegistrationConfirmationModal';
-import ResearchAreaBoard from '../features/student-journey/components/ResearchAreaBoard';
-import ResearchAreaDetailModal from '../features/student-journey/components/ResearchAreaDetailModal';
+import { ResearchAreaPage } from '../features/research-area';
 import ResearchGroupBoard from '../features/student-journey/components/ResearchGroupBoard';
 import TopicBoard from '../features/student-journey/components/TopicBoard';
 import { useLecturerGroupSelection } from '../features/student-journey/hooks/useLecturerGroupSelection';
@@ -158,45 +156,39 @@ function App() {
   } = useAccountSelector();
 
   const [activeNavId, setActiveNavId] = useState('research-area');
-  const [pendingAreaId, setPendingAreaId] = useState('');
-  const [detailAreaId, setDetailAreaId] = useState('');
 
   const studentJourney = useStudentJourneyDemo(selectedStudentCode);
   const {
-    areaQuery,
     candidateQuery,
     createGroupName,
-    errorMessage,
-    filteredAreas,
     filteredCandidates,
     group,
     groupErrorMessage,
     inviteStudentCode,
-    isLoading,
     isSubmitting,
-    journey,
     matching,
+    matchingAction,
     matchingErrorMessage,
     proposedTopics,
-    selectedAreaId,
+    selectedAreaTitle,
     successMessage,
-    summary,
     topicDraft,
     topicErrorMessage,
     topicOverview,
     onAcceptInvitation,
-    onAreaQueryChange,
     onCandidateQueryChange,
     onChooseProposedTopic,
-    onConfirmAreaRegistration,
     onCreateGroup,
     onCreateGroupNameChange,
+    onDeleteGroup,
     onInvite,
+    onInviteCandidateFromMatching,
     onInviteStudentCodeChange,
+    onLeaveGroup,
     onLoadGroup,
     onLoadMatching,
     onLoadTopic,
-    onRefresh,
+    onRequestJoinGroup,
     onRejectInvitation,
     onSubmitTopic,
     onTopicDraftChange,
@@ -299,24 +291,20 @@ function App() {
 
   const navigationItems = selectedRole === ROLES.LECTURER ? LECTURER_NAV : STUDENT_NAV;
   const currentPageMeta = PAGE_META[activeNavId] || { title: 'Trang chủ', description: '' };
-
-  const pendingArea =
-    filteredAreas.find((area) => area.id === pendingAreaId) ||
-    journey?.researchAreas.find((area) => area.id === pendingAreaId) ||
-    null;
-
-  const detailArea =
-    filteredAreas.find((area) => area.id === detailAreaId) ||
-    journey?.researchAreas.find((area) => area.id === detailAreaId) ||
-    null;
+  const canInviteCandidates = Boolean(
+    group
+    && group.members.find(
+      (member) => member.studentCode === selectedStudentCode && member.roleLabel === 'Trưởng nhóm'
+    )
+  );
 
   const topCards = useMemo(() => {
-    if (selectedRole !== ROLES.STUDENT || !journey || !summary) return [];
+    if (selectedRole !== ROLES.STUDENT) return [];
 
     if (activeNavId === 'research-group') {
       return [
         { accentClassName: 'border-l-4 border-l-[#0b4a7a]', label: 'Trạng thái nhóm', value: group ? groupStatusLabel(group.status) : 'Chưa có nhóm', note: group ? `Nhóm ${group.name} — ${group.members.length}/${group.maxMembers} thành viên.` : 'Bạn có thể tạo nhóm mới.' },
-        { accentClassName: 'border-l-4 border-l-slate-300', label: 'Mảng đã chọn', value: summary.selectedAreaTitle, note: 'Chỉ sinh viên cùng mảng mới được vào cùng nhóm.' },
+        { accentClassName: 'border-l-4 border-l-slate-300', label: 'Mảng đã chọn', value: selectedAreaTitle, note: 'Chỉ sinh viên cùng mảng mới được vào cùng nhóm.' },
         { accentClassName: 'border-l-4 border-l-rose-300', label: 'Lời mời đã gửi', value: group ? String(group.sentInvitations.length) : '0', note: 'Theo dõi các lời mời đang chờ phản hồi.' },
       ];
     }
@@ -337,12 +325,8 @@ function App() {
       ];
     }
 
-    return [
-      { accentClassName: 'border-l-4 border-l-[#0b4a7a]', label: 'Mảng đang mở', value: String(filteredAreas.length), note: 'Số mảng có thể đăng ký hiện tại.' },
-      { accentClassName: 'border-l-4 border-l-slate-300', label: 'Trạng thái', value: summary.selectedAreaTitle === 'Chưa chọn' ? 'Chưa chọn' : summary.selectedAreaTitle, note: 'Mỗi sinh viên chỉ được chọn một mảng.' },
-      { accentClassName: 'border-l-4 border-l-rose-300', label: 'Hạn đăng ký', value: new Date(journey.registrationWindow.closeAt).toLocaleDateString('vi-VN'), note: 'Sau khi chọn, tiến sang nhóm nghiên cứu.' },
-    ];
-  }, [activeNavId, selectedRole, ROLES, filteredAreas.length, filteredCandidates.length, group, journey, matching, summary, topicOverview]);
+    return [];
+  }, [activeNavId, selectedRole, ROLES, filteredCandidates.length, group, matching, selectedAreaTitle, topicOverview]);
 
   const lecturerTopCards = useMemo(() => {
     if (selectedRole !== ROLES.LECTURER) return [];
@@ -598,24 +582,6 @@ function App() {
                     <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{currentPageMeta.description}</p>
                   </div>
 
-                  {journey && selectedRole === ROLES.STUDENT ? (
-                    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
-                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Thời gian đăng ký</p>
-                      <div className="mt-3 flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">
-                            {new Date(journey.registrationWindow.openAt).toLocaleDateString('vi-VN')}
-                          </p>
-                          <p className="text-sm text-slate-500">
-                            {new Date(journey.registrationWindow.closeAt).toLocaleDateString('vi-VN')}
-                          </p>
-                        </div>
-                        <div className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                          Còn {journey.registrationWindow.daysLeft} ngày
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
                 </div>
 
                 {displayCards.length > 0 ? (
@@ -636,44 +602,22 @@ function App() {
                   <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{lecturerTopicSuccessMessage}</div>
                 ) : null}
 
-                {selectedRole === ROLES.STUDENT && isLoading ? (
-                  <div className="mt-6 flex items-center justify-center py-12">
-                    <div className="text-center">
-                      <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-[#0b4a7a]" />
-                      <p className="mt-4 text-sm text-slate-500">Đang tải dữ liệu...</p>
-                    </div>
-                  </div>
-                ) : null}
-
-                {selectedRole === ROLES.STUDENT && !isLoading && (!journey || !summary) ? (
-                  <div className="mt-6 rounded-2xl border border-rose-200 bg-white px-6 py-8 text-center shadow-sm">
-                    <p className="text-lg font-semibold text-slate-950">Không thể tải dữ liệu</p>
-                    <p className="mt-2 text-sm text-rose-600">{errorMessage || 'Vui lòng kiểm tra kết nối và thử lại.'}</p>
-                    <button type="button" onClick={onRefresh} className="mt-4 rounded-xl bg-[#0b4a7a] px-5 py-2 text-sm font-semibold text-white">
-                      Thử lại
-                    </button>
-                  </div>
-                ) : null}
-
-                {selectedRole === ROLES.STUDENT && !isLoading && journey && summary ? (
+                {selectedRole === ROLES.STUDENT ? (
                   <div className="mt-5">
                     {activeNavId === 'research-area' ? (
-                      <>
-                        <ResearchAreaBoard areas={filteredAreas} closeAt={journey.registrationWindow.closeAt} onAreaQueryChange={onAreaQueryChange} onRefresh={onRefresh} onSelectArea={setPendingAreaId} onViewDetail={setDetailAreaId} query={areaQuery} selectedAreaId={selectedAreaId} />
-                        {errorMessage ? <p className="mt-5 text-sm text-rose-600">{errorMessage}</p> : null}
-                      </>
+                      <ResearchAreaPage studentCode={selectedStudentCode} />
                     ) : null}
 
                     {activeNavId === 'research-group' ? (
                       <>
-                        <ResearchGroupBoard createGroupName={createGroupName} group={group} inviteStudentCode={inviteStudentCode} isCreating={isSubmitting} isInviting={isSubmitting} onCreateGroup={onCreateGroup} onCreateGroupNameChange={onCreateGroupNameChange} onInvite={onInvite} onInviteStudentCodeChange={onInviteStudentCodeChange} />
+                        <ResearchGroupBoard createGroupName={createGroupName} currentStudentCode={selectedStudentCode} group={group} inviteStudentCode={inviteStudentCode} isCreating={isSubmitting} isDeleting={isSubmitting} isInviting={isSubmitting} isLeaving={isSubmitting} onCreateGroup={onCreateGroup} onCreateGroupNameChange={onCreateGroupNameChange} onDeleteGroup={onDeleteGroup} onInvite={onInvite} onInviteStudentCodeChange={onInviteStudentCodeChange} onLeaveGroup={onLeaveGroup} studentSuggestions={matching.matchingCandidates} />
                         {groupErrorMessage ? <p className="mt-5 text-sm text-rose-600">{groupErrorMessage}</p> : null}
                       </>
                     ) : null}
 
                     {activeNavId === 'matching' ? (
                       <>
-                        <GroupMatchingBoard candidateQuery={candidateQuery} candidates={filteredCandidates} invitations={matching.receivedInvitations} onAcceptInvitation={onAcceptInvitation} onCandidateQueryChange={onCandidateQueryChange} onRejectInvitation={onRejectInvitation} suggestedGroups={matching.suggestedGroups} />
+                        <GroupMatchingBoard candidateQuery={candidateQuery} canInviteCandidates={canInviteCandidates} candidates={filteredCandidates} invitations={matching.receivedInvitations} matchingAction={matchingAction} onAcceptInvitation={onAcceptInvitation} onCandidateQueryChange={onCandidateQueryChange} onInviteCandidate={onInviteCandidateFromMatching} onRejectInvitation={onRejectInvitation} onRequestJoinGroup={onRequestJoinGroup} suggestedGroups={matching.suggestedGroups} />
                         {matchingErrorMessage ? <p className="mt-5 text-sm text-rose-600">{matchingErrorMessage}</p> : null}
                       </>
                     ) : null}
@@ -799,20 +743,6 @@ function App() {
         </div>
       </div>
 
-      <RegistrationConfirmationModal
-        area={pendingArea}
-        isSubmitting={isSubmitting}
-        onCancel={() => setPendingAreaId('')}
-        onConfirm={async () => {
-          if (!pendingArea) return;
-          const isSuccess = await onConfirmAreaRegistration(pendingArea);
-          if (isSuccess) setPendingAreaId('');
-        }}
-      />
-      <ResearchAreaDetailModal
-        area={detailArea}
-        onClose={() => setDetailAreaId('')}
-      />
       <LecturerGroupDetailModal
         group={selectedLecturerGroup}
         isSubmitting={isLecturerSubmitting}

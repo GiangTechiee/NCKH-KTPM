@@ -15,13 +15,22 @@ function InvitationStatusPill({ status }) {
 
 function GroupMatchingBoard({
   candidateQuery,
+  canInviteCandidates,
   candidates,
   invitations,
+  matchingAction,
   onAcceptInvitation,
   onCandidateQueryChange,
+  onInviteCandidate,
+  onRequestJoinGroup,
   onRejectInvitation,
   suggestedGroups,
 }) {
+  const isCandidateInviting = (studentCode) => matchingAction.type === 'invite-candidate' && matchingAction.targetId === studentCode;
+  const isGroupJoining = (groupId) => matchingAction.type === 'join-group' && matchingAction.targetId === String(groupId);
+  const isAcceptingInvitation = (invitationId) => matchingAction.type === 'accept-invitation' && matchingAction.targetId === String(invitationId);
+  const isRejectingInvitation = (invitationId) => matchingAction.type === 'reject-invitation' && matchingAction.targetId === String(invitationId);
+
   return (
     <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -70,6 +79,16 @@ function GroupMatchingBoard({
                       <p className="mt-2 text-sm text-slate-500">{candidate.studentCode}</p>
                       <p className="mt-3 text-sm leading-6 text-slate-600">{candidate.reason}</p>
                     </div>
+                    {canInviteCandidates ? (
+                      <button
+                        type="button"
+                        onClick={() => onInviteCandidate(candidate.studentCode)}
+                        disabled={isCandidateInviting(candidate.studentCode)}
+                        className="shrink-0 self-start rounded-xl bg-[#0b4a7a] px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300 lg:mt-1"
+                      >
+                        {isCandidateInviting(candidate.studentCode) ? 'Đang gửi...' : 'Mời vào nhóm'}
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               ))}
@@ -85,17 +104,29 @@ function GroupMatchingBoard({
             <div className="space-y-4 px-5 py-5">
               {suggestedGroups.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">
-                  Chưa có nhóm phù hợp hoặc bạn đã có nhóm hiện tại.
+                  Chưa có nhóm phù hợp.
                 </div>
               ) : null}
 
               {suggestedGroups.map((group) => (
                 <div key={group.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="font-semibold text-slate-950">{group.name}</p>
-                  <p className="mt-2 text-sm text-slate-500">
-                    Trưởng nhóm: {group.leaderName} ({group.leaderStudentCode})
-                  </p>
-                  <p className="mt-2 text-sm text-slate-500">Số thành viên hiện tại: {group.memberCount}</p>
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                      <p className="font-semibold text-slate-950">{group.name}</p>
+                      <p className="mt-2 text-sm text-slate-500">
+                        Trưởng nhóm: {group.leaderName} ({group.leaderStudentCode})
+                      </p>
+                      <p className="mt-2 text-sm text-slate-500">Số thành viên hiện tại: {group.memberCount}</p>
+                    </div>
+                      <button
+                        type="button"
+                        onClick={() => onRequestJoinGroup(group.id)}
+                        disabled={isGroupJoining(group.id)}
+                        className="shrink-0 self-start rounded-xl border border-[#0b4a7a] bg-white px-4 py-2 text-sm font-semibold text-[#0b4a7a] disabled:cursor-not-allowed disabled:border-slate-300 disabled:text-slate-400 lg:mt-1"
+                      >
+                        {isGroupJoining(group.id) ? 'Đang xử lý...' : 'Tham gia nhóm'}
+                      </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -129,16 +160,18 @@ function GroupMatchingBoard({
                       <button
                         type="button"
                         onClick={() => onAcceptInvitation(invitation.id)}
+                        disabled={isAcceptingInvitation(invitation.id) || isRejectingInvitation(invitation.id)}
                         className="rounded-xl bg-[#0b4a7a] px-4 py-2 text-sm font-semibold text-white"
                       >
-                        Đồng ý
+                        {isAcceptingInvitation(invitation.id) ? 'Đang xử lý...' : 'Đồng ý'}
                       </button>
                       <button
                         type="button"
                         onClick={() => onRejectInvitation(invitation.id)}
+                        disabled={isAcceptingInvitation(invitation.id) || isRejectingInvitation(invitation.id)}
                         className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700"
                       >
-                        Từ chối
+                        {isRejectingInvitation(invitation.id) ? 'Đang xử lý...' : 'Từ chối'}
                       </button>
                     </>
                   ) : null}

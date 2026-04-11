@@ -48,6 +48,30 @@ class NhomNghienCuuController {
       data,
     });
   }
+
+  async xoaNhom(request: Request, response: Response): Promise<Response> {
+    const maSinhVien = layMaSinhVienTuYeuCau(request);
+    const sinhVien = await nguoiDungService.laySinhVienTheoMa(maSinhVien);
+    const groupId = layGroupIdTuRequest(request);
+    const data = await nhomNghienCuuService.xoaNhom(sinhVien.id, groupId);
+
+    return sendSuccess(response, {
+      message: data.message,
+      data: {},
+    });
+  }
+
+  async roiNhom(request: Request, response: Response): Promise<Response> {
+    const maSinhVien = layMaSinhVienTuYeuCau(request);
+    const sinhVien = await nguoiDungService.laySinhVienTheoMa(maSinhVien);
+    const groupId = layGroupIdTuRequest(request);
+    const data = await nhomNghienCuuService.roiNhom(sinhVien.id, groupId);
+
+    return sendSuccess(response, {
+      message: data.message,
+      data: {},
+    });
+  }
 }
 
 const nhomNghienCuuController = new NhomNghienCuuController();

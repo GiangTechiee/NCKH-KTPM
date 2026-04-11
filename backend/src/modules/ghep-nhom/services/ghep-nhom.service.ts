@@ -14,7 +14,7 @@ import { getPrismaClient } from '../../../infrastructure/database/trinh-khach-pr
 import { nhatKyKiemToanService } from '../../nhat-ky-kiem-toan/services/nhat-ky-kiem-toan.service';
 import { thongBaoService } from '../../thong-bao/services/thong-bao.service';
 import { PhanHoiLoiMoiDto } from '../dto/phan-hoi-loi-moi.dto';
-import { GhepNhomRepository } from '../repositories/ghep-nhom.repository';
+import { CoSoDuLieu, GhepNhomRepository } from '../repositories/ghep-nhom.repository';
 import { GoiYGhepNhomResponse } from '../types/ghep-nhom.types';
 
 class GhepNhomService {
@@ -52,9 +52,7 @@ class GhepNhomService {
             tenKhoa: sinhVien.tenKhoa,
           }))
         : [],
-      nhomPhuHop: nhomHienTai
-        ? []
-        : nhomPhuHop.map((nhom) => ({
+      nhomPhuHop: nhomPhuHop.map((nhom) => ({
             id: nhom.id,
             tenNhom: nhom.tenNhom,
             soLuongThanhVien: nhom.soLuongThanhVien,
@@ -101,16 +99,10 @@ class GhepNhomService {
       });
     }
 
-    const nhomHienTai = await this.ghepNhomRepository.timNhomDangThamGia(sinhVienId);
-    if (nhomHienTai) {
-      throw new ConflictError({
-        message: 'Sinh viên đã thuộc một nhóm khác',
-        errorCode: 'ALREADY_IN_GROUP',
-      });
-    }
-
     const thoiDiemHienTai = new Date();
     const ketQua = await this.prisma.$transaction(async (giaoDich) => {
+      await this.xuLyChuyenNhomNeuCan(sinhVienId, loiMoi.nhomNghienCuuId, thoiDiemHienTai, giaoDich);
+
       const soLuongThanhVienHienTai = await this.ghepNhomRepository.demThanhVienDaChapNhan(loiMoi.nhomNghienCuuId, giaoDich);
       if (soLuongThanhVienHienTai >= MAX_GROUP_MEMBERS) {
         throw new ConflictError({
@@ -258,6 +250,190 @@ class GhepNhomService {
       trangThai: loiMoiDaCapNhat.trangThai,
       lyDoTuChoi: loiMoiDaCapNhat.lyDoTuChoi,
     };
+  }
+
+  async thamGiaNhom(sinhVienId: bigint, groupId: bigint) {
+    const dangKyMang = await this.ghepNhomRepository.timDangKyMangGanNhat(sinhVienId);
+    if (!dangKyMang) {
+      throw new ConflictError({
+        message: 'Sinh viên chưa đăng ký mảng nghiên cứu',
+        errorCode: 'RESEARCH_AREA_REGISTRATION_REQUIRED',
+      });
+    }
+
+    const nhomMucTieu = await this.ghepNhomRepository.timNhomTheoId(groupId);
+    if (!nhomMucTieu) {
+      throw new ValidationError('Không tìm thấy nhóm nghiên cứu', [
+        { field: 'groupId', code: 'GROUP_NOT_FOUND' },
+      ]);
+    }
+
+    if (nhomMucTieu.mangNghienCuuId !== dangKyMang.mangNghienCuuId) {
+      throw new ConflictError({
+        message: 'Chỉ được tham gia nhóm cùng mảng nghiên cứu',
+        errorCode: 'GROUP_NOT_IN_SAME_RESEARCH_AREA',
+      });
+    }
+
+    const thoiDiemHienTai = new Date();
+    const ketQua = await this.prisma.$transaction(async (giaoDich) => {
+      await this.xuLyChuyenNhomNeuCan(sinhVienId, groupId, thoiDiemHienTai, giaoDich);
+
+      const soLuongThanhVienHienTai = await this.ghepNhomRepository.demThanhVienDaChapNhan(groupId, giaoDich);
+      if (soLuongThanhVienHienTai >= MAX_GROUP_MEMBERS) {
+        throw new ConflictError({
+          message: 'Nhóm nghiên cứu đã đủ thành viên',
+          errorCode: 'GROUP_IS_FULL',
+        });
+      }
+
+      const thanhVienDaTonTai = await this.ghepNhomRepository.timThanhVienTheoNhomVaSinhVien(groupId, sinhVienId, giaoDich);
+      if (thanhVienDaTonTai) {
+        throw new ConflictError({
+          message: 'Sinh viên đã có trong nhóm nghiên cứu này',
+          errorCode: 'MEMBER_ALREADY_EXISTS',
+        });
+      }
+
+      const thanhVien = await this.ghepNhomRepository.taoThanhVienNhom(
+        {
+          nhomNghienCuuId: groupId,
+          sinhVienId,
+          vaiTro: GroupMemberRole.THANH_VIEN,
+          trangThaiThamGia: MemberJoinStatus.DA_CHAP_NHAN,
+          thoiGianThamGia: thoiDiemHienTai,
+        },
+        giaoDich
+      );
+
+      const soLuongMoi = soLuongThanhVienHienTai + 1;
+      const nhomDaCapNhat = await this.ghepNhomRepository.capNhatSoLuongVaTrangThaiNhom(
+        groupId,
+        soLuongMoi,
+        soLuongMoi >= MAX_GROUP_MEMBERS ? GroupStatus.DA_DU_THANH_VIEN : GroupStatus.DANG_TUYEN_THANH_VIEN,
+        giaoDich
+      );
+
+      await this.ghepNhomRepository.huyTatCaLoiMoiChoPhanHoiCuaSinhVien(sinhVienId, giaoDich);
+
+      return { thanhVien, nhomDaCapNhat };
+    });
+
+    await nhatKyKiemToanService.taoBanGhi({
+      nguoiThucHienId: sinhVienId,
+      vaiTroNguoiThucHien: UserRole.SINH_VIEN,
+      hanhDong: AuditAction.THAM_GIA_NHOM,
+      loaiDoiTuong: AuditEntityType.NHOM_NGHIEN_CUU,
+      doiTuongId: groupId,
+      trangThaiSau: {
+        thanhVienNhomId: ketQua.thanhVien.id.toString(),
+        soLuongThanhVien: ketQua.nhomDaCapNhat.soLuongThanhVien,
+        trangThaiNhom: ketQua.nhomDaCapNhat.trangThai,
+      },
+      duLieuBoSung: {
+        trigger: 'DIRECT_JOIN',
+      },
+    });
+
+    await thongBaoService.taoNhieuThongBao([
+      {
+        nguoiNhanId: nhomMucTieu.truongNhomSinhVienId,
+        loaiNguoiNhan: UserRole.SINH_VIEN,
+        tieuDe: 'Có thành viên mới tham gia nhóm',
+        noiDung: `Một sinh viên đã tham gia trực tiếp vào nhóm ${nhomMucTieu.tenNhom}.`,
+        loaiThongBao: 'THAM_GIA_NHOM_TRUC_TIEP',
+        loaiDoiTuong: AuditEntityType.NHOM_NGHIEN_CUU,
+        doiTuongId: groupId,
+      },
+    ]);
+
+    return {
+      nhomNghienCuuId: groupId,
+      soLuongThanhVien: ketQua.nhomDaCapNhat.soLuongThanhVien,
+      trangThaiNhom: ketQua.nhomDaCapNhat.trangThai,
+    };
+  }
+
+  private async xuLyChuyenNhomNeuCan(
+    sinhVienId: bigint,
+    nhomMucTieuId: bigint,
+    thoiDiemHienTai: Date,
+    giaoDich: CoSoDuLieu
+  ) {
+    const nhomHienTai = await this.ghepNhomRepository.timNhomDangThamGia(sinhVienId);
+    if (!nhomHienTai) {
+      return;
+    }
+
+    const nhomCu = nhomHienTai.nhomNghienCuu;
+    if (nhomCu.id === nhomMucTieuId) {
+      throw new ConflictError({
+        message: 'Sinh viên đã thuộc nhóm nghiên cứu này',
+        errorCode: 'ALREADY_IN_TARGET_GROUP',
+      });
+    }
+
+    const laTruongNhom = nhomCu.truongNhomSinhVienId === sinhVienId;
+    if (laTruongNhom && nhomCu.soLuongThanhVien > 1) {
+      throw new ConflictError({
+        message: 'Trưởng nhóm phải giải tán nhóm hoặc chuyển quyền trước khi tham gia nhóm khác',
+        errorCode: 'LEADER_MUST_TRANSFER_OR_DISBAND_FIRST',
+      });
+    }
+
+    if (laTruongNhom) {
+      await this.ghepNhomRepository.huyLoiMoiDangChoCuaNhom(nhomCu.id, giaoDich);
+      await this.ghepNhomRepository.xoaTatCaThanhVienNhom(nhomCu.id, giaoDich);
+      await this.ghepNhomRepository.xoaNhom(nhomCu.id, giaoDich);
+
+      await nhatKyKiemToanService.taoBanGhi({
+        nguoiThucHienId: sinhVienId,
+        vaiTroNguoiThucHien: UserRole.SINH_VIEN,
+        hanhDong: AuditAction.XOA_NHOM,
+        loaiDoiTuong: AuditEntityType.NHOM_NGHIEN_CUU,
+        doiTuongId: nhomCu.id,
+        trangThaiTruoc: {
+          trangThai: nhomCu.trangThai,
+          soLuongThanhVien: nhomCu.soLuongThanhVien,
+        },
+        trangThaiSau: null,
+        duLieuBoSung: {
+          trigger: 'JOINED_NEW_GROUP',
+          newGroupId: nhomMucTieuId.toString(),
+        },
+      });
+
+      return;
+    }
+
+    await this.ghepNhomRepository.xoaThanhVienKhoiNhom(nhomCu.id, sinhVienId, giaoDich);
+    await this.ghepNhomRepository.capNhatSoLuongVaTrangThaiNhom(
+      nhomCu.id,
+      nhomCu.soLuongThanhVien - 1,
+      GroupStatus.DANG_TUYEN_THANH_VIEN,
+      giaoDich
+    );
+
+    await nhatKyKiemToanService.taoBanGhi({
+      nguoiThucHienId: sinhVienId,
+      vaiTroNguoiThucHien: UserRole.SINH_VIEN,
+      hanhDong: AuditAction.ROI_NHOM,
+      loaiDoiTuong: AuditEntityType.NHOM_NGHIEN_CUU,
+      doiTuongId: nhomCu.id,
+      trangThaiTruoc: {
+        trangThai: nhomCu.trangThai,
+        soLuongThanhVien: nhomCu.soLuongThanhVien,
+      },
+      trangThaiSau: {
+        soLuongThanhVien: nhomCu.soLuongThanhVien - 1,
+        trangThai: GroupStatus.DANG_TUYEN_THANH_VIEN,
+      },
+      duLieuBoSung: {
+        trigger: 'JOINED_NEW_GROUP',
+        newGroupId: nhomMucTieuId.toString(),
+        switchedAt: thoiDiemHienTai.toISOString(),
+      },
+    });
   }
 }
 

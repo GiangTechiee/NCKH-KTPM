@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { AuditAction, AuditEntityType, GroupMemberRole, MemberJoinStatus, UserRole } from '../../../common/constants';
+import { AuditAction, AuditEntityType, GroupMemberRole, GroupStatus, MemberJoinStatus, UserRole } from '../../../common/constants';
 import { ConflictError, ForbiddenError, ValidationError } from '../../../common/exceptions';
 import { getPrismaClient } from '../../../infrastructure/database/trinh-khach-prisma';
 import { nhatKyKiemToanService } from '../../nhat-ky-kiem-toan/services/nhat-ky-kiem-toan.service';
@@ -9,6 +9,16 @@ import { MoiThanhVienDto } from '../dto/moi-thanh-vien.dto';
 import { TaoNhomNghienCuuDto } from '../dto/tao-nhom-nghien-cuu.dto';
 import { NhomNghienCuuRepository } from '../repositories/nhom-nghien-cuu.repository';
 import { NhomCuaToiResponse } from '../types/nhom-nghien-cuu.types';
+
+const TRANG_THAI_NHOM_CO_THE_XOA = new Set<string>([
+  GroupStatus.DANG_TUYEN_THANH_VIEN,
+  GroupStatus.DA_DU_THANH_VIEN,
+]);
+
+const TRANG_THAI_NHOM_CO_THE_ROI = new Set<string>([
+  GroupStatus.DANG_TUYEN_THANH_VIEN,
+  GroupStatus.DA_DU_THANH_VIEN,
+]);
 
 class NhomNghienCuuService {
   private readonly prisma: PrismaClient;
@@ -227,6 +237,105 @@ class NhomNghienCuuService {
       trangThai: loiMoi.trangThai,
       thoiGianMoi: loiMoi.thoiGianMoi,
     };
+  }
+
+  async xoaNhom(sinhVienId: bigint, groupId: bigint) {
+    const nhom = await this.nhomNghienCuuRepository.timNhomTheoId(groupId);
+    if (!nhom) {
+      throw new ValidationError('Không tìm thấy nhóm nghiên cứu', [
+        { field: 'groupId', code: 'GROUP_NOT_FOUND' },
+      ]);
+    }
+
+    if (nhom.truongNhomSinhVienId !== sinhVienId) {
+      throw new ForbiddenError({
+        message: 'Chỉ trưởng nhóm mới được xóa nhóm',
+        errorCode: 'ONLY_GROUP_LEADER_CAN_DELETE',
+      });
+    }
+
+    if (!TRANG_THAI_NHOM_CO_THE_XOA.has(nhom.trangThai)) {
+      throw new ConflictError({
+        message: 'Nhóm không thể bị xóa ở trạng thái hiện tại',
+        errorCode: 'GROUP_CANNOT_BE_DELETED_IN_CURRENT_STATE',
+      });
+    }
+
+    const trangThaiTruoc = { tenNhom: nhom.tenNhom, trangThai: nhom.trangThai, soLuongThanhVien: nhom.soLuongThanhVien };
+
+    await this.prisma.$transaction(async (giaoDich) => {
+      await this.nhomNghienCuuRepository.huyLoiMoiDangChoCuaNhom(groupId, giaoDich);
+      await this.nhomNghienCuuRepository.xoaTatCaThanhVienNhom(groupId, giaoDich);
+      await this.nhomNghienCuuRepository.xoaNhom(groupId, giaoDich);
+    });
+
+    await nhatKyKiemToanService.taoBanGhi({
+      nguoiThucHienId: sinhVienId,
+      vaiTroNguoiThucHien: UserRole.SINH_VIEN,
+      hanhDong: AuditAction.XOA_NHOM,
+      loaiDoiTuong: AuditEntityType.NHOM_NGHIEN_CUU,
+      doiTuongId: groupId,
+      trangThaiTruoc,
+      trangThaiSau: null,
+      duLieuBoSung: {},
+    });
+
+    return { message: 'Xóa nhóm thành công' };
+  }
+
+  async roiNhom(sinhVienId: bigint, groupId: bigint) {
+    const nhom = await this.nhomNghienCuuRepository.timNhomTheoId(groupId);
+    if (!nhom) {
+      throw new ValidationError('Không tìm thấy nhóm nghiên cứu', [
+        { field: 'groupId', code: 'GROUP_NOT_FOUND' },
+      ]);
+    }
+
+    if (nhom.truongNhomSinhVienId === sinhVienId) {
+      throw new ForbiddenError({
+        message: 'Trưởng nhóm không thể rời nhóm. Hãy xóa nhóm nếu muốn giải tán.',
+        errorCode: 'GROUP_LEADER_CANNOT_LEAVE',
+      });
+    }
+
+    if (!TRANG_THAI_NHOM_CO_THE_ROI.has(nhom.trangThai)) {
+      throw new ConflictError({
+        message: 'Không thể rời nhóm ở trạng thái hiện tại',
+        errorCode: 'CANNOT_LEAVE_GROUP_IN_CURRENT_STATE',
+      });
+    }
+
+    const banGhiThanhVien = await this.nhomNghienCuuRepository.timThanhVienTheoNhomVaSinhVien(groupId, sinhVienId);
+    if (!banGhiThanhVien || banGhiThanhVien.trangThaiThamGia !== MemberJoinStatus.DA_CHAP_NHAN) {
+      throw new ConflictError({
+        message: 'Bạn không phải thành viên của nhóm này',
+        errorCode: 'NOT_A_MEMBER',
+      });
+    }
+
+    const soThanhVienHienTai = await this.nhomNghienCuuRepository.demThanhVienDaChapNhan(groupId);
+
+    await this.prisma.$transaction(async (giaoDich) => {
+      await this.nhomNghienCuuRepository.xoaThanhVienKhoiNhom(groupId, sinhVienId, giaoDich);
+      await this.nhomNghienCuuRepository.capNhatSoLuongVaTrangThaiNhom(
+        groupId,
+        soThanhVienHienTai - 1,
+        giaoDich
+      );
+    });
+
+    await nhatKyKiemToanService.taoBanGhi({
+      nguoiThucHienId: sinhVienId,
+      vaiTroNguoiThucHien: UserRole.SINH_VIEN,
+      hanhDong: AuditAction.ROI_NHOM,
+      loaiDoiTuong: AuditEntityType.NHOM_NGHIEN_CUU,
+      doiTuongId: groupId,
+      trangThaiTruoc: { trangThai: nhom.trangThai, soLuongThanhVien: soThanhVienHienTai },
+      trangThaiSau: { soLuongThanhVien: soThanhVienHienTai - 1 },
+      duLieuBoSung: {},
+    });
+
+    return { message: 'Rời nhóm thành công' };
   }
 }
 

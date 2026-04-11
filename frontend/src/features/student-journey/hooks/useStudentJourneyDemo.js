@@ -3,7 +3,6 @@ import {
   capNhatDeTai,
   chapNhanLoiMoi,
   chonDeTaiDeXuat,
-  dangKyMangNghienCuu,
   getRegistrationPageData,
   layDanhSachDeTaiDeXuat,
   layGoiYGhepNhom,
@@ -11,11 +10,13 @@ import {
   layNhomCuaToi,
   moiThanhVienVaoNhom,
   nopDeTai,
+  roiNhom,
+  thamGiaNhom,
   taoNhomNghienCuu,
   tuChoiLoiMoi,
+  xoaNhom,
 } from '../services/student-journey.service';
 
-const SELECTED_AREA_STORAGE_KEY = 'nckh_selected_area_id';
 const EMPTY_TOPIC_DRAFT = {
   title: '',
   problemDescription: '',
@@ -27,20 +28,19 @@ const EMPTY_TOPIC_DRAFT = {
 };
 
 export function useStudentJourneyDemo(studentCode) {
-  const [journey, setJourney] = useState(null);
   const [group, setGroup] = useState(null);
   const [matching, setMatching] = useState({
     matchingCandidates: [],
     suggestedGroups: [],
     receivedInvitations: [],
   });
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [matchingAction, setMatchingAction] = useState({
+    type: '',
+    targetId: '',
+  });
   const [successMessage, setSuccessMessage] = useState('');
-  const [areaQuery, setAreaQuery] = useState('');
   const [candidateQuery, setCandidateQuery] = useState('');
-  const [selectedAreaId, setSelectedAreaId] = useState(() => localStorage.getItem(SELECTED_AREA_STORAGE_KEY) || '');
   const [createGroupName, setCreateGroupName] = useState('');
   const [inviteStudentCode, setInviteStudentCode] = useState('');
   const [groupErrorMessage, setGroupErrorMessage] = useState('');
@@ -56,21 +56,25 @@ export function useStudentJourneyDemo(studentCode) {
   const [topicDraft, setTopicDraft] = useState(EMPTY_TOPIC_DRAFT);
   const [topicErrorMessage, setTopicErrorMessage] = useState('');
   const [proposedTopics, setProposedTopics] = useState([]);
+  const [selectedAreaTitle, setSelectedAreaTitle] = useState('Chưa chọn');
 
-  const loadJourney = useCallback(async () => {
-    setIsLoading(true);
-    setErrorMessage('');
+  const loadSelectedAreaSummary = useCallback(async () => {
+    if (!studentCode.trim()) {
+      setSelectedAreaTitle('Chưa chọn');
+      return;
+    }
 
     try {
-      const data = await getRegistrationPageData(studentCode);
-      setJourney(data);
-    } catch (error) {
-      setJourney(null);
-      setErrorMessage(error.message || 'Không tải được dữ liệu đăng ký mảng nghiên cứu.');
-    } finally {
-      setIsLoading(false);
+      const data = await getRegistrationPageData(studentCode.trim());
+      setSelectedAreaTitle(data.currentRegistration?.area?.title || 'Chưa chọn');
+    } catch (_error) {
+      setSelectedAreaTitle('Chưa chọn');
     }
   }, [studentCode]);
+
+  useEffect(() => {
+    loadSelectedAreaSummary();
+  }, [loadSelectedAreaSummary]);
 
   const loadGroup = useCallback(async () => {
     if (!studentCode.trim()) {
@@ -177,26 +181,6 @@ export function useStudentJourneyDemo(studentCode) {
     }
   }, [studentCode]);
 
-  useEffect(() => {
-    loadJourney();
-  }, [loadJourney]);
-
-  const filteredAreas = useMemo(() => {
-    if (!journey) {
-      return [];
-    }
-
-    const normalizedQuery = areaQuery.trim().toLowerCase();
-    if (!normalizedQuery) {
-      return journey.researchAreas;
-    }
-
-    return journey.researchAreas.filter((area) => {
-      const searchable = `${area.title} ${area.shortCode} ${area.description}`.toLowerCase();
-      return searchable.includes(normalizedQuery);
-    });
-  }, [areaQuery, journey]);
-
   const filteredCandidates = useMemo(() => {
     const normalizedQuery = candidateQuery.trim().toLowerCase();
     if (!normalizedQuery) {
@@ -208,48 +192,6 @@ export function useStudentJourneyDemo(studentCode) {
       return searchable.includes(normalizedQuery);
     });
   }, [candidateQuery, matching.matchingCandidates]);
-
-  const selectedArea = useMemo(() => {
-    if (!journey) {
-      return null;
-    }
-
-    return journey.researchAreas.find((area) => area.id === selectedAreaId) || null;
-  }, [journey, selectedAreaId]);
-
-  const summary = useMemo(() => {
-    if (!journey) {
-      return null;
-    }
-
-    return {
-      selectedAreaTitle: selectedArea ? selectedArea.title : 'Chưa chọn',
-    };
-  }, [journey, selectedArea]);
-
-  async function handleConfirmAreaRegistration(area) {
-    if (!studentCode.trim()) {
-      setErrorMessage('Bạn cần nhập mã sinh viên để gửi yêu cầu đăng ký.');
-      return false;
-    }
-
-    setIsSubmitting(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-
-    try {
-      await dangKyMangNghienCuu(studentCode.trim(), area.id);
-      setSelectedAreaId(area.id);
-      localStorage.setItem(SELECTED_AREA_STORAGE_KEY, area.id);
-      setSuccessMessage(`Đăng ký mảng "${area.title}" thành công.`);
-      return true;
-    } catch (error) {
-      setErrorMessage(error.message || 'Đăng ký mảng nghiên cứu thất bại.');
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   async function handleCreateGroup() {
     if (!studentCode.trim()) {
@@ -270,7 +212,7 @@ export function useStudentJourneyDemo(studentCode) {
       await taoNhomNghienCuu(studentCode.trim(), createGroupName.trim());
       setCreateGroupName('');
       setSuccessMessage('Tạo nhóm nghiên cứu thành công.');
-      await Promise.all([loadGroup(), loadMatching()]);
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
     } catch (error) {
       setGroupErrorMessage(error.message || 'Tạo nhóm nghiên cứu thất bại.');
     } finally {
@@ -297,7 +239,7 @@ export function useStudentJourneyDemo(studentCode) {
       await moiThanhVienVaoNhom(studentCode.trim(), group.id, inviteStudentCode.trim());
       setInviteStudentCode('');
       setSuccessMessage('Gửi lời mời thành công.');
-      await Promise.all([loadGroup(), loadMatching()]);
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
     } catch (error) {
       setGroupErrorMessage(error.message || 'Gửi lời mời thất bại.');
     } finally {
@@ -305,35 +247,139 @@ export function useStudentJourneyDemo(studentCode) {
     }
   }
 
+  async function handleInviteCandidateFromMatching(candidateStudentCode) {
+    if (!group) {
+      setMatchingErrorMessage('Bạn chưa có nhóm để gửi lời mời.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMatchingAction({
+      type: 'invite-candidate',
+      targetId: candidateStudentCode,
+    });
+    setMatchingErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await moiThanhVienVaoNhom(studentCode.trim(), group.id, candidateStudentCode);
+      setSuccessMessage(`Đã gửi lời mời đến ${candidateStudentCode} thành công.`);
+      await Promise.all([loadGroup(), loadMatching()]);
+    } catch (error) {
+      setMatchingErrorMessage(error.message || 'Gửi lời mời thất bại.');
+    } finally {
+      setIsSubmitting(false);
+      setMatchingAction({ type: '', targetId: '' });
+    }
+  }
+
+  async function handleDeleteGroup() {
+    if (!group) {
+      setGroupErrorMessage('Không tìm thấy nhóm để xóa.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setGroupErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await xoaNhom(studentCode.trim(), group.id);
+      setSuccessMessage('Đã xóa nhóm thành công.');
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
+    } catch (error) {
+      setGroupErrorMessage(error.message || 'Xóa nhóm thất bại.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleRequestJoinGroup(groupId) {
+    if (!studentCode.trim()) {
+      setMatchingErrorMessage('Bạn cần nhập MSSV trước khi tham gia nhóm.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMatchingAction({
+      type: 'join-group',
+      targetId: String(groupId),
+    });
+    setMatchingErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await thamGiaNhom(studentCode.trim(), groupId);
+      setSuccessMessage('Tham gia nhóm thành công.');
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
+    } catch (error) {
+      setMatchingErrorMessage(error.message || 'Tham gia nhóm thất bại.');
+    } finally {
+      setIsSubmitting(false);
+      setMatchingAction({ type: '', targetId: '' });
+    }
+  }
+
+  async function handleLeaveGroup() {
+    if (!group) {
+      setGroupErrorMessage('Không tìm thấy nhóm để rời.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setGroupErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await roiNhom(studentCode.trim(), group.id);
+      setSuccessMessage('Đã rời nhóm thành công.');
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
+    } catch (error) {
+      setGroupErrorMessage(error.message || 'Rời nhóm thất bại.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   async function handleAcceptInvitation(invitationId) {
     setIsSubmitting(true);
+    setMatchingAction({
+      type: 'accept-invitation',
+      targetId: String(invitationId),
+    });
     setMatchingErrorMessage('');
     setSuccessMessage('');
 
     try {
       await chapNhanLoiMoi(studentCode.trim(), invitationId);
       setSuccessMessage('Chấp nhận lời mời thành công.');
-      await Promise.all([loadGroup(), loadMatching()]);
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
     } catch (error) {
       setMatchingErrorMessage(error.message || 'Chấp nhận lời mời thất bại.');
     } finally {
       setIsSubmitting(false);
+      setMatchingAction({ type: '', targetId: '' });
     }
   }
 
   async function handleRejectInvitation(invitationId) {
     setIsSubmitting(true);
+    setMatchingAction({
+      type: 'reject-invitation',
+      targetId: String(invitationId),
+    });
     setMatchingErrorMessage('');
     setSuccessMessage('');
 
     try {
       await tuChoiLoiMoi(studentCode.trim(), invitationId);
       setSuccessMessage('Từ chối lời mời thành công.');
-      await Promise.all([loadGroup(), loadMatching()]);
+      await Promise.all([loadGroup(), loadMatching(), loadSelectedAreaSummary()]);
     } catch (error) {
       setMatchingErrorMessage(error.message || 'Từ chối lời mời thất bại.');
     } finally {
       setIsSubmitting(false);
+      setMatchingAction({ type: '', targetId: '' });
     }
   }
 
@@ -391,41 +437,37 @@ export function useStudentJourneyDemo(studentCode) {
   }
 
   return {
-    areaQuery,
     candidateQuery,
     createGroupName,
-    errorMessage,
-    filteredAreas,
     filteredCandidates,
     group,
     groupErrorMessage,
     inviteStudentCode,
-    isLoading,
     isSubmitting,
-    journey,
     matching,
+    matchingAction,
     matchingErrorMessage,
     proposedTopics,
-    selectedAreaId,
+    selectedAreaTitle,
     studentCode,
     successMessage,
-    summary,
     topicDraft,
     topicErrorMessage,
     topicOverview,
     onAcceptInvitation: handleAcceptInvitation,
-    onAreaQueryChange: setAreaQuery,
     onCandidateQueryChange: setCandidateQuery,
     onChooseProposedTopic: handleChooseProposedTopic,
-    onConfirmAreaRegistration: handleConfirmAreaRegistration,
     onCreateGroup: handleCreateGroup,
     onCreateGroupNameChange: setCreateGroupName,
+    onDeleteGroup: handleDeleteGroup,
     onInvite: handleInviteMember,
+    onInviteCandidateFromMatching: handleInviteCandidateFromMatching,
     onInviteStudentCodeChange: setInviteStudentCode,
+    onLeaveGroup: handleLeaveGroup,
     onLoadGroup: loadGroup,
     onLoadMatching: loadMatching,
     onLoadTopic: loadTopic,
-    onRefresh: loadJourney,
+    onRequestJoinGroup: handleRequestJoinGroup,
     onRejectInvitation: handleRejectInvitation,
     onSubmitTopic: handleSubmitTopic,
     onTopicDraftChange: (field, value) =>

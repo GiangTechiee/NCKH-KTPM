@@ -5,6 +5,8 @@ import {
   InvitationStatus,
   MAX_GROUP_MEMBERS,
   MemberJoinStatus,
+  RegistrationStatus,
+  ResearchAreaStatus,
 } from '../../../common/constants';
 import { getPrismaClient } from '../../../infrastructure/database/trinh-khach-prisma';
 
@@ -14,8 +16,18 @@ class NhomNghienCuuRepository {
   private readonly prisma = getPrismaClient();
 
   async timDangKyMangGanNhat(sinhVienId: bigint) {
+    const thoiDiem = new Date();
+
     return this.prisma.sinhVienDangKyMang.findFirst({
-      where: { sinhVienId },
+      where: {
+        sinhVienId,
+        trangThai: RegistrationStatus.REGISTERED,
+        mangNghienCuu: {
+          trangThai: ResearchAreaStatus.OPEN,
+          thoiGianMoDangKy: { lte: thoiDiem },
+          thoiGianDongDangKy: { gte: thoiDiem },
+        },
+      },
       include: { mangNghienCuu: true },
       orderBy: { thoiGianDangKy: 'desc' },
     });
@@ -145,6 +157,39 @@ class NhomNghienCuuRepository {
 
   async timThanhVienTheoNhomVaSinhVien(nhomNghienCuuId: bigint, sinhVienId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
     return coSoDuLieu.thanhVienNhomNghienCuu.findUnique({
+      where: {
+        nhomNghienCuuId_sinhVienId: {
+          nhomNghienCuuId,
+          sinhVienId,
+        },
+      },
+    });
+  }
+
+  async huyLoiMoiDangChoCuaNhom(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.loiMoiNhom.updateMany({
+      where: {
+        nhomNghienCuuId,
+        trangThai: InvitationStatus.CHO_XAC_NHAN,
+      },
+      data: { trangThai: InvitationStatus.DA_HUY },
+    });
+  }
+
+  async xoaTatCaThanhVienNhom(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.thanhVienNhomNghienCuu.deleteMany({
+      where: { nhomNghienCuuId },
+    });
+  }
+
+  async xoaNhom(nhomNghienCuuId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.nhomNghienCuu.delete({
+      where: { id: nhomNghienCuuId },
+    });
+  }
+
+  async xoaThanhVienKhoiNhom(nhomNghienCuuId: bigint, sinhVienId: bigint, coSoDuLieu: CoSoDuLieu = this.prisma) {
+    return coSoDuLieu.thanhVienNhomNghienCuu.delete({
       where: {
         nhomNghienCuuId_sinhVienId: {
           nhomNghienCuuId,

@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { ResearchAreaStatus } from '../../../common/constants';
+import { RegistrationStatus, ResearchAreaStatus } from '../../../common/constants';
 import { getPrismaClient } from '../../../infrastructure/database/trinh-khach-prisma';
 
 type CoSoDuLieu = PrismaClient | Prisma.TransactionClient;
@@ -17,7 +17,9 @@ class DangKyMangNghienCuuRepository {
       include: {
         _count: {
           select: {
-            dangKyMang: true,
+            dangKyMang: {
+              where: { trangThai: RegistrationStatus.REGISTERED },
+            },
           },
         },
       },
@@ -25,9 +27,30 @@ class DangKyMangNghienCuuRepository {
     });
   }
 
-  async timDangKyGanNhatCuaSinhVien(sinhVienId: bigint) {
+  async timDangKyHienTaiTrongDotMo(sinhVienId: bigint, thoiDiem: Date) {
     return this.prisma.sinhVienDangKyMang.findFirst({
-      where: { sinhVienId },
+      where: {
+        sinhVienId,
+        trangThai: RegistrationStatus.REGISTERED,
+        mangNghienCuu: {
+          trangThai: ResearchAreaStatus.OPEN,
+          thoiGianMoDangKy: { lte: thoiDiem },
+          thoiGianDongDangKy: { gte: thoiDiem },
+        },
+      },
+      include: {
+        mangNghienCuu: {
+          select: {
+            id: true,
+            maMang: true,
+            tenMang: true,
+            moTa: true,
+            thoiGianMoDangKy: true,
+            thoiGianDongDangKy: true,
+            trangThai: true,
+          },
+        },
+      },
       orderBy: { thoiGianDangKy: 'desc' },
     });
   }
@@ -47,7 +70,37 @@ class DangKyMangNghienCuuRepository {
         sinhVienId: duLieu.sinhVienId,
         mangNghienCuuId: duLieu.mangNghienCuuId,
         thoiGianDangKy: duLieu.thoiGianDangKy,
-        trangThai: 'REGISTERED',
+        trangThai: RegistrationStatus.REGISTERED,
+      },
+    });
+  }
+
+  async capNhatTrangThaiDangKy(
+    dangKyId: bigint,
+    trangThaiMoi: string,
+    coSoDuLieu: CoSoDuLieu = this.prisma
+  ) {
+    return coSoDuLieu.sinhVienDangKyMang.update({
+      where: { id: dangKyId },
+      data: { trangThai: trangThaiMoi },
+    });
+  }
+
+  async timDangKyTheoId(dangKyId: bigint) {
+    return this.prisma.sinhVienDangKyMang.findUnique({
+      where: { id: dangKyId },
+      include: {
+        mangNghienCuu: {
+          select: {
+            id: true,
+            maMang: true,
+            tenMang: true,
+            moTa: true,
+            thoiGianMoDangKy: true,
+            thoiGianDongDangKy: true,
+            trangThai: true,
+          },
+        },
       },
     });
   }

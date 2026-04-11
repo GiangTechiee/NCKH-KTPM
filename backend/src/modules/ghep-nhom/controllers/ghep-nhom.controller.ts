@@ -3,7 +3,7 @@ import { sendSuccess } from '../../../common/utils/phan-hoi';
 import { layMaSinhVienTuYeuCau } from '../../../common/utils/lay-ma-sinh-vien-tu-yeu-cau';
 import { nguoiDungService } from '../../nguoi-dung/services/nguoi-dung.service';
 import { ghepNhomService } from '../services/ghep-nhom.service';
-import { layInvitationIdTuRequest, xacThucPhanHoiLoiMoi } from '../validators/ghep-nhom.validator';
+import { layGroupIdTuRequest, layInvitationIdTuRequest, xacThucPhanHoiLoiMoi } from '../validators/ghep-nhom.validator';
 
 class GhepNhomController {
   async layGoiYGhepNhom(request: Request, response: Response): Promise<Response> {
@@ -38,6 +38,18 @@ class GhepNhomController {
 
     return sendSuccess(response, {
       message: 'Từ chối lời mời tham gia nhóm thành công',
+      data,
+    });
+  }
+
+  async thamGiaNhom(request: Request, response: Response): Promise<Response> {
+    const maSinhVien = layMaSinhVienTuYeuCau(request);
+    const sinhVien = await nguoiDungService.laySinhVienTheoMa(maSinhVien);
+    const groupId = layGroupIdTuRequest(request);
+    const data = await ghepNhomService.thamGiaNhom(sinhVien.id, groupId);
+
+    return sendSuccess(response, {
+      message: 'Tham gia nhóm thành công',
       data,
     });
   }

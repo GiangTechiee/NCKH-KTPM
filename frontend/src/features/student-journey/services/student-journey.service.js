@@ -1,11 +1,5 @@
 import { apiClient } from '../../../core/api/api-client';
-
-function tinhSoNgayConLai(closeAt) {
-  const now = new Date();
-  const closeDate = new Date(closeAt);
-  const difference = closeDate.getTime() - now.getTime();
-  return Math.max(0, Math.ceil(difference / (1000 * 60 * 60 * 24)));
-}
+import { getRegistrationPageData } from '../../research-area/services/research-area.service';
 
 function taoHeadersSinhVien(studentCode) {
   return {
@@ -19,20 +13,6 @@ function taoHeadersGiangVien(lecturerCode) {
   };
 }
 
-function mapResearchArea(area) {
-  return {
-    id: String(area.id),
-    shortCode: area.maMang,
-    title: area.tenMang,
-    description: area.moTa || 'Chưa có mô tả chi tiết cho mảng nghiên cứu này.',
-    tags: [area.maMang, 'Nghiên cứu khoa học'],
-    slotsFilled: area.soLuongDaDangKy || 0,
-    slotLimit: Math.max((area.soLuongDaDangKy || 0) + 10, 10),
-    trend: area.trangThai === 'OPEN' ? 'Mở đăng ký' : area.trangThai,
-    openAt: area.thoiGianMoDangKy,
-    closeAt: area.thoiGianDongDangKy,
-  };
-}
 
 function mapGroupResponse(group) {
   return {
@@ -66,6 +46,8 @@ function mapMatchingResponse(payload) {
       id: String(candidate.id),
       fullName: candidate.hoTen,
       studentCode: candidate.maSinhVien,
+      className: candidate.tenLop || '',
+      facultyName: candidate.tenKhoa || '',
       compatibilityLabel: 'Cùng mảng',
       reason: [candidate.tenLop, candidate.tenKhoa].filter(Boolean).join(' - ') || 'Sinh viên cùng mảng nghiên cứu.',
       skillTags: ['Cùng mảng', 'Chưa có nhóm'],
@@ -88,38 +70,6 @@ function mapMatchingResponse(payload) {
       sentAt: invitation.thoiGianMoi,
     })),
   };
-}
-
-async function getRegistrationPageData(studentCode) {
-  const response = await apiClient.getJson('/api/mang-nghien-cuu/dang-mo');
-  const researchAreas = (response?.data || []).map(mapResearchArea);
-  const closeAt = researchAreas[0]?.closeAt || new Date().toISOString();
-  const openAt = researchAreas[0]?.openAt || new Date().toISOString();
-
-  return {
-    student: {
-      fullName: 'Người dùng hiện tại',
-      studentCode: studentCode || '',
-      major: 'Sinh viên nghiên cứu khoa học',
-    },
-    registrationWindow: {
-      openAt,
-      closeAt,
-      daysLeft: tinhSoNgayConLai(closeAt),
-      isOpen: true,
-    },
-    researchAreas,
-  };
-}
-
-async function dangKyMangNghienCuu(studentCode, researchAreaId) {
-  return apiClient.postJson(
-    '/api/dang-ky-mang-nghien-cuu',
-    { mangNghienCuuId: researchAreaId },
-    {
-      headers: taoHeadersSinhVien(studentCode),
-    }
-  );
 }
 
 async function layNhomCuaToi(studentCode) {
@@ -161,6 +111,16 @@ async function layGoiYGhepNhom(studentCode) {
 async function chapNhanLoiMoi(studentCode, invitationId) {
   return apiClient.postJson(
     `/api/loi-moi-nhom/${invitationId}/chap-nhan`,
+    {},
+    {
+      headers: taoHeadersSinhVien(studentCode),
+    }
+  );
+}
+
+async function thamGiaNhom(studentCode, groupId) {
+  return apiClient.postJson(
+    `/api/goi-y-ghep-nhom/${groupId}/tham-gia`,
     {},
     {
       headers: taoHeadersSinhVien(studentCode),
@@ -457,12 +417,28 @@ async function layDanhSachNhomDangHuongDan(lecturerCode) {
   return (response.data || []).map(mapLecturerCurrentGroup);
 }
 
+
+async function xoaNhom(studentCode, groupId) {
+  return apiClient.deleteJson(`/api/nhom-nghien-cuu/${groupId}`, {
+    headers: taoHeadersSinhVien(studentCode),
+  });
+}
+
+async function roiNhom(studentCode, groupId) {
+  return apiClient.postJson(
+    `/api/nhom-nghien-cuu/${groupId}/roi-nhom`,
+    {},
+    {
+      headers: taoHeadersSinhVien(studentCode),
+    }
+  );
+}
+
 export {
   capNhatDeTai,
   chapNhanLoiMoi,
   chotDeTai,
   chonDeTaiDeXuat,
-  dangKyMangNghienCuu,
   duyetDeTai,
   getRegistrationPageData,
   layChiTietNhomChoGiangVien,
@@ -476,8 +452,11 @@ export {
   moiThanhVienVaoNhom,
   nhanHuongDanNhom,
   nopDeTai,
+  roiNhom,
+  thamGiaNhom,
   taoNhomNghienCuu,
   tuChoiDeTai,
   tuChoiLoiMoi,
+  xoaNhom,
   yeuCauChinhSuaDeTai,
 };

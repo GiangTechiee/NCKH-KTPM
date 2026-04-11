@@ -7,6 +7,10 @@ function layInvitationIdTuRequest(request: Request): bigint {
   return chuyenSangBigInt(request.params.id, 'id');
 }
 
+function layGroupIdTuRequest(request: Request): bigint {
+  return chuyenSangBigInt(request.params.groupId, 'groupId');
+}
+
 function xacThucPhanHoiLoiMoi(body: unknown): PhanHoiLoiMoiDto {
   if (!body || typeof body !== 'object') {
     return {};
@@ -24,4 +28,4 @@ function xacThucPhanHoiLoiMoi(body: unknown): PhanHoiLoiMoiDto {
   return { lyDoTuChoi };
 }
 
-export { layInvitationIdTuRequest, xacThucPhanHoiLoiMoi };
+export { layInvitationIdTuRequest, layGroupIdTuRequest, xacThucPhanHoiLoiMoi };

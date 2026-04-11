@@ -10,5 +10,13 @@ router.post(
   '/nhom-nghien-cuu/:groupId/moi-thanh-vien',
   xuLyBatDongBo(nhomNghienCuuController.moiThanhVien)
 );
+router.delete(
+  '/nhom-nghien-cuu/:groupId',
+  xuLyBatDongBo(nhomNghienCuuController.xoaNhom)
+);
+router.post(
+  '/nhom-nghien-cuu/:groupId/roi-nhom',
+  xuLyBatDongBo(nhomNghienCuuController.roiNhom)
+);
 
 export default router;

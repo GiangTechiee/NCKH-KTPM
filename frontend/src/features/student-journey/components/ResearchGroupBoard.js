@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   groupStatusBadgeClass,
   groupStatusLabel,
@@ -8,6 +8,8 @@ import {
   memberJoinStatusLabel,
   memberRoleLabel,
 } from '../../../shared/utils/status-labels';
+
+const TRUONG_NHOM_DISPLAY_LABEL = 'Trưởng nhóm';
 
 function MemberAvatar({ fullName }) {
   const initials = fullName
@@ -23,17 +25,88 @@ function MemberAvatar({ fullName }) {
   );
 }
 
+function InviteStudentDropdown({ studentSuggestions, value, onChange, onInvite, isInviting }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+
+  const filtered = studentSuggestions.filter((student) => {
+    const searchable = `${student.studentCode} ${student.fullName} ${student.className || student.reason || ''}`.toLowerCase();
+    return searchable.includes(query.toLowerCase());
+  });
+
+  function handleSelect(studentCode) {
+    onChange(studentCode);
+    setQuery('');
+    setIsOpen(false);
+  }
+
+  function handleInputChange(event) {
+    setQuery(event.target.value);
+    onChange(event.target.value);
+    setIsOpen(true);
+  }
+
+  function handleInputFocus() {
+    setIsOpen(true);
+  }
+
+  function handleInputBlur() {
+    setTimeout(() => setIsOpen(false), 150);
+  }
+
+  const selectedStudent = studentSuggestions.find((s) => s.studentCode === value);
+  const inputDisplayValue = query || (selectedStudent ? `${selectedStudent.studentCode} — ${selectedStudent.fullName}` : value);
+
+  return (
+    <div className="relative min-w-0 flex-1">
+      <input
+        value={inputDisplayValue}
+        onChange={handleInputChange}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        placeholder="Tìm theo MSSV, tên hoặc lớp để mời..."
+        className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none"
+      />
+      {isOpen && filtered.length > 0 ? (
+        <ul className="absolute z-10 mt-1 max-h-56 w-full overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-lg">
+          {filtered.map((student) => (
+            <li
+              key={student.studentCode}
+              onMouseDown={() => handleSelect(student.studentCode)}
+              className="cursor-pointer px-4 py-3 hover:bg-slate-50"
+            >
+              <p className="text-sm font-semibold text-slate-950">
+                {student.studentCode} — {student.fullName}
+              </p>
+              <p className="mt-0.5 text-xs text-slate-500">{student.className || student.reason || 'Sinh viên cùng mảng'}</p>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
 function ResearchGroupBoard({
   createGroupName,
+  currentStudentCode,
   group,
   inviteStudentCode,
   isCreating,
+  isDeleting,
   isInviting,
+  isLeaving,
   onCreateGroup,
   onCreateGroupNameChange,
+  onDeleteGroup,
   onInvite,
   onInviteStudentCodeChange,
+  onLeaveGroup,
+  studentSuggestions,
 }) {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+
   if (!group) {
     return (
       <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
@@ -64,6 +137,8 @@ function ResearchGroupBoard({
     );
   }
 
+  const currentMember = group.members.find((m) => m.studentCode === currentStudentCode);
+  const isLeader = currentMember?.roleLabel === TRUONG_NHOM_DISPLAY_LABEL;
   const remainingSlots = group.maxMembers - group.members.length;
   const fillPercent = Math.round((group.members.length / group.maxMembers) * 100);
 
@@ -102,8 +177,29 @@ function ResearchGroupBoard({
               <p className="text-sm font-semibold text-slate-950">Nhóm của tôi ({group.name})</p>
               <p className="mt-1 text-sm text-slate-500">Quản lý thành viên và mời thêm sinh viên cùng mảng.</p>
             </div>
-            <div className="rounded-full bg-[#edf5ff] px-4 py-2 text-sm font-medium text-[#0b4a7a]">
-              Còn trống {remainingSlots} vị trí
+            <div className="flex items-center gap-3">
+              <div className="rounded-full bg-[#edf5ff] px-4 py-2 text-sm font-medium text-[#0b4a7a]">
+                Còn trống {remainingSlots} vị trí
+              </div>
+              {isLeader ? (
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={isDeleting}
+                  className="rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isDeleting ? 'Đang xóa...' : 'Xóa nhóm'}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowLeaveConfirm(true)}
+                  disabled={isLeaving}
+                  className="rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isLeaving ? 'Đang rời...' : 'Rời nhóm'}
+                </button>
+              )}
             </div>
           </div>
 
@@ -135,22 +231,25 @@ function ResearchGroupBoard({
               {remainingSlots > 0 ? `Còn trống ${remainingSlots} vị trí để hoàn tất nhóm.` : 'Nhóm đã đủ thành viên.'}
             </div>
 
-            <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 md:flex-row">
-              <input
-                value={inviteStudentCode}
-                onChange={(event) => onInviteStudentCodeChange(event.target.value)}
-                placeholder="Nhập MSSV muốn mời"
-                className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none"
-              />
-              <button
-                type="button"
-                onClick={onInvite}
-                disabled={isInviting}
-                className="rounded-2xl bg-[#0b4a7a] px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
-              >
-                {isInviting ? 'Đang gửi...' : 'Mời thêm thành viên'}
-              </button>
-            </div>
+            {isLeader ? (
+              <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 md:flex-row">
+                <InviteStudentDropdown
+                  studentSuggestions={studentSuggestions}
+                  value={inviteStudentCode}
+                  onChange={onInviteStudentCodeChange}
+                  onInvite={onInvite}
+                  isInviting={isInviting}
+                />
+                <button
+                  type="button"
+                  onClick={onInvite}
+                  disabled={isInviting}
+                  className="rounded-2xl bg-[#0b4a7a] px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+                >
+                  {isInviting ? 'Đang gửi...' : 'Mời thêm thành viên'}
+                </button>
+              </div>
+            ) : null}
           </div>
         </article>
 
@@ -179,6 +278,66 @@ function ResearchGroupBoard({
           </div>
         </article>
       </div>
+
+      {showDeleteConfirm ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="mx-4 w-full max-w-sm rounded-[24px] bg-white p-6 shadow-xl">
+            <h4 className="text-lg font-semibold text-slate-950">Xác nhận xóa nhóm</h4>
+            <p className="mt-2 text-sm text-slate-600">
+              Bạn có chắc muốn xóa nhóm <strong>{group.name}</strong>? Tất cả thành viên và lời mời sẽ bị hủy. Hành động này không thể hoàn tác.
+            </p>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(false)}
+                className="rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  onDeleteGroup();
+                }}
+                className="rounded-2xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
+              >
+                Xóa nhóm
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {showLeaveConfirm ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="mx-4 w-full max-w-sm rounded-[24px] bg-white p-6 shadow-xl">
+            <h4 className="text-lg font-semibold text-slate-950">Xác nhận rời nhóm</h4>
+            <p className="mt-2 text-sm text-slate-600">
+              Bạn có chắc muốn rời nhóm <strong>{group.name}</strong>? Bạn sẽ không còn thuộc nhóm này nữa.
+            </p>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowLeaveConfirm(false)}
+                className="rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLeaveConfirm(false);
+                  onLeaveGroup();
+                }}
+                className="rounded-2xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+              >
+                Rời nhóm
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

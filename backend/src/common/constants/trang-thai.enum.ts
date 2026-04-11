@@ -72,6 +72,13 @@ export const ResearchAreaStatus = Object.freeze({
 
 export type ResearchAreaStatus = (typeof ResearchAreaStatus)[keyof typeof ResearchAreaStatus];
 
+export const RegistrationStatus = Object.freeze({
+  REGISTERED: 'REGISTERED',
+  CANCELLED: 'CANCELLED',
+} as const);
+
+export type RegistrationStatus = (typeof RegistrationStatus)[keyof typeof RegistrationStatus];
+
 export const UserRole = Object.freeze({
   SINH_VIEN: 'SINH_VIEN',
   GIANG_VIEN: 'GIANG_VIEN',

@@ -42,7 +42,15 @@ async function putJson(path, body, options = {}) {
   });
 }
 
+async function deleteJson(path, options = {}) {
+  return requestJson(path, {
+    method: 'DELETE',
+    ...options,
+  });
+}
+
 export const apiClient = {
+  deleteJson,
   getJson,
   postJson,
   putJson,

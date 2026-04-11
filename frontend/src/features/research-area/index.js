@@ -1,1 +1,11 @@
-export {};
+export { useResearchArea } from './hooks/useResearchArea';
+export { default as ResearchAreaPage } from './pages/ResearchAreaPage';
+export { default as ResearchAreaBoard } from './components/ResearchAreaBoard';
+export { default as ResearchAreaCard } from './components/ResearchAreaCard';
+export { default as ResearchAreaDetailModal } from './components/ResearchAreaDetailModal';
+export { default as RegistrationConfirmationModal } from './components/RegistrationConfirmationModal';
+export { default as RegistrationWindowPanel } from './components/RegistrationWindowPanel';
+export { default as ResearchAreaOverviewCards } from './components/ResearchAreaOverviewCards';
+export { default as SelectedAreaBanner } from './components/SelectedAreaBanner';
+export { default as ChangeAreaConfirmationModal } from './components/ChangeAreaConfirmationModal';
+export { default as CancelAreaConfirmationModal } from './components/CancelAreaConfirmationModal';

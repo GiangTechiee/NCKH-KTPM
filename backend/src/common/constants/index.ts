@@ -8,6 +8,7 @@ export {
   GroupMemberRole,
   MemberJoinStatus,
   TopicSource,
+  RegistrationStatus,
   ResearchAreaStatus,
   UserRole,
 } from './trang-thai.enum';
