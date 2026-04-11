@@ -29,8 +29,8 @@ export const TOPIC_SUBMISSION_STATUS = Object.freeze({
 });
 
 export const INVITATION_STATUS = Object.freeze({
-  PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED',
-  CANCELLED: 'CANCELLED',
+  CHO_XAC_NHAN: 'CHO_XAC_NHAN',
+  DA_CHAP_NHAN: 'DA_CHAP_NHAN',
+  DA_TU_CHOI: 'DA_TU_CHOI',
+  DA_HUY: 'DA_HUY',
 });

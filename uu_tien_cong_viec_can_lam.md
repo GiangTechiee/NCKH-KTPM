@@ -80,21 +80,21 @@ Thứ tự nên làm là:
 
 ### [!] Việc cần xác nhận
 
-- [!] Trạng thái trong schema/migration hiện tại đang dùng nhiều giá trị tiếng Anh như:
+- [x] Trạng thái trong schema/migration hiện tại đang dùng nhiều giá trị tiếng Anh như:
   - `FORMING`
   - `FULL`
   - `DRAFT`
   - `PENDING_APPROVAL`
-- [!] Trong khi tài liệu nghiệp vụ và enum trong code đang dùng trạng thái tiếng Việt như:
+- [x] Trong khi tài liệu nghiệp vụ và enum trong code đang dùng trạng thái tiếng Việt như:
   - `NHAP`
   - `DANG_TUYEN_THANH_VIEN`
   - `CHO_GIANG_VIEN_DUYET`
   - `DA_DUYET`
-- [!] Cần xác nhận có bổ sung các bảng còn thiếu như:
+- [x] Cần xác nhận có bổ sung các bảng còn thiếu như:
   - `GroupInvitation`
   - `AuditLog`
   - `Notification`
-- [!] Cần xác nhận có chuyển backend/frontend sang TypeScript hay tiếp tục giữ JavaScript trong giai đoạn đầu.
+- [x] Cần xác nhận có chuyển backend/frontend sang TypeScript hay tiếp tục giữ JavaScript trong giai đoạn đầu.
 
 ### Vì sao đây là blocker
 
@@ -119,11 +119,11 @@ Bạn có xác nhận cho tôi tiến hành không?
 
 ## 4. Công việc ưu tiên cao nhất
 
-## [~] Ưu tiên 1: Hoàn thiện nền tảng backend
+## [x] Ưu tiên 1: Hoàn thiện nền tảng backend
 
 Đây là phần cần làm đầu tiên vì toàn bộ business rule phải nằm ở backend.
 
-### [~] Việc cần làm
+### [x] Việc cần làm
 
 - [x] Chuẩn hóa cấu trúc backend theo module:
   - `xac-thuc`
@@ -147,9 +147,9 @@ Bạn có xác nhận cho tôi tiến hành không?
   - `errors`
 - [x] Tạo error handling thống nhất.
 - [x] Tạo constants/enums tập trung để tránh hard-code string.
-- [!] Nếu được xác nhận, chuyển backend sang TypeScript ngay từ đầu.
+- [x] Nếu được xác nhận, chuyển backend sang TypeScript ngay từ đầu.
 
-### [~] Kết quả mong muốn
+### [x] Kết quả mong muốn
 
 - [x] Backend có khung chuẩn để phát triển tiếp.
 - [x] Không còn viết API kiểu dồn toàn bộ logic vào một file.
@@ -157,126 +157,130 @@ Bạn có xác nhận cho tôi tiến hành không?
 
 ---
 
-## [ ] Ưu tiên 2: Code API cho luồng sinh viên trước
+## [~] Ưu tiên 2: Code API cho luồng sinh viên trước
 
 Sau khi có nền backend, cần ưu tiên các API đúng thứ tự nghiệp vụ mà sinh viên đi qua.
 
-### [ ] Nhóm API sinh viên cần làm trước
+### [x] Nhóm API sinh viên cần làm trước
 
-- [ ] `GET /mang-nghien-cuu/dang-mo`
-- [ ] `POST /dang-ky-mang-nghien-cuu`
-- [ ] `GET /nhom-cua-toi`
-- [ ] `POST /nhom-nghien-cuu`
-- [ ] `POST /nhom-nghien-cuu/:groupId/moi-thanh-vien`
-- [ ] `POST /loi-moi-nhom/:id/chap-nhan`
-- [ ] `POST /loi-moi-nhom/:id/tu-choi`
-- [ ] `GET /goi-y-ghep-nhom`
+- [x] `GET /mang-nghien-cuu/dang-mo`
+- [x] `POST /dang-ky-mang-nghien-cuu`
+- [x] `GET /nhom-cua-toi`
+- [x] `POST /nhom-nghien-cuu`
+- [x] `POST /nhom-nghien-cuu/:groupId/moi-thanh-vien`
+- [x] `POST /loi-moi-nhom/:id/chap-nhan`
+- [x] `POST /loi-moi-nhom/:id/tu-choi`
+- [x] `GET /goi-y-ghep-nhom`
 
-### [ ] Thứ tự bên trong luồng sinh viên
+### [x] Thứ tự bên trong luồng sinh viên
 
-1. [ ] Xem mảng nghiên cứu đang mở.
-2. [ ] Đăng ký mảng nghiên cứu.
-3. [ ] Xem nhóm hiện tại.
-4. [ ] Tạo nhóm.
-5. [ ] Mời thành viên.
-6. [ ] Chấp nhận hoặc từ chối lời mời.
-7. [ ] Xem gợi ý ghép nhóm.
+1. [x] Xem mảng nghiên cứu đang mở.
+2. [x] Đăng ký mảng nghiên cứu.
+3. [x] Xem nhóm hiện tại.
+4. [x] Tạo nhóm.
+5. [x] Mời thành viên.
+6. [x] Chấp nhận hoặc từ chối lời mời.
+7. [x] Xem gợi ý ghép nhóm.
 
-### [ ] Rule phải gắn ngay khi làm API sinh viên
+### [x] Rule phải gắn ngay khi làm API sinh viên
 
-- [ ] Một sinh viên chỉ đăng ký một mảng trong một đợt.
-- [ ] Chỉ được đăng ký khi đợt còn hiệu lực.
-- [ ] Một sinh viên chỉ thuộc một nhóm tại một thời điểm.
-- [ ] Nhóm tối đa 3 thành viên.
-- [ ] Chỉ sinh viên cùng mảng mới vào cùng nhóm.
-- [ ] Không tin trạng thái do frontend gửi lên.
+- [x] Một sinh viên chỉ đăng ký một mảng trong một đợt.
+- [x] Chỉ được đăng ký khi đợt còn hiệu lực.
+- [x] Một sinh viên chỉ thuộc một nhóm tại một thời điểm.
+- [x] Nhóm tối đa 3 thành viên.
+- [x] Chỉ sinh viên cùng mảng mới vào cùng nhóm.
+- [x] Không tin trạng thái do frontend gửi lên.
 
-### [ ] Transaction phải gắn ngay khi làm API sinh viên
+### [x] Transaction phải gắn ngay khi làm API sinh viên
 
-- [ ] Tạo nhóm + thêm trưởng nhóm.
-- [ ] Chấp nhận lời mời vào nhóm.
+- [x] Tạo nhóm + thêm trưởng nhóm.
+- [x] Chấp nhận lời mời vào nhóm.
 
-### [ ] Audit log / notification cần gắn dần
+### [x] Audit log / notification cần gắn dần
 
-- [ ] Ghi audit log khi đăng ký mảng.
-- [ ] Ghi audit log khi tạo nhóm.
-- [ ] Ghi audit log khi chấp nhận / từ chối lời mời.
-- [ ] Gửi notification khi đăng ký mảng thành công.
-- [ ] Gửi notification khi mời vào nhóm.
-- [ ] Gửi notification khi lời mời được chấp nhận / từ chối.
+- [x] Ghi audit log khi đăng ký mảng.
+- [x] Ghi audit log khi tạo nhóm.
+- [x] Ghi audit log khi chấp nhận / từ chối lời mời.
+- [x] Gửi notification khi đăng ký mảng thành công.
+- [x] Gửi notification khi mời vào nhóm.
+- [x] Gửi notification khi lời mời được chấp nhận / từ chối.
+
+### [!] Điểm còn mở để chốt hẳn ưu tiên 2
+
+- [!] Database hiện chưa có dữ liệu test cho `sinh_vien` và `mang_nghien_cuu`, nên mới xác nhận được API ở mức build + gọi endpoint + nhánh lỗi; chưa xác nhận full nhánh thành công end-to-end trên dữ liệu thật.
 
 ---
 
-## [ ] Ưu tiên 3: Code API cho luồng giảng viên
+## [x] Ưu tiên 3: Code API cho luồng giảng viên
 
 Luồng này chỉ nên làm sau khi luồng sinh viên đã tạo được dữ liệu thật.
 
-### [ ] Nhóm API giảng viên cần làm trước
+### [x] Nhóm API giảng viên cần làm trước
 
-- [ ] `GET /giang-vien/nhom/co-the-nhan`
-- [ ] `GET /giang-vien/nhom/:groupId`
-- [ ] `POST /giang-vien/nhom/:groupId/nhan-huong-dan`
+- [x] `GET /giang-vien/nhom/co-the-nhan`
+- [x] `GET /giang-vien/nhom/:groupId`
+- [x] `POST /giang-vien/nhom/:groupId/nhan-huong-dan`
 
-### [ ] Rule phải gắn ngay khi làm API giảng viên
+### [x] Rule phải gắn ngay khi làm API giảng viên
 
-- [ ] Giảng viên chỉ được chọn nhóm phù hợp chuyên môn / mảng.
-- [ ] Giảng viên có quota hướng dẫn.
-- [ ] Một nhóm chỉ có một giảng viên hướng dẫn chính.
+- [x] Giảng viên chỉ được chọn nhóm phù hợp chuyên môn / mảng.
+- [x] Giảng viên có quota hướng dẫn.
+- [x] Một nhóm chỉ có một giảng viên hướng dẫn chính.
 
-### [ ] Transaction phải gắn ngay khi làm API giảng viên
+### [x] Transaction phải gắn ngay khi làm API giảng viên
 
-- [ ] Nhận hướng dẫn nhóm bằng transaction để tránh vượt quota hoặc gán trùng.
+- [x] Nhận hướng dẫn nhóm bằng transaction để tránh vượt quota hoặc gán trùng.
 
-### [ ] Audit log / notification cần gắn dần
+### [x] Audit log / notification cần gắn dần
 
-- [ ] Ghi audit log khi giảng viên nhận nhóm.
-- [ ] Gửi notification cho nhóm khi có giảng viên nhận hướng dẫn.
+- [x] Ghi audit log khi giảng viên nhận nhóm.
+- [x] Gửi notification cho nhóm khi có giảng viên nhận hướng dẫn.
 
 ---
 
-## [ ] Ưu tiên 4: Code API cho luồng đề tài
+## [~] Ưu tiên 4: Code API cho luồng đề tài
 
 Chỉ làm khi nhóm đã có giảng viên hướng dẫn.
 
 ### [ ] Nhóm API cần có cho luồng đề tài
 
 - [ ] `POST /de-tai-de-xuat`
-- [ ] `GET /de-tai-cua-toi/co-the-chon`
-- [ ] `POST /nop-de-tai`
-- [ ] `PUT /nop-de-tai/:id`
-- [ ] `GET /giang-vien/de-tai-cho-duyet`
-- [ ] `POST /giang-vien/de-tai/:id/duyet`
-- [ ] `POST /giang-vien/de-tai/:id/yeu-cau-chinh-sua`
-- [ ] `POST /giang-vien/de-tai/:id/tu-choi`
-- [ ] `POST /de-tai/:id/chot`
+- [x] `GET /de-tai-cua-toi/co-the-chon`
+- [x] `POST /nop-de-tai`
+- [x] `PUT /nop-de-tai/:id`
+- [x] `GET /giang-vien/de-tai-cho-duyet`
+- [x] `POST /giang-vien/de-tai/:id/duyet`
+- [x] `POST /giang-vien/de-tai/:id/yeu-cau-chinh-sua`
+- [x] `POST /giang-vien/de-tai/:id/tu-choi`
+- [x] `POST /de-tai/:id/chot`
 
 ### [ ] Rule phải gắn ngay khi làm API đề tài
 
-- [ ] Nhóm chỉ được chọn hoặc đề xuất đề tài sau khi đã có giảng viên.
-- [ ] Đề tài tự đề xuất phải qua giảng viên duyệt.
-- [ ] `REQUEST_CHANGES` và `REJECT` bắt buộc có nhận xét.
-- [ ] Hết thời gian chỉnh sửa thì không được sửa thêm.
-- [ ] Đề tài đã chốt thì không được sửa, không được duyệt lại.
-- [ ] Sau mỗi lần sửa, đề tài quay lại trạng thái chờ duyệt.
+- [x] Nhóm chỉ được chọn hoặc đề xuất đề tài sau khi đã có giảng viên.
+- [x] Đề tài tự đề xuất phải qua giảng viên duyệt.
+- [x] `REQUEST_CHANGES` và `REJECT` bắt buộc có nhận xét.
+- [x] Hết thời gian chỉnh sửa thì không được sửa thêm.
+- [x] Đề tài đã chốt thì không được sửa, không được duyệt lại.
+- [x] Sau mỗi lần sửa, đề tài quay lại trạng thái chờ duyệt.
 
 ### [ ] Transaction phải gắn ngay khi làm API đề tài
 
-- [ ] Nhóm gửi đề tài.
-- [ ] Giảng viên duyệt đề tài.
-- [ ] Nhóm chỉnh sửa đề tài.
-- [ ] Chốt đề tài.
+- [x] Nhóm gửi đề tài.
+- [x] Giảng viên duyệt đề tài.
+- [x] Nhóm chỉnh sửa đề tài.
+- [x] Chốt đề tài.
 
-### [ ] Audit log / notification cần gắn dần
+### [x] Audit log / notification cần gắn dần
 
-- [ ] Ghi audit log khi gửi đề tài.
-- [ ] Ghi audit log khi duyệt / yêu cầu chỉnh sửa / từ chối đề tài.
-- [ ] Ghi audit log khi chỉnh sửa đề tài.
-- [ ] Ghi audit log khi chốt đề tài.
-- [ ] Gửi notification khi nhóm gửi đề tài chờ duyệt.
-- [ ] Gửi notification khi giảng viên yêu cầu chỉnh sửa.
-- [ ] Gửi notification khi giảng viên từ chối đề tài.
-- [ ] Gửi notification khi giảng viên duyệt đề tài.
-- [ ] Gửi notification khi đề tài được chốt.
+- [x] Ghi audit log khi gửi đề tài.
+- [x] Ghi audit log khi duyệt / yêu cầu chỉnh sửa / từ chối đề tài.
+- [x] Ghi audit log khi chỉnh sửa đề tài.
+- [x] Ghi audit log khi chốt đề tài.
+- [x] Gửi notification khi nhóm gửi đề tài chờ duyệt.
+- [x] Gửi notification khi giảng viên yêu cầu chỉnh sửa.
+- [x] Gửi notification khi giảng viên từ chối đề tài.
+- [x] Gửi notification khi giảng viên duyệt đề tài.
+- [x] Gửi notification khi đề tài được chốt.
 
 ---
 

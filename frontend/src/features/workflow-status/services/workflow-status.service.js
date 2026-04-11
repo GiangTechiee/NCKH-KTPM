@@ -1,16 +1,28 @@
 import { apiClient } from '../../../core/api/api-client';
 
-async function getWelcomeMessage() {
-  const data = await apiClient.getJson('/api');
-
-  return data.message;
+function taoHeadersSinhVien(studentCode) {
+  return { 'x-ma-sinh-vien': studentCode };
 }
 
-async function getSystemHealth() {
-  return apiClient.getJson('/api/health');
+function taoHeadersGiangVien(lecturerCode) {
+  return { 'x-ma-giang-vien': lecturerCode };
+}
+
+async function layTienTrinhSinhVien(studentCode) {
+  const response = await apiClient.getJson('/api/trang-thai-quy-trinh/sinh-vien', {
+    headers: taoHeadersSinhVien(studentCode),
+  });
+  return response.data;
+}
+
+async function layTienTrinhGiangVien(lecturerCode) {
+  const response = await apiClient.getJson('/api/trang-thai-quy-trinh/giang-vien', {
+    headers: taoHeadersGiangVien(lecturerCode),
+  });
+  return response.data;
 }
 
 export const workflowStatusService = {
-  getWelcomeMessage,
-  getSystemHealth,
+  layTienTrinhSinhVien,
+  layTienTrinhGiangVien,
 };

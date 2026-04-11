@@ -2,10 +2,14 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Backend Node.js project",
-  "main": "src/may_chu.js",
+  "main": "dist/may-chu.js",
   "scripts": {
-    "start": "node src/may_chu.js",
-    "dev": "nodemon src/may_chu.js",
+    "build": "tsc",
+    "start": "node dist/may-chu.js",
+    "dev": "ts-node -r tsconfig-paths/register src/may-chu.ts",
+    "dev:watch": "nodemon --exec ts-node -r tsconfig-paths/register src/may-chu.ts",
+    "db:seed:demo": "ts-node -r tsconfig-paths/register src/scripts/khoi-tao-du-lieu-demo.ts",
+    "db:seed:demo:additive": "node scripts/bo-sung-du-lieu-demo-giao-dien.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate:deploy": "prisma migrate deploy"
   },
@@ -13,11 +17,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "dotenv": "^17.4.1",
     "express": "^4.18.2",
+    "pg": "^8.20.0",
     "prisma": "^7.7.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.2",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^6.0.2"
   }
 }

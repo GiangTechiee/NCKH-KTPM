@@ -28,7 +28,7 @@ npm start
 ```
 backend/
 ├── src/
-│   └── may_chu.js
+│   └── may-chu.ts
 ├── package.json
 ├── .env.example
 ├── .gitignore
