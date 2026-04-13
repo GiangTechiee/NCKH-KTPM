@@ -1,17 +1,16 @@
-import { GiangVien, SinhVien } from '@prisma/client';
 import { MemberJoinStatus } from '../../../common/constants';
 import { getPrismaClient } from '../../../infrastructure/database/trinh-khach-prisma';
 
 class NguoiDungRepository {
   private readonly prisma = getPrismaClient();
 
-  async timSinhVienTheoMa(maSinhVien: string): Promise<SinhVien | null> {
+  async timSinhVienTheoMa(maSinhVien: string) {
     return this.prisma.sinhVien.findUnique({
       where: { maSinhVien },
     });
   }
 
-  async timGiangVienTheoMa(maGiangVien: string): Promise<GiangVien | null> {
+  async timGiangVienTheoMa(maGiangVien: string) {
     return this.prisma.giangVien.findUnique({
       where: { maGiangVien },
     });

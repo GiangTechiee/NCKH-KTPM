@@ -6,6 +6,7 @@ async function requestJson(path, options = {}) {
       'Content-Type': 'application/json',
       ...(headers || {}),
     },
+    credentials: 'omit',
     ...restOptions,
   });
 

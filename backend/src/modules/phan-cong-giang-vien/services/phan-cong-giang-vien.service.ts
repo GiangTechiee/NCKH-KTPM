@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import {
   AuditAction,
   AuditEntityType,
+  GROUP_STATUS_TRANSITIONS,
   GroupStatus,
   UserRole,
 } from '../../../common/constants';
@@ -15,6 +16,10 @@ import {
   NhomDangHuongDanResponse,
   NhomUngVienHuongDanResponse,
 } from '../types/phan-cong-giang-vien.types';
+
+const DANH_SACH_TRANG_THAI_CO_THE_NHAN_HUONG_DAN = (Object.values(GroupStatus) as GroupStatus[]).filter(
+  (trangThai) => GROUP_STATUS_TRANSITIONS[trangThai].includes(GroupStatus.DA_CO_GIANG_VIEN)
+);
 
 function boDauVaChuanHoa(text: string): string {
   return text
@@ -126,6 +131,34 @@ class PhanCongGiangVienService {
     };
   }
 
+  private kiemTraNhomCoTheNhanHuongDan(nhom: { giangVienId: bigint | null; trangThai: string }) {
+    if (nhom.giangVienId) {
+      throw new ConflictError({
+        message: 'Nhóm này đã có giảng viên hướng dẫn',
+        errorCode: 'GROUP_ALREADY_ASSIGNED',
+      });
+    }
+
+    if (!DANH_SACH_TRANG_THAI_CO_THE_NHAN_HUONG_DAN.includes(nhom.trangThai as GroupStatus)) {
+      throw new ConflictError({
+        message: 'Trạng thái nhóm hiện tại không phù hợp để nhận hướng dẫn',
+        errorCode: 'GROUP_STATUS_NOT_ELIGIBLE_FOR_ASSIGNMENT',
+      });
+    }
+  }
+
+  private kiemTraQuotaGiangVien(giangVien: {
+    soNhomDangHuongDan: number;
+    soNhomHuongDanToiDa: number;
+  }) {
+    if (giangVien.soNhomDangHuongDan >= giangVien.soNhomHuongDanToiDa) {
+      throw new ConflictError({
+        message: 'Giảng viên đã hết quota hướng dẫn',
+        errorCode: 'LECTURER_QUOTA_EXCEEDED',
+      });
+    }
+  }
+
   async layDanhSachNhomCoTheNhan(giangVien: {
     id: bigint;
     chuyenMon: string | null;
@@ -182,19 +215,8 @@ class PhanCongGiangVienService {
       throw new NotFoundError('Không tìm thấy nhóm nghiên cứu');
     }
 
-    if (nhom.giangVienId) {
-      throw new ConflictError({
-        message: 'Nhóm này đã có giảng viên hướng dẫn',
-        errorCode: 'GROUP_ALREADY_ASSIGNED',
-      });
-    }
-
-    if (giangVien.soNhomDangHuongDan >= giangVien.soNhomHuongDanToiDa) {
-      throw new ConflictError({
-        message: 'Giảng viên đã hết quota hướng dẫn',
-        errorCode: 'LECTURER_QUOTA_EXCEEDED',
-      });
-    }
+    this.kiemTraNhomCoTheNhanHuongDan(nhom);
+    this.kiemTraQuotaGiangVien(giangVien);
 
     const phuHopChuyenMon = xacDinhPhuHopChuyenMon(
       giangVien.chuyenMon,
@@ -210,18 +232,56 @@ class PhanCongGiangVienService {
     }
 
     const ketQua = await this.prisma.$transaction(async (giaoDich) => {
-      const nhomDaCapNhat = await this.phanCongGiangVienRepository.capNhatNhomHuongDan(
+      const soLuongNhomDaCapNhat = await this.phanCongGiangVienRepository.ganGiangVienChoNhomNeuHopLe(
         groupId,
         giangVien.id,
+        DANH_SACH_TRANG_THAI_CO_THE_NHAN_HUONG_DAN,
         giaoDich
       );
 
-      const giangVienDaCapNhat = await this.phanCongGiangVienRepository.tangSoNhomDangHuongDan(
+      if (soLuongNhomDaCapNhat === 0) {
+        const nhomMoiNhat = await this.phanCongGiangVienRepository.timChiTietNhomTheoId(groupId, giaoDich);
+        if (!nhomMoiNhat) {
+          throw new NotFoundError('Không tìm thấy nhóm nghiên cứu');
+        }
+
+        this.kiemTraNhomCoTheNhanHuongDan(nhomMoiNhat);
+        throw new ConflictError({
+          message: 'Không thể nhận hướng dẫn nhóm ở thời điểm hiện tại',
+          errorCode: 'GROUP_ASSIGNMENT_CONFLICT',
+        });
+      }
+
+      const thongTinHuongDanGiangVien = await this.phanCongGiangVienRepository.timThongTinHuongDanGiangVien(
         giangVien.id,
         giaoDich
       );
+      if (!thongTinHuongDanGiangVien) {
+        throw new NotFoundError('Không tìm thấy giảng viên');
+      }
 
-      return { nhomDaCapNhat, giangVienDaCapNhat };
+      const soLuongGiangVienDaCapNhat =
+        await this.phanCongGiangVienRepository.tangSoNhomDangHuongDanNeuConSlot(
+          giangVien.id,
+          thongTinHuongDanGiangVien.soNhomHuongDanToiDa,
+          giaoDich
+        );
+      if (soLuongGiangVienDaCapNhat === 0) {
+        throw new ConflictError({
+          message: 'Giảng viên đã hết quota hướng dẫn',
+          errorCode: 'LECTURER_QUOTA_EXCEEDED',
+        });
+      }
+
+      const nhomDaCapNhat = await this.phanCongGiangVienRepository.timChiTietNhomTheoId(groupId, giaoDich);
+      if (!nhomDaCapNhat) {
+        throw new NotFoundError('Không tìm thấy nhóm nghiên cứu');
+      }
+
+      return {
+        nhomDaCapNhat,
+        currentLecturerLoad: thongTinHuongDanGiangVien.soNhomDangHuongDan + 1,
+      };
     });
 
     await Promise.all([
@@ -258,7 +318,7 @@ class PhanCongGiangVienService {
       lecturerId: giangVien.id,
       lecturerCode: giangVien.maGiangVien,
       groupStatus: ketQua.nhomDaCapNhat.trangThai,
-      currentLecturerLoad: ketQua.giangVienDaCapNhat.soNhomDangHuongDan,
+      currentLecturerLoad: ketQua.currentLecturerLoad,
     };
   }
 }

@@ -7,6 +7,10 @@ type CoSoDuLieu = PrismaClient | Prisma.TransactionClient;
 class PhanCongGiangVienRepository {
   private readonly prisma = getPrismaClient();
 
+  private layCoSoDuLieu(coSoDuLieu?: CoSoDuLieu): CoSoDuLieu {
+    return coSoDuLieu ?? this.prisma;
+  }
+
   async timDanhSachNhomUngVien() {
     return this.prisma.nhomNghienCuu.findMany({
       where: {
@@ -60,8 +64,8 @@ class PhanCongGiangVienRepository {
     });
   }
 
-  async timChiTietNhomTheoId(groupId: bigint) {
-    return this.prisma.nhomNghienCuu.findUnique({
+  async timChiTietNhomTheoId(groupId: bigint, coSoDuLieu?: CoSoDuLieu) {
+    return this.layCoSoDuLieu(coSoDuLieu).nhomNghienCuu.findUnique({
       where: { id: groupId },
       include: {
         mangNghienCuu: true,
@@ -80,29 +84,60 @@ class PhanCongGiangVienRepository {
     });
   }
 
-  async capNhatNhomHuongDan(
+  async timThongTinHuongDanGiangVien(giangVienId: bigint, coSoDuLieu?: CoSoDuLieu) {
+    return this.layCoSoDuLieu(coSoDuLieu).giangVien.findUnique({
+      where: { id: giangVienId },
+      select: {
+        id: true,
+        soNhomDangHuongDan: true,
+        soNhomHuongDanToiDa: true,
+      },
+    });
+  }
+
+  async ganGiangVienChoNhomNeuHopLe(
     groupId: bigint,
     giangVienId: bigint,
+    danhSachTrangThaiHopLe: GroupStatus[],
     coSoDuLieu: CoSoDuLieu
   ) {
-    return coSoDuLieu.nhomNghienCuu.update({
-      where: { id: groupId },
+    const ketQua = await coSoDuLieu.nhomNghienCuu.updateMany({
+      where: {
+        id: groupId,
+        giangVienId: null,
+        trangThai: {
+          in: danhSachTrangThaiHopLe,
+        },
+      },
       data: {
         giangVienId,
         trangThai: GroupStatus.DA_CO_GIANG_VIEN,
       },
     });
+
+    return ketQua.count;
   }
 
-  async tangSoNhomDangHuongDan(giangVienId: bigint, coSoDuLieu: CoSoDuLieu) {
-    return coSoDuLieu.giangVien.update({
-      where: { id: giangVienId },
+  async tangSoNhomDangHuongDanNeuConSlot(
+    giangVienId: bigint,
+    soNhomHuongDanToiDa: number,
+    coSoDuLieu: CoSoDuLieu
+  ) {
+    const ketQua = await coSoDuLieu.giangVien.updateMany({
+      where: {
+        id: giangVienId,
+        soNhomDangHuongDan: {
+          lt: soNhomHuongDanToiDa,
+        },
+      },
       data: {
         soNhomDangHuongDan: {
           increment: 1,
         },
       },
     });
+
+    return ketQua.count;
   }
 }
 
