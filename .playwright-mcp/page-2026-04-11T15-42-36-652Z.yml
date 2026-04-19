@@ -1,0 +1,129 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: H
+          - generic [ref=e12]:
+            - paragraph [ref=e13]: Hanoi Open University
+            - paragraph [ref=e14]: Hệ thống NCKH
+        - generic [ref=e15]:
+          - paragraph [ref=e16]: Vai trò
+          - combobox [ref=e17]:
+            - option "Sinh viên" [selected]
+            - option "Giảng viên"
+            - option "Quản trị viên"
+        - generic [ref=e18]:
+          - paragraph [ref=e19]: Sinh viên
+          - combobox [ref=e20]:
+            - option "SV001 — Nguyễn Minh Anh"
+            - option "SV002 — Trần Thu Hà"
+            - option "SV003 — Lê Quang Huy"
+            - option "SV004 — Phạm Gia Hân"
+            - option "SV005 — Đỗ Đức Minh"
+            - option "SV006 — Vũ Khánh Linh"
+            - option "SV007 — Bùi Nhật Nam"
+            - option "SV008 — Hoàng Mai Phương"
+            - option "SV009 — Nguyễn Anh Khoa"
+            - option "SV010 — Tạ Bảo Châu"
+            - option "SV011 — Phạm Ngọc An"
+            - option "SV012 — Nguyễn Hoài Thu"
+            - option "SV013 — Lê Thu Trang"
+            - option "SV014 — Trịnh Khánh Vy"
+            - option "SV015 — Dương Quốc Bảo" [selected]
+        - navigation [ref=e21]:
+          - paragraph [ref=e22]: Điều hướng
+          - button "Đăng ký mảng nghiên cứu" [ref=e23] [cursor=pointer]:
+            - img [ref=e24]
+            - generic [ref=e26]: Đăng ký mảng nghiên cứu
+          - button "Nhóm nghiên cứu" [ref=e27] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: Nhóm nghiên cứu
+          - button "Ghép nhóm / lời mời" [ref=e31] [cursor=pointer]:
+            - img [ref=e32]
+            - generic [ref=e34]: Ghép nhóm / lời mời
+          - button "Đề tài nghiên cứu" [active] [ref=e35] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e38]: Đề tài nghiên cứu
+          - button "Tiến trình thực hiện" [ref=e39] [cursor=pointer]:
+            - img [ref=e40]
+            - generic [ref=e42]: Tiến trình thực hiện
+          - button "Thông báo 1" [ref=e43] [cursor=pointer]:
+            - img [ref=e44]
+            - generic [ref=e46]: Thông báo
+            - generic [ref=e47]: "1"
+        - generic [ref=e48]:
+          - paragraph [ref=e49]: Hỗ trợ
+          - paragraph [ref=e50]: nckh@hou.edu.vn
+    - generic [ref=e51]:
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - paragraph [ref=e55]: Quản lý Nghiên cứu Khoa học
+          - heading "Đề tài nghiên cứu" [level=1] [ref=e410]
+        - generic [ref=e58]:
+          - generic [ref=e59]: QB
+          - generic [ref=e60]:
+            - paragraph [ref=e61]: Dương Quốc Bảo
+            - paragraph [ref=e62]: CNTT08-K17
+      - generic [ref=e63]:
+        - generic [ref=e65]:
+          - heading "Đề tài nghiên cứu" [level=2] [ref=e411]
+          - paragraph [ref=e67]: Nhóm tự đề xuất đề tài để gửi giảng viên duyệt.
+        - generic [ref=e278]:
+          - article [ref=e412]:
+            - paragraph [ref=e413]: Nhóm hiện tại
+            - paragraph [ref=e414]: XINCHAOXINCHAO
+            - paragraph [ref=e415]: "Trạng thái: Đang tuyển thành viên"
+          - article [ref=e416]:
+            - paragraph [ref=e417]: Giảng viên hướng dẫn
+            - paragraph [ref=e418]: Chưa có
+            - paragraph [ref=e419]: Đề tài chỉ gửi khi đã có giảng viên.
+          - article [ref=e420]:
+            - paragraph [ref=e421]: Trạng thái đề tài
+            - paragraph [ref=e422]: Chưa nộp
+            - paragraph [ref=e423]: Nhóm chưa có đề tài.
+        - generic [ref=e424]:
+          - generic [ref=e427]:
+            - article [ref=e428]:
+              - generic [ref=e429]:
+                - generic [ref=e430]:
+                  - paragraph [ref=e431]: Nhóm hiện tại
+                  - heading "XINCHAOXINCHAO" [level=3] [ref=e432]
+                  - paragraph [ref=e433]: Mảng Trí tuệ nhân tạo ứng dụng • 1 thành viên • Giảng viên chưa phân công
+                - button "Làm mới" [ref=e434] [cursor=pointer]
+              - generic [ref=e435]: Nhóm chưa có giảng viên hướng dẫn. Bạn sẽ nộp đề tài sau khi giảng viên nhận nhóm.
+              - generic [ref=e436]:
+                - paragraph [ref=e437]: Nhóm chưa nộp đề tài.
+                - paragraph [ref=e438]: Điền form bên phải để gửi đề tài tự đề xuất cho giảng viên duyệt.
+            - article [ref=e439]:
+              - paragraph [ref=e440]: Đề xuất đề tài
+              - heading "Tạo đề tài nhóm" [level=3] [ref=e441]
+              - paragraph [ref=e442]: Giữ form ngắn gọn, rõ vấn đề nghiên cứu và hướng triển khai để giảng viên duyệt nhanh hơn.
+              - generic [ref=e443]:
+                - generic [ref=e444]:
+                  - text: Tên đề tài
+                  - textbox "Tên đề tài" [disabled] [ref=e445]
+                - generic [ref=e446]:
+                  - text: Mô tả vấn đề
+                  - textbox "Mô tả vấn đề" [disabled] [ref=e447]
+                - generic [ref=e448]:
+                  - text: Mục tiêu nghiên cứu
+                  - textbox "Mục tiêu nghiên cứu" [disabled] [ref=e449]
+                - generic [ref=e450]:
+                  - text: Ứng dụng thực tiễn
+                  - textbox "Ứng dụng thực tiễn" [disabled] [ref=e451]
+                - generic [ref=e452]:
+                  - text: Phạm vi nghiên cứu
+                  - textbox "Phạm vi nghiên cứu" [disabled] [ref=e453]
+                - generic [ref=e454]:
+                  - text: Công nghệ sử dụng
+                  - textbox "Công nghệ sử dụng" [disabled] [ref=e455]
+                - generic [ref=e456]:
+                  - text: Lý do lựa chọn
+                  - textbox "Lý do lựa chọn" [disabled] [ref=e457]
+              - button "Nộp đề tài" [disabled] [ref=e458]
+          - article [ref=e459]:
+            - generic [ref=e460]:
+              - paragraph [ref=e461]: Đề tài giảng viên đề xuất
+              - heading "Chưa có đề tài đề xuất" [level=3] [ref=e462]
+              - paragraph [ref=e463]: Giảng viên hướng dẫn chưa đề xuất đề tài nào cho nhóm. Bạn có thể tự đề xuất đề tài bằng form phía trên.

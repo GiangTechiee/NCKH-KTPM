@@ -1,0 +1,276 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =========================================================
+// sinh_vien
+// =========================================================
+model SinhVien {
+  id                   BigInt                    @id @default(autoincrement())
+  maSinhVien           String                    @unique @map("ma_sinh_vien") @db.VarChar(20)
+  hoTen                String                    @map("ho_ten") @db.VarChar(100)
+  email                String                    @unique @db.VarChar(100)
+  tenLop               String?                   @map("ten_lop") @db.VarChar(50)
+  tenKhoa              String?                   @map("ten_khoa") @db.VarChar(100)
+  soDienThoai          String?                   @map("so_dien_thoai") @db.VarChar(20)
+  ngayTao              DateTime                  @default(now()) @map("ngay_tao")
+  ngayCapNhat          DateTime                  @default(now()) @updatedAt @map("ngay_cap_nhat")
+  nhomDoTruong         NhomNghienCuu[]           @relation("TruongNhom")
+  thanhVienNhom        ThanhVienNhomNghienCuu[]
+  dangKyMang           SinhVienDangKyMang[]
+  loiMoiDaGui          LoiMoiNhom[]              @relation("NguoiMoi")
+  loiMoiDaNhan         LoiMoiNhom[]              @relation("SinhVienDuocMoi")
+
+  @@index([maSinhVien], map: "idx_sinh_vien_ma_sinh_vien")
+  @@map("sinh_vien")
+}
+
+// =========================================================
+// giang_vien
+// =========================================================
+model GiangVien {
+  id                  BigInt          @id @default(autoincrement())
+  maGiangVien         String          @unique @map("ma_giang_vien") @db.VarChar(20)
+  hoTen               String          @map("ho_ten") @db.VarChar(100)
+  email               String          @unique @db.VarChar(100)
+  tenBoMon            String?         @map("ten_bo_mon") @db.VarChar(100)
+  chuyenMon           String?         @map("chuyen_mon") @db.VarChar(255)
+  soNhomHuongDanToiDa Int             @default(0) @map("so_nhom_huong_dan_toi_da")
+  soNhomDangHuongDan  Int             @default(0) @map("so_nhom_dang_huong_dan")
+  ngayTao             DateTime        @default(now()) @map("ngay_tao")
+  ngayCapNhat         DateTime        @default(now()) @updatedAt @map("ngay_cap_nhat")
+  nhomNghienCuu       NhomNghienCuu[]
+  danhMucDeTaiGiangVien DanhMucDeTaiGiangVien[]
+  deTaiNghienCuu      DeTaiNghienCuu[]
+
+  @@index([maGiangVien], map: "idx_giang_vien_ma_giang_vien")
+  @@map("giang_vien")
+}
+
+// =========================================================
+// mang_nghien_cuu
+// =========================================================
+model MangNghienCuu {
+  id                BigInt               @id @default(autoincrement())
+  maMang            String               @unique @map("ma_mang") @db.VarChar(20)
+  tenMang           String               @unique @map("ten_mang") @db.VarChar(100)
+  moTa              String?              @map("mo_ta")
+  thoiGianMoDangKy  DateTime             @map("thoi_gian_mo_dang_ky")
+  thoiGianDongDangKy DateTime            @map("thoi_gian_dong_dang_ky")
+  trangThai         String               @map("trang_thai") @db.VarChar(20)
+  ngayTao           DateTime             @default(now()) @map("ngay_tao")
+  ngayCapNhat       DateTime             @default(now()) @updatedAt @map("ngay_cap_nhat")
+  nhomNghienCuu     NhomNghienCuu[]
+  dangKyMang        SinhVienDangKyMang[]
+  danhMucDeTaiGiangVien DanhMucDeTaiGiangVien[]
+
+  @@index([trangThai], map: "idx_mang_nghien_cuu_trang_thai")
+  @@map("mang_nghien_cuu")
+}
+
+// =========================================================
+// sinh_vien_dang_ky_mang
+// =========================================================
+model SinhVienDangKyMang {
+  id             BigInt        @id @default(autoincrement())
+  sinhVienId     BigInt        @map("sinh_vien_id")
+  mangNghienCuuId BigInt       @map("mang_nghien_cuu_id")
+  thoiGianDangKy DateTime      @default(now()) @map("thoi_gian_dang_ky")
+  trangThai      String        @default("REGISTERED") @map("trang_thai") @db.VarChar(20)
+  ngayTao        DateTime      @default(now()) @map("ngay_tao")
+  ngayCapNhat    DateTime      @default(now()) @updatedAt @map("ngay_cap_nhat")
+  sinhVien       SinhVien      @relation(fields: [sinhVienId], references: [id], onDelete: Cascade, map: "fk_svdkm_sinh_vien")
+  mangNghienCuu  MangNghienCuu @relation(fields: [mangNghienCuuId], references: [id], onDelete: Cascade, map: "fk_svdkm_mang_nghien_cuu")
+
+  @@index([mangNghienCuuId], map: "sinh_vien_dang_ky_mang_mang_nghien_cuu_id_idx")
+  @@map("sinh_vien_dang_ky_mang")
+}
+
+// =========================================================
+// nhom_nghien_cuu
+// trang_thai: NHAP | DANG_TUYEN_THANH_VIEN | DA_DU_THANH_VIEN |
+//             CHUA_CO_GIANG_VIEN | DA_CO_GIANG_VIEN | DANG_CHON_DE_TAI |
+//             CHO_DUYET_DE_TAI | CAN_CHINH_SUA_DE_TAI | DA_DUYET_DE_TAI | DA_CHOT_DE_TAI
+// =========================================================
+model NhomNghienCuu {
+  id                BigInt                   @id @default(autoincrement())
+  tenNhom           String                   @map("ten_nhom") @db.VarChar(100)
+  mangNghienCuuId   BigInt                   @map("mang_nghien_cuu_id")
+  truongNhomSinhVienId BigInt                @map("truong_nhom_sinh_vien_id")
+  giangVienId       BigInt?                  @map("giang_vien_id")
+  trangThai         String                   @default("NHAP") @map("trang_thai") @db.VarChar(30)
+  soLuongThanhVien  Int                      @default(1) @map("so_luong_thanh_vien")
+  ngayTao           DateTime                 @default(now()) @map("ngay_tao")
+  ngayCapNhat       DateTime                 @default(now()) @updatedAt @map("ngay_cap_nhat")
+  mangNghienCuu     MangNghienCuu            @relation(fields: [mangNghienCuuId], references: [id], onDelete: Restrict, map: "fk_nnc_mang")
+  truongNhom        SinhVien                 @relation("TruongNhom", fields: [truongNhomSinhVienId], references: [id], onDelete: Restrict, map: "fk_nnc_truong_nhom")
+  giangVien         GiangVien?               @relation(fields: [giangVienId], references: [id], onDelete: SetNull, map: "fk_nnc_giang_vien")
+  thanhVien         ThanhVienNhomNghienCuu[]
+  deTai             DeTaiNghienCuu?
+  loiMoi            LoiMoiNhom[]
+
+  @@unique([mangNghienCuuId, tenNhom], map: "uq_ten_nhom_trong_mot_mang")
+  @@index([trangThai], map: "idx_nhom_nghien_cuu_trang_thai")
+  @@index([giangVienId], map: "idx_nhom_nghien_cuu_giang_vien_id")
+  @@map("nhom_nghien_cuu")
+}
+
+// =========================================================
+// thanh_vien_nhom_nghien_cuu
+// vai_tro: TRUONG_NHOM | THANH_VIEN
+// trang_thai_tham_gia: CHO_XAC_NHAN | DA_CHAP_NHAN | DA_TU_CHOI
+// =========================================================
+model ThanhVienNhomNghienCuu {
+  id               BigInt        @id @default(autoincrement())
+  nhomNghienCuuId  BigInt        @map("nhom_nghien_cuu_id")
+  sinhVienId       BigInt        @map("sinh_vien_id")
+  vaiTro           String        @map("vai_tro") @db.VarChar(20)
+  trangThaiThamGia String        @default("CHO_XAC_NHAN") @map("trang_thai_tham_gia") @db.VarChar(20)
+  thoiGianThamGia  DateTime?     @map("thoi_gian_tham_gia")
+  ngayTao          DateTime      @default(now()) @map("ngay_tao")
+  ngayCapNhat      DateTime      @default(now()) @updatedAt @map("ngay_cap_nhat")
+  nhomNghienCuu    NhomNghienCuu @relation(fields: [nhomNghienCuuId], references: [id], onDelete: Cascade, map: "fk_tvnnc_nhom")
+  sinhVien         SinhVien      @relation(fields: [sinhVienId], references: [id], onDelete: Cascade, map: "fk_tvnnc_sinh_vien")
+
+  @@unique([nhomNghienCuuId, sinhVienId], map: "uq_nhom_sinh_vien")
+  @@index([trangThaiThamGia], map: "idx_thanh_vien_nhom_trang_thai_tham_gia")
+  @@map("thanh_vien_nhom_nghien_cuu")
+}
+
+// =========================================================
+// loi_moi_nhom (GroupInvitation)
+// trang_thai: CHO_XAC_NHAN | DA_CHAP_NHAN | DA_TU_CHOI | DA_HUY
+// =========================================================
+model LoiMoiNhom {
+  id                  BigInt        @id @default(autoincrement())
+  nhomNghienCuuId     BigInt        @map("nhom_nghien_cuu_id")
+  nguoiMoiSinhVienId  BigInt        @map("nguoi_moi_sinh_vien_id")
+  sinhVienDuocMoiId   BigInt        @map("sinh_vien_duoc_moi_id")
+  trangThai           String        @default("CHO_XAC_NHAN") @map("trang_thai") @db.VarChar(20)
+  lyDoTuChoi          String?       @map("ly_do_tu_choi")
+  thoiGianMoi         DateTime      @default(now()) @map("thoi_gian_moi")
+  thoiGianPhanHoi     DateTime?     @map("thoi_gian_phan_hoi")
+  ngayTao             DateTime      @default(now()) @map("ngay_tao")
+  ngayCapNhat         DateTime      @default(now()) @updatedAt @map("ngay_cap_nhat")
+  nhomNghienCuu       NhomNghienCuu @relation(fields: [nhomNghienCuuId], references: [id], onDelete: Cascade, map: "fk_lmn_nhom")
+  nguoiMoi            SinhVien      @relation("NguoiMoi", fields: [nguoiMoiSinhVienId], references: [id], onDelete: Cascade, map: "fk_lmn_nguoi_moi")
+  sinhVienDuocMoi     SinhVien      @relation("SinhVienDuocMoi", fields: [sinhVienDuocMoiId], references: [id], onDelete: Cascade, map: "fk_lmn_sinh_vien_duoc_moi")
+
+  @@index([trangThai], map: "idx_loi_moi_nhom_trang_thai")
+  @@index([sinhVienDuocMoiId], map: "idx_loi_moi_nhom_sinh_vien_duoc_moi")
+  @@index([nhomNghienCuuId], map: "idx_loi_moi_nhom_nhom_id")
+  @@map("loi_moi_nhom")
+}
+
+// =========================================================
+// de_tai_nghien_cuu
+// trang_thai: NHAP | CHO_GIANG_VIEN_DUYET | CAN_CHINH_SUA | DA_DUYET | TU_CHOI | DA_CHOT
+// loai_de_tai: GIANG_VIEN_DE_XUAT | NHOM_DE_XUAT
+// =========================================================
+model DeTaiNghienCuu {
+  id                  BigInt        @id @default(autoincrement())
+  nhomNghienCuuId     BigInt        @unique @map("nhom_nghien_cuu_id")
+  giangVienId         BigInt        @map("giang_vien_id")
+  danhMucDeTaiGiangVienId BigInt?   @map("danh_muc_de_tai_giang_vien_id")
+  tenDeTai            String        @map("ten_de_tai") @db.VarChar(255)
+  loaiDeTai           String        @map("loai_de_tai") @db.VarChar(30)
+  moTaVanDe           String        @map("mo_ta_van_de")
+  mucTieuNghienCuu    String        @map("muc_tieu_nghien_cuu")
+  ungDungThucTien     String?       @map("ung_dung_thuc_tien")
+  phamViNghienCuu     String?       @map("pham_vi_nghien_cuu")
+  congNgheSuDung      String?       @map("cong_nghe_su_dung")
+  lyDoLuaChon         String?       @map("ly_do_lua_chon")
+  nhanXetGiangVien    String?       @map("nhan_xet_giang_vien")
+  ghiChuChinhSua      String?       @map("ghi_chu_chinh_sua")
+  soLanChinhSua       Int           @default(0) @map("so_lan_chinh_sua")
+  trangThai           String        @default("NHAP") @map("trang_thai") @db.VarChar(30)
+  thoiGianNop         DateTime?     @map("thoi_gian_nop")
+  thoiGianDuyet       DateTime?     @map("thoi_gian_duyet")
+  thoiGianChot        DateTime?     @map("thoi_gian_chot")
+  hanChinhSua         DateTime?     @map("han_chinh_sua")
+  ngayTao             DateTime      @default(now()) @map("ngay_tao")
+  ngayCapNhat         DateTime      @default(now()) @updatedAt @map("ngay_cap_nhat")
+  nhomNghienCuu       NhomNghienCuu @relation(fields: [nhomNghienCuuId], references: [id], onDelete: Cascade, map: "fk_dtnc_nhom")
+  giangVien           GiangVien     @relation(fields: [giangVienId], references: [id], onDelete: Restrict, map: "fk_dtnc_giang_vien")
+  danhMucDeTaiGiangVien DanhMucDeTaiGiangVien? @relation(fields: [danhMucDeTaiGiangVienId], references: [id], onDelete: SetNull, map: "fk_dtnc_danh_muc_de_tai_giang_vien")
+
+  @@index([trangThai], map: "idx_de_tai_nghien_cuu_trang_thai")
+  @@index([giangVienId], map: "idx_de_tai_nghien_cuu_giang_vien_id")
+  @@index([danhMucDeTaiGiangVienId], map: "idx_de_tai_nghien_cuu_danh_muc_giang_vien_id")
+  @@map("de_tai_nghien_cuu")
+}
+
+model DanhMucDeTaiGiangVien {
+  id                  BigInt        @id @default(autoincrement())
+  giangVienId         BigInt        @map("giang_vien_id")
+  mangNghienCuuId     BigInt        @map("mang_nghien_cuu_id")
+  tenDeTai            String        @map("ten_de_tai") @db.VarChar(255)
+  moTaVanDe           String        @map("mo_ta_van_de")
+  mucTieuNghienCuu    String        @map("muc_tieu_nghien_cuu")
+  ungDungThucTien     String?       @map("ung_dung_thuc_tien")
+  phamViNghienCuu     String?       @map("pham_vi_nghien_cuu")
+  congNgheSuDung      String?       @map("cong_nghe_su_dung")
+  lyDoLuaChon         String?       @map("ly_do_lua_chon")
+  trangThai           String        @default("ACTIVE") @map("trang_thai") @db.VarChar(20)
+  ngayTao             DateTime      @default(now()) @map("ngay_tao")
+  ngayCapNhat         DateTime      @default(now()) @updatedAt @map("ngay_cap_nhat")
+  giangVien           GiangVien     @relation(fields: [giangVienId], references: [id], onDelete: Cascade, map: "fk_dmdtgv_giang_vien")
+  mangNghienCuu       MangNghienCuu @relation(fields: [mangNghienCuuId], references: [id], onDelete: Cascade, map: "fk_dmdtgv_mang_nghien_cuu")
+  deTaiNghienCuu      DeTaiNghienCuu[]
+
+  @@index([giangVienId], map: "idx_danh_muc_de_tai_giang_vien_id")
+  @@index([mangNghienCuuId], map: "idx_danh_muc_de_tai_mang_nghien_cuu_id")
+  @@index([trangThai], map: "idx_danh_muc_de_tai_trang_thai")
+  @@map("danh_muc_de_tai_giang_vien")
+}
+
+// =========================================================
+// nhat_ky_kiem_toan (AuditLog)
+// vai_tro_nguoi_thuc_hien: SINH_VIEN | GIANG_VIEN | QUAN_TRI_VIEN
+// =========================================================
+model NhatKyKiemToan {
+  id                    BigInt   @id @default(autoincrement())
+  nguoiThucHienId       BigInt   @map("nguoi_thuc_hien_id")
+  vaiTroNguoiThucHien   String   @map("vai_tro_nguoi_thuc_hien") @db.VarChar(20)
+  hanhDong              String   @map("hanh_dong") @db.VarChar(100)
+  loaiDoiTuong          String   @map("loai_doi_tuong") @db.VarChar(50)
+  doiTuongId            BigInt   @map("doi_tuong_id")
+  trangThaiTruoc        Json?    @map("trang_thai_truoc")
+  trangThaiSau          Json?    @map("trang_thai_sau")
+  duLieuBoSung          Json?    @map("du_lieu_bo_sung")
+  ngayTao               DateTime @default(now()) @map("ngay_tao")
+
+  @@index([nguoiThucHienId], map: "idx_nhat_ky_kiem_toan_nguoi_thuc_hien")
+  @@index([loaiDoiTuong, doiTuongId], map: "idx_nhat_ky_kiem_toan_doi_tuong")
+  @@index([hanhDong], map: "idx_nhat_ky_kiem_toan_hanh_dong")
+  @@index([ngayTao(sort: Desc)], map: "idx_nhat_ky_kiem_toan_ngay_tao")
+  @@map("nhat_ky_kiem_toan")
+}
+
+// =========================================================
+// thong_bao (Notification)
+// loai_nguoi_nhan: SINH_VIEN | GIANG_VIEN | QUAN_TRI_VIEN
+// =========================================================
+model ThongBao {
+  id             BigInt    @id @default(autoincrement())
+  nguoiNhanId    BigInt    @map("nguoi_nhan_id")
+  loaiNguoiNhan  String    @map("loai_nguoi_nhan") @db.VarChar(20)
+  tieuDe         String    @map("tieu_de") @db.VarChar(255)
+  noiDung        String    @map("noi_dung")
+  loaiThongBao   String    @map("loai_thong_bao") @db.VarChar(50)
+  loaiDoiTuong   String?   @map("loai_doi_tuong") @db.VarChar(50)
+  doiTuongId     BigInt?   @map("doi_tuong_id")
+  daDoc          Boolean   @default(false) @map("da_doc")
+  thoiGianDoc    DateTime? @map("thoi_gian_doc")
+  ngayTao        DateTime  @default(now()) @map("ngay_tao")
+  ngayCapNhat    DateTime  @default(now()) @updatedAt @map("ngay_cap_nhat")
+
+  @@index([nguoiNhanId, loaiNguoiNhan], map: "idx_thong_bao_nguoi_nhan")
+  @@index([loaiThongBao], map: "idx_thong_bao_loai")
+  @@index([ngayTao(sort: Desc)], map: "idx_thong_bao_ngay_tao")
+  @@map("thong_bao")
+}
