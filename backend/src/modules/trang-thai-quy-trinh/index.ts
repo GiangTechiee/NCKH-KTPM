@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import xuLyBatDongBo from '../../common/utils/xu-ly-bat-dong-bo';
-import { trangThaiQuyTrinhController } from './controllers/trang-thai-quy-trinh.controller';
+import { trangThaiQuyTrinhController } from './api-layer/trang-thai-quy-trinh.controller';
 
 const router = Router();
 

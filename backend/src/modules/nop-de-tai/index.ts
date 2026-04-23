@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import xuLyBatDongBo from '../../common/utils/xu-ly-bat-dong-bo';
-import { nopDeTaiController } from './controllers/nop-de-tai.controller';
+import { nopDeTaiController } from './api-layer/nop-de-tai.controller';
 
 const router = Router();
 

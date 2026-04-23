@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import xuLyBatDongBo from '../../common/utils/xu-ly-bat-dong-bo';
-import { phanCongGiangVienController } from './controllers/phan-cong-giang-vien.controller';
+import { phanCongGiangVienController } from './api-layer/phan-cong-giang-vien.controller';
 
 const router = Router();
 

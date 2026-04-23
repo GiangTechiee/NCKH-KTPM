@@ -20,67 +20,67 @@
 ```mermaid
 sequenceDiagram
   actor SinhVien as Sinh viên
-  participant NopDeTaiController
-  participant nguoiDungService
-  participant nopDeTaiService
-  participant NopDeTaiRepository
-  participant PrismaDB as Prisma/PostgreSQL
-  participant nhatKyKiemToanService
-  participant thongBaoService
+  participant NopDeTaiAPI as API Layer<br/>NopDeTaiAPI
+  participant nguoiDungService as Business Layer<br/>NguoiDungService
+  participant nopDeTaiService as Business Layer<br/>NopDeTaiService
+  participant NopDeTaiDataAccess as Data Access Layer<br/>NopDeTaiDataAccess
+  participant PrismaDB as Database<br/>Prisma/PostgreSQL
+  participant nhatKyKiemToanService as Business Layer<br/>NhatKyKiemToanService
+  participant thongBaoService as Business Layer<br/>ThongBaoService
 
-  SinhVien->>NopDeTaiController: POST /api/nop-de-tai
-  activate NopDeTaiController
-  Note over NopDeTaiController: layMaSinhVienTuYeuCau(request)<br/>xacThucNopDeTai(request.body)
+  SinhVien->>NopDeTaiAPI: POST /api/nop-de-tai
+  activate NopDeTaiAPI
+  Note over NopDeTaiAPI: layMaSinhVienTuYeuCau(request)<br/>xacThucNopDeTai(request.body)
 
-  NopDeTaiController->>nguoiDungService: laySinhVienTheoMa(maSinhVien)
+  NopDeTaiAPI->>nguoiDungService: laySinhVienTheoMa(maSinhVien)
   activate nguoiDungService
-  nguoiDungService-->>NopDeTaiController: sinhVien
+  nguoiDungService-->>NopDeTaiAPI: sinhVien
   deactivate nguoiDungService
 
-  NopDeTaiController->>nopDeTaiService: nopDeTai(sinhVien.id, input)
+  NopDeTaiAPI->>nopDeTaiService: nopDeTai(sinhVien.id, input)
   activate nopDeTaiService
 
-  nopDeTaiService->>NopDeTaiRepository: timNhomCuaSinhVien(sinhVienId)
-  activate NopDeTaiRepository
-  NopDeTaiRepository->>PrismaDB: findFirst()
+  nopDeTaiService->>NopDeTaiDataAccess: timNhomCuaSinhVien(sinhVienId)
+  activate NopDeTaiDataAccess
+  NopDeTaiDataAccess->>PrismaDB: findFirst()
   activate PrismaDB
-  PrismaDB-->>NopDeTaiRepository: nhomNghienCuu
+  PrismaDB-->>NopDeTaiDataAccess: nhomNghienCuu
   deactivate PrismaDB
-  NopDeTaiRepository-->>nopDeTaiService: nhomNghienCuu
-  deactivate NopDeTaiRepository
+  NopDeTaiDataAccess-->>nopDeTaiService: nhomNghienCuu
+  deactivate NopDeTaiDataAccess
 
   Note over nopDeTaiService: Kiểm tra nhóm có giảng viên<br/>Kiểm tra trạng thái đề tài hiện tại<br/>Kiểm tra quyền chuyển đề tài nếu có
 
   rect rgba(220, 235, 255, 0.6)
     Note over nopDeTaiService,PrismaDB: Transaction
     opt Chuyển từ đề tài giảng viên đề xuất
-      nopDeTaiService->>NopDeTaiRepository: xoaDeTai(deTaiHienTai.id)
-      activate NopDeTaiRepository
-      NopDeTaiRepository->>PrismaDB: delete()
+      nopDeTaiService->>NopDeTaiDataAccess: xoaDeTai(deTaiHienTai.id)
+      activate NopDeTaiDataAccess
+      NopDeTaiDataAccess->>PrismaDB: delete()
       activate PrismaDB
-      PrismaDB-->>NopDeTaiRepository: OK
+      PrismaDB-->>NopDeTaiDataAccess: OK
       deactivate PrismaDB
-      NopDeTaiRepository-->>nopDeTaiService: OK
-      deactivate NopDeTaiRepository
+      NopDeTaiDataAccess-->>nopDeTaiService: OK
+      deactivate NopDeTaiDataAccess
     end
 
-    nopDeTaiService->>NopDeTaiRepository: taoDeTai(...)
-    activate NopDeTaiRepository
-    NopDeTaiRepository->>PrismaDB: create()
+    nopDeTaiService->>NopDeTaiDataAccess: taoDeTai(...)
+    activate NopDeTaiDataAccess
+    NopDeTaiDataAccess->>PrismaDB: create()
     activate PrismaDB
-    PrismaDB-->>NopDeTaiRepository: deTaiMoi
+    PrismaDB-->>NopDeTaiDataAccess: deTaiMoi
     deactivate PrismaDB
-    NopDeTaiRepository-->>nopDeTaiService: deTaiMoi
-    deactivate NopDeTaiRepository
+    NopDeTaiDataAccess-->>nopDeTaiService: deTaiMoi
+    deactivate NopDeTaiDataAccess
 
-    nopDeTaiService->>NopDeTaiRepository: capNhatTrangThaiNhom(nhomId, CHO_DUYET_DE_TAI)
-    activate NopDeTaiRepository
-    NopDeTaiRepository->>PrismaDB: update()
+    nopDeTaiService->>NopDeTaiDataAccess: capNhatTrangThaiNhom(nhomId, CHO_DUYET_DE_TAI)
+    activate NopDeTaiDataAccess
+    NopDeTaiDataAccess->>PrismaDB: update()
     activate PrismaDB
-    PrismaDB-->>NopDeTaiRepository: nhomDaCapNhat
+    PrismaDB-->>NopDeTaiDataAccess: nhomDaCapNhat
     deactivate PrismaDB
-    NopDeTaiRepository-->>nopDeTaiService: nhomDaCapNhat
-    deactivate NopDeTaiRepository
+    NopDeTaiDataAccess-->>nopDeTaiService: nhomDaCapNhat
+    deactivate NopDeTaiDataAccess
   end
 
   par Ghi audit log
@@ -103,10 +103,10 @@ sequenceDiagram
     deactivate thongBaoService
   end
 
-  nopDeTaiService-->>NopDeTaiController: DeTaiTomTatResponse
+  nopDeTaiService-->>NopDeTaiAPI: DeTaiTomTatResponse
   deactivate nopDeTaiService
-  NopDeTaiController-->>SinhVien: 201 Nộp đề tài thành công
-  deactivate NopDeTaiController
+  NopDeTaiAPI-->>SinhVien: 201 Nộp đề tài thành công
+  deactivate NopDeTaiAPI
 ```
 
 ## 4.3.2.2. Các unit cần cho chức năng "Sinh viên nộp đề tài tự đề xuất"
@@ -124,29 +124,27 @@ sequenceDiagram
 | 7 | nhomNghienCuu | NhomNghienCuu | Nhóm nghiên cứu hiện tại của sinh viên |
 | 8 | deTaiMoi | DeTaiTomTatResponse | Đề tài mới được tạo |
 
-- **Unit cần thiết**
+- **Unit cần thiết (theo kiến trúc 4 tầng)**
 
-| STT | Class | Method | Input | Output |
-|-----|-------|--------|-------|--------|
-| 1 | NopDeTaiController | nopDeTai(request, response) | request, response | 201: Nộp đề tài thành công |
-| 2 | nguoiDungService | laySinhVienTheoMa(maSinhVien) | maSinhVien | sinhVien |
-| 3 | nopDeTaiService | nopDeTai(sinhVienId, input) | sinhVienId, input | DeTaiTomTatResponse |
-| 4 | NopDeTaiRepository | timNhomCuaSinhVien(sinhVienId) | sinhVienId | nhomNghienCuu |
-| 5 | NopDeTaiRepository | xoaDeTai(deTaiId) | deTaiId | OK |
-| 6 | NopDeTaiRepository | taoDeTai(input) | input | deTaiMoi |
-| 7 | NopDeTaiRepository | capNhatTrangThaiNhom(nhomId, trangThaiMoi) | nhomId, trangThaiMoi | nhomDaCapNhat |
-| 8 | nhatKyKiemToanService | taoBanGhi(input) | input | Ghi audit log thành công |
-| 9 | thongBaoService | taoNhieuThongBao(danhSachThongBao) | danhSachThongBao | Tạo thông báo thành công |
+| STT | Tầng | Class | Method | Input | Output |
+|-----|------|-------|--------|-------|--------|
+| 1 | API Layer | NopDeTaiAPI | nopDeTai(request, response) | request, response | 201: Nộp đề tài thành công |
+| 2 | Business Layer | NguoiDungService | laySinhVienTheoMa(maSinhVien) | maSinhVien | sinhVien |
+| 3 | Business Layer | NopDeTaiService | nopDeTai(sinhVienId, input) | sinhVienId, input | DeTaiTomTatResponse |
+| 4 | Data Access Layer | NopDeTaiDataAccess | timNhomCuaSinhVien(sinhVienId) | sinhVienId | nhomNghienCuu |
+| 5 | Data Access Layer | NopDeTaiDataAccess | xoaDeTai(deTaiId) | deTaiId | OK |
+| 6 | Data Access Layer | NopDeTaiDataAccess | taoDeTai(input) | input | deTaiMoi |
+| 7 | Data Access Layer | NopDeTaiDataAccess | capNhatTrangThaiNhom(nhomId, trangThaiMoi) | nhomId, trangThaiMoi | nhomDaCapNhat |
+| 8 | Business Layer | NhatKyKiemToanService | taoBanGhi(input) | input | Ghi audit log thành công |
+| 9 | Business Layer | ThongBaoService | taoNhieuThongBao(danhSachThongBao) | danhSachThongBao | Tạo thông báo thành công |
 
-- `NopDeTaiController::nopDeTai(request, response)`
-- `nguoiDungService::laySinhVienTheoMa(maSinhVien)`
-- `nopDeTaiService::nopDeTai(sinhVienId, input)`
-- `NopDeTaiRepository::timNhomCuaSinhVien(sinhVienId)`
-- `NopDeTaiRepository::xoaDeTai(deTaiId)`
-- `NopDeTaiRepository::taoDeTai(input)`
-- `NopDeTaiRepository::capNhatTrangThaiNhom(nhomId, trangThaiMoi)`
-- `nhatKyKiemToanService::taoBanGhi(input)`
-- `thongBaoService::taoNhieuThongBao(danhSachThongBao)`
+**Mapping với code thực tế:**
+- `NopDeTaiAPI` → `backend/src/modules/nop-de-tai/api-layer/nop-de-tai.controller.ts`
+- `NguoiDungService` → `backend/src/modules/nguoi-dung/business-layer/nguoi-dung.service.ts`
+- `NopDeTaiService` → `backend/src/modules/nop-de-tai/business-layer/nop-de-tai.service.ts`
+- `NopDeTaiDataAccess` → `backend/src/modules/nop-de-tai/data-access-layer/nop-de-tai.repository.ts`
+- `NhatKyKiemToanService` → `backend/src/modules/nhat-ky-kiem-toan/business-layer/nhat-ky-kiem-toan.service.ts`
+- `ThongBaoService` → `backend/src/modules/thong-bao/business-layer/thong-bao.service.ts`
 
 ## 4.3.2.3. Activity cho `xacThucNopDeTai()`
 
@@ -203,7 +201,7 @@ flowchart TD
     U --> V[Kết thúc]
 ```
 
-## 4.3.2.6. Activity cho `NopDeTaiRepository::taoDeTai(input)`
+## 4.3.2.6. Activity cho `NopDeTaiDataAccess::taoDeTai(input)`
 
 ```mermaid
 flowchart TD
@@ -216,7 +214,7 @@ flowchart TD
     G --> H[Kết thúc]
 ```
 
-## 4.3.2.7. Activity cho `NopDeTaiRepository::capNhatTrangThaiNhom(nhomId, trangThaiMoi)`
+## 4.3.2.7. Activity cho `NopDeTaiDataAccess::capNhatTrangThaiNhom(nhomId, trangThaiMoi)`
 
 ```mermaid
 flowchart TD
@@ -228,14 +226,37 @@ flowchart TD
     F --> G[Kết thúc]
 ```
 
-## 4.3.2.8. Ghi chú đối chiếu mã nguồn
+## 4.3.2.8. Ghi chú đối chiếu mã nguồn (Kiến trúc 4 tầng)
 
-- Route chính: `backend/src/modules/nop-de-tai/index.ts`
-- Controller chính: `backend/src/modules/nop-de-tai/controllers/nop-de-tai.controller.ts`
-- Service chính: `backend/src/modules/nop-de-tai/services/nop-de-tai.service.ts`
-- Repository chính: `backend/src/modules/nop-de-tai/repositories/nop-de-tai.repository.ts`
+### Cấu trúc theo kiến trúc mới:
+
+**API Layer (Nhận request, validate dữ liệu đầu vào):**
+- Route: `backend/src/modules/nop-de-tai/index.ts`
+- Controller: `backend/src/modules/nop-de-tai/api-layer/nop-de-tai.controller.ts`
 - Validator: `backend/src/modules/nop-de-tai/validators/nop-de-tai.validator.ts`
 - DTO: `backend/src/modules/nop-de-tai/dto/nop-de-tai.dto.ts`
-- Dịch vụ tra cứu sinh viên: `backend/src/modules/nguoi-dung/services/nguoi-dung.service.ts`
-- Audit log service: `backend/src/modules/nhat-ky-kiem-toan/services/nhat-ky-kiem-toan.service.ts`
-- Notification service: `backend/src/modules/thong-bao/services/thong-bao.service.ts`
+
+**Business Layer (Logic nghiệp vụ):**
+- Service chính: `backend/src/modules/nop-de-tai/business-layer/nop-de-tai.service.ts`
+- Dịch vụ tra cứu sinh viên: `backend/src/modules/nguoi-dung/business-layer/nguoi-dung.service.ts`
+- Audit log service: `backend/src/modules/nhat-ky-kiem-toan/business-layer/nhat-ky-kiem-toan.service.ts`
+- Notification service: `backend/src/modules/thong-bao/business-layer/thong-bao.service.ts`
+
+**Data Access Layer (Truy vấn DB, mapping dữ liệu, transaction):**
+- Repository: `backend/src/modules/nop-de-tai/data-access-layer/nop-de-tai.repository.ts`
+
+**Middleware (Xác thực JWT, kiểm tra vai trò/quyền):**
+- Error handler: `backend/src/common/middlewares/xu-ly-loi.ts`
+- Not found handler: `backend/src/common/middlewares/xu-ly-khong-tim-thay.ts`
+
+### Luồng xử lý request:
+
+```
+Client → API Layer → Middleware → Business Layer → Data Access Layer → Database
+```
+
+1. **API Layer** nhận request, validate input
+2. **Middleware** xác thực JWT, kiểm tra quyền
+3. **Business Layer** xử lý logic nghiệp vụ
+4. **Data Access Layer** truy vấn database
+5. **Database** (PostgreSQL via Prisma)

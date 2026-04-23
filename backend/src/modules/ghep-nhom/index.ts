@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import xuLyBatDongBo from '../../common/utils/xu-ly-bat-dong-bo';
-import { ghepNhomController } from './controllers/ghep-nhom.controller';
+import { ghepNhomController } from './api-layer/ghep-nhom.controller';
 
 const router = Router();
 

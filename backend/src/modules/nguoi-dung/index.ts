@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import xuLyBatDongBo from '../../common/utils/xu-ly-bat-dong-bo';
 import { sendSuccess } from '../../common/utils/phan-hoi';
-import { nguoiDungController } from './controllers/nguoi-dung.controller';
+import { nguoiDungController } from './api-layer/nguoi-dung.controller';
 
 const router = Router();
 

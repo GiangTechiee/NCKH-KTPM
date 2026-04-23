@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import xuLyBatDongBo from '../../common/utils/xu-ly-bat-dong-bo';
-import { duyetDeTaiController } from './controllers/duyet-de-tai.controller';
+import { duyetDeTaiController } from './api-layer/duyet-de-tai.controller';
 
 const router = Router();
 
