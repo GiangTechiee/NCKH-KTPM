@@ -58,18 +58,20 @@ class NguoiDungService {
       const dangKyMangGanNhat = sinhVien.dangKyMang[0] ?? null;
       const nhomDangThamGia = sinhVien.thanhVienNhom[0]?.nhomNghienCuu ?? null;
       const deTaiHienTai = nhomDangThamGia?.deTai ?? null;
+      const hasRegisteredArea = Boolean(dangKyMangGanNhat);
 
       return {
         code: sinhVien.maSinhVien,
-        displayName: `${sinhVien.maSinhVien} - ${sinhVien.hoTen}`,
+        displayName: `${sinhVien.maSinhVien} - ${sinhVien.hoTen}${hasRegisteredArea ? '' : ' •'}`,
         fullName: sinhVien.hoTen,
         className: sinhVien.tenLop,
         facultyName: sinhVien.tenKhoa,
         workflowStatus: xacDinhTrangThaiTienTrinhSinhVien({
-          coDangKyMang: Boolean(dangKyMangGanNhat),
+          coDangKyMang: hasRegisteredArea,
           coNhom: Boolean(nhomDangThamGia),
           coDeTai: Boolean(deTaiHienTai),
         }),
+        hasRegisteredArea,
         researchAreaCode: dangKyMangGanNhat?.mangNghienCuu.maMang ?? null,
         researchAreaName: dangKyMangGanNhat?.mangNghienCuu.tenMang ?? null,
         registrationStatus: dangKyMangGanNhat?.trangThai ?? null,

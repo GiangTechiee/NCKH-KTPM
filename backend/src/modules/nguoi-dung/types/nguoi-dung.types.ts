@@ -7,6 +7,7 @@ interface StudentAccountOption {
   className: string | null;
   facultyName: string | null;
   workflowStatus: StudentWorkflowStatus;
+  hasRegisteredArea: boolean;
   researchAreaCode: string | null;
   researchAreaName: string | null;
   registrationStatus: string | null;

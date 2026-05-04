@@ -1,0 +1,541 @@
+<mxfile host="Electron" agent="Codex" pages="5">
+  <diagram id="act-bat-buoc-co-nhan-xet" name="batBuocCoNhanXet">
+    <mxGraphModel dx="1195" dy="728" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a1-start" parent="1" style="ellipse;html=1;shape=startState;fontFamily=Times New Roman;fontSize=14;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="395" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-n1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" value="Nhận quyetDinh, nhanXet, lyDo" vertex="1">
+          <mxGeometry height="60" width="250" x="285" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" value="Quyết định là&lt;br&gt;YEU_CAU_CHINH_SUA&lt;br&gt;hoặc TU_CHOI?" vertex="1">
+          <mxGeometry height="110" width="180" x="320" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" value="nhanXet và lyDo&lt;br&gt;đều rỗng?" vertex="1">
+          <mxGeometry height="95" width="170" x="135" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" value="nhanXet rỗng?" vertex="1">
+          <mxGeometry height="90" width="150" x="525" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-false1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về false" vertex="1">
+          <mxGeometry height="55" width="150" x="125" y="555" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-true1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về true" vertex="1">
+          <mxGeometry height="55" width="150" x="305" y="555" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-false2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về false" vertex="1">
+          <mxGeometry height="55" width="150" x="505" y="555" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-true2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về true" vertex="1">
+          <mxGeometry height="55" width="150" x="675" y="555" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-end" parent="1" style="ellipse;html=1;shape=endState;fontFamily=Times New Roman;fontSize=14;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="395" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-e1" edge="1" parent="1" source="a1-start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-n1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-e2" edge="1" parent="1" source="a1-n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-e3" edge="1" parent="1" source="a1-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-d2" value="Có">
+          <mxGeometry relative="1" x="-0.7073" as="geometry">
+            <mxPoint x="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e4" edge="1" parent="1" source="a1-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-d3" value="Không">
+          <mxGeometry relative="1" x="-0.6099" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e5" edge="1" parent="1" source="a1-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-false1" value="Có">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="528" />
+              <mxPoint x="170" y="528" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e6" edge="1" parent="1" source="a1-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-true1" value="Không">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="528" />
+              <mxPoint x="380" y="528" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e7" edge="1" parent="1" source="a1-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-false2" value="Có">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="510" />
+              <mxPoint x="540" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e8" edge="1" parent="1" source="a1-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-true2" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a1-e9" edge="1" parent="1" source="a1-false1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="725" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e10" edge="1" parent="1" source="a1-true1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="670" />
+              <mxPoint x="400" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e11" edge="1" parent="1" source="a1-false2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="725" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1-e12" edge="1" parent="1" source="a1-true2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman;fontSize=14;" target="a1-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="750" />
+              <mxPoint x="420" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="act-phe-duyet" name="pheDuyet">
+    <mxGraphModel dx="1355" dy="825" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a2-start" parent="1" style="ellipse;html=1;shape=startState;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-n1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Nhận deTaiNghienCuuId, nguoiDuyetGiangVienId, nhanXet" vertex="1">
+          <mxGeometry height="60" width="320" x="265" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-n2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Tìm hồ sơ đề tài" vertex="1">
+          <mxGeometry height="55" width="200" x="325" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Tìm thấy đề tài?" vertex="1">
+          <mxGeometry height="90" width="150" x="350" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Trạng thái = CHO_DUYET?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Người duyệt có quyền?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-d4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Nhận xét hợp lệ?" vertex="1">
+          <mxGeometry height="90" width="160" x="345" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-n3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Lưu quyết định PHE_DUYET" vertex="1">
+          <mxGeometry height="55" width="230" x="310" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-n4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Gọi doiTrangThai(DA_DUYET)" vertex="1">
+          <mxGeometry height="55" width="250" x="300" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-n5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Ghi log và gửi thông báo" vertex="1">
+          <mxGeometry height="55" width="230" x="310" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-ok" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về bản ghi phê duyệt" vertex="1">
+          <mxGeometry height="55" width="240" x="305" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-error" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về lỗi tương ứng" vertex="1">
+          <mxGeometry height="55" width="180" x="610" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-end" parent="1" style="ellipse;html=1;shape=endState;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="1190" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e1" edge="1" parent="1" source="a2-start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-n1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e2" edge="1" parent="1" source="a2-n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-n2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e3" edge="1" parent="1" source="a2-n2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e4" edge="1" parent="1" source="a2-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-d2" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e5" edge="1" parent="1" source="a2-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-error" value="Không">
+          <mxGeometry relative="1" x="-0.85" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a2-e6" edge="1" parent="1" source="a2-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-d3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e7" edge="1" parent="1" source="a2-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-error" value="Không">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="488" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a2-e8" edge="1" parent="1" source="a2-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-d4" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e9" edge="1" parent="1" source="a2-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-error" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e10" edge="1" parent="1" source="a2-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-n3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e11" edge="1" parent="1" source="a2-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a2-error" value="Không">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="745" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a2-e12" edge="1" parent="1" source="a2-n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-n4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e13" edge="1" parent="1" source="a2-n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-n5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e14" edge="1" parent="1" source="a2-n5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e15" edge="1" parent="1" source="a2-ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2-e16" edge="1" parent="1" source="a2-error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a2-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="1205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="act-tu-choi" name="tuChoi">
+    <mxGraphModel dx="1373" dy="845" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a3-start" parent="1" style="ellipse;html=1;shape=startState;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-n1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Nhận deTaiNghienCuuId, nguoiDuyetGiangVienId, lyDo, nhanXet" vertex="1">
+          <mxGeometry height="60" width="350" x="250" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-n2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Tìm hồ sơ đề tài" vertex="1">
+          <mxGeometry height="55" width="200" x="325" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Tìm thấy đề tài?" vertex="1">
+          <mxGeometry height="90" width="150" x="350" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Trạng thái = CHO_DUYET?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Người duyệt có quyền?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-d4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Lý do/nhận xét hợp lệ?" vertex="1">
+          <mxGeometry height="90" width="180" x="335" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-n3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Lưu quyết định TU_CHOI" vertex="1">
+          <mxGeometry height="55" width="230" x="310" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-n4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Gọi doiTrangThai(TU_CHOI)" vertex="1">
+          <mxGeometry height="55" width="240" x="305" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-n5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Ghi log và gửi thông báo" vertex="1">
+          <mxGeometry height="55" width="230" x="310" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-ok" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về bản ghi từ chối" vertex="1">
+          <mxGeometry height="55" width="240" x="305" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-error" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về lỗi tương ứng" vertex="1">
+          <mxGeometry height="55" width="180" x="610" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-end" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="1190" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e1" edge="1" parent="1" source="a3-start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-n1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e2" edge="1" parent="1" source="a3-n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-n2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e3" edge="1" parent="1" source="a3-n2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e4" edge="1" parent="1" source="a3-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-d2" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e5" edge="1" parent="1" source="a3-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-error" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e6" edge="1" parent="1" source="a3-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-d3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e7" edge="1" parent="1" source="a3-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-error" value="Không">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="488" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a3-e8" edge="1" parent="1" source="a3-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-d4" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e9" edge="1" parent="1" source="a3-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-error" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e10" edge="1" parent="1" source="a3-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-n3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e11" edge="1" parent="1" source="a3-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a3-error" value="Không">
+          <mxGeometry relative="1" x="-0.7539" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="670" y="745" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a3-e12" edge="1" parent="1" source="a3-n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-n4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e13" edge="1" parent="1" source="a3-n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-n5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e14" edge="1" parent="1" source="a3-n5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e15" edge="1" parent="1" source="a3-ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3-e16" edge="1" parent="1" source="a3-error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a3-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="1205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="act-yeu-cau-chinh-sua" name="yeuCauChinhSua">
+    <mxGraphModel dx="1084" dy="667" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1350" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a4-start" parent="1" style="ellipse;html=1;shape=startState;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-n1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Nhận deTaiNghienCuuId, nguoiDuyetGiangVienId, nhanXet, hanChinhSua" vertex="1">
+          <mxGeometry height="60" width="380" x="235" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-n2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Tìm hồ sơ đề tài" vertex="1">
+          <mxGeometry height="55" width="200" x="325" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Tìm thấy đề tài?" vertex="1">
+          <mxGeometry height="90" width="150" x="350" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Trạng thái = CHO_DUYET?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Người duyệt có quyền?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-d4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Nhận xét hợp lệ?" vertex="1">
+          <mxGeometry height="90" width="160" x="345" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-d5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Hạn chỉnh sửa hợp lệ?" vertex="1">
+          <mxGeometry height="95" width="170" x="340" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-n3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Lưu quyết định YEU_CAU_CHINH_SUA" vertex="1">
+          <mxGeometry height="55" width="290" x="280" y="960" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-n4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Gọi doiTrangThai(CAN_CHINH_SUA)" vertex="1">
+          <mxGeometry height="55" width="290" x="280" y="1050" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-n5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Ghi log và gửi thông báo" vertex="1">
+          <mxGeometry height="55" width="230" x="310" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-ok" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về bản ghi yêu cầu chỉnh sửa" vertex="1">
+          <mxGeometry height="55" width="280" x="285" y="1230" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-error" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về lỗi tương ứng" vertex="1">
+          <mxGeometry height="55" width="180" x="610" y="635" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-end" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e1" edge="1" parent="1" source="a4-start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-n1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e2" edge="1" parent="1" source="a4-n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-n2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e3" edge="1" parent="1" source="a4-n2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e4" edge="1" parent="1" source="a4-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-d2" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e5" edge="1" parent="1" source="a4-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-error" value="Không">
+          <mxGeometry relative="1" x="-0.8312" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a4-e6" edge="1" parent="1" source="a4-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-d3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e7" edge="1" parent="1" source="a4-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-error" value="Không">
+          <mxGeometry relative="1" x="-0.7214" y="-2" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="650" y="488" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a4-e8" edge="1" parent="1" source="a4-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-d4" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e9" edge="1" parent="1" source="a4-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-error" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e10" edge="1" parent="1" source="a4-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-d5" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e11" edge="1" parent="1" source="a4-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-error" value="Không">
+          <mxGeometry relative="1" x="-0.55" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="650" y="745" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a4-e12" edge="1" parent="1" source="a4-d5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-n3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e13" edge="1" parent="1" source="a4-d5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a4-error" value="Không">
+          <mxGeometry relative="1" x="-0.8387" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a4-e14" edge="1" parent="1" source="a4-n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-n4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e15" edge="1" parent="1" source="a4-n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-n5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e16" edge="1" parent="1" source="a4-n5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e17" edge="1" parent="1" source="a4-ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4-e18" edge="1" parent="1" source="a4-error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a4-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="1335" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="act-doi-trang-thai" name="doiTrangThai">
+    <mxGraphModel dx="824" dy="507" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a5-start" parent="1" style="ellipse;html=1;shape=startState;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-n1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Nhận deTaiNghienCuuId, trangThaiMoi, nguoiThucHienId" vertex="1">
+          <mxGeometry height="60" width="330" x="260" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-n2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Tìm đề tài theo ID" vertex="1">
+          <mxGeometry height="55" width="200" x="325" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Tìm thấy đề tài?" vertex="1">
+          <mxGeometry height="90" width="150" x="350" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="trangThaiMoi thuộc enum?" vertex="1">
+          <mxGeometry height="95" width="180" x="335" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=13" value="Chuyển trạng thái hợp lệ?" vertex="1">
+          <mxGeometry height="95" width="190" x="330" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-n3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Cập nhật trạng thái đề tài" vertex="1">
+          <mxGeometry height="55" width="240" x="305" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-n4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Cập nhật thời điểm sửa đổi" vertex="1">
+          <mxGeometry height="55" width="240" x="305" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-ok" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về đề tài đã cập nhật" vertex="1">
+          <mxGeometry height="55" width="240" x="305" y="895" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-error" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Trả về lỗi tương ứng" vertex="1">
+          <mxGeometry height="55" width="180" x="610" y="505" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-end" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="985" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e1" edge="1" parent="1" source="a5-start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-n1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e2" edge="1" parent="1" source="a5-n1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-n2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e3" edge="1" parent="1" source="a5-n2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e4" edge="1" parent="1" source="a5-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a5-d2" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e5" edge="1" parent="1" source="a5-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a5-error" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e6" edge="1" parent="1" source="a5-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a5-d3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e7" edge="1" parent="1" source="a5-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a5-error" value="Không">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="562" y="493" />
+              <mxPoint x="562" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a5-e8" edge="1" parent="1" source="a5-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a5-n3" value="Có">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e9" edge="1" parent="1" source="a5-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman" target="a5-error" value="Không">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e10" edge="1" parent="1" source="a5-n3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-n4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e11" edge="1" parent="1" source="a5-n4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e12" edge="1" parent="1" source="a5-ok" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5-e13" edge="1" parent="1" source="a5-error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1" target="a5-end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="1000" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
