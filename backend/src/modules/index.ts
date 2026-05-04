@@ -13,6 +13,7 @@ import topicReviewRouter from './duyet-de-tai';
 import workflowStatusRouter from './trang-thai-quy-trinh';
 import notificationRouter from './thong-bao';
 import auditLogRouter from './nhat-ky-kiem-toan';
+import trendAnalysisRouter from './phan-tich-xu-huong';
 
 const router = Router();
 
@@ -46,6 +47,7 @@ const registeredModules = [
   { path: '/trang-thai-quy-trinh', key: 'trang-thai-quy-trinh' },
   { path: '/thong-bao', key: 'thong-bao' },
   { path: '/audit-logs/:entityType/:entityId', key: 'nhat-ky-kiem-toan' },
+  { path: '/phan-tich-xu-huong/yeu-cau', key: 'phan-tich-xu-huong' },
 ];
 
 router.get('/', (_req, res) => {
@@ -69,5 +71,6 @@ router.use('/duyet-de-tai', topicReviewRouter);
 router.use('/trang-thai-quy-trinh', workflowStatusRouter);
 router.use('/thong-bao', notificationRouter);
 router.use('/audit-logs', auditLogRouter);
+router.use('/phan-tich-xu-huong', trendAnalysisRouter);
 
 export default router;
