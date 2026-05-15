@@ -1,0 +1,212 @@
+<mxfile host="Electron" agent="Codex" version="24.7.17" pages="6">
+  <diagram id="uc03-uc04-usecase" name="01 - Use Case bo sung UC03 UC04">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="uc-title" value="Use Case Diagram bổ sung - Kế thừa UC-03 và UC-04 từ DHL-SWD.202502.G04" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=20;fontFamily=Times New Roman" vertex="1" parent="1">
+          <mxGeometry x="140" y="25" width="880" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-system" value="Hệ thống quản lý NCKH sinh viên&#xa;Phần bổ sung BakDb - LogDb" style="swimlane;whiteSpace=wrap;html=1;fontStyle=1;fontFamily=Times New Roman;fontSize=15;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="235" y="95" width="715" height="590" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-student" value="Sinh viên / Nhóm sinh viên" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="85" y="240" width="55" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-lecturer" value="Giảng viên / Cán bộ có thẩm quyền" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="1015" y="240" width="55" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="uc03" value="UC-03&#xa;Đăng ký đề tài nghiên cứu" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Times New Roman;fontSize=15" vertex="1" parent="uc-system">
+          <mxGeometry x="65" y="80" width="205" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc04" value="UC-04&#xa;Phê duyệt đề tài nghiên cứu" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Times New Roman;fontSize=15" vertex="1" parent="uc-system">
+          <mxGeometry x="435" y="80" width="210" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-detail" value="Xem chi tiết đề tài" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=15" vertex="1" parent="uc-system">
+          <mxGeometry x="255" y="205" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-bak" value="Ghi bản sao dữ liệu&#xa;vào BakDb" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Times New Roman;fontSize=15" vertex="1" parent="uc-system">
+          <mxGeometry x="80" y="365" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-log" value="Ghi nhật ký thay đổi&#xa;vào LogDb" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Times New Roman;fontSize=15" vertex="1" parent="uc-system">
+          <mxGeometry x="445" y="365" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-history" value="Xem lịch sử thay đổi&#xa;của đề tài" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Times New Roman;fontSize=15" vertex="1" parent="uc-system">
+          <mxGeometry x="255" y="465" width="190" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-note" value="Ghi chú: UC-03 và UC-04 kế thừa từ báo cáo DHL-SWD.202502.G04.&#xa;Các use case BakDb, LogDb, lịch sử thay đổi là phần bổ sung theo yêu cầu mới." style="note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Times New Roman;fontSize=13" vertex="1" parent="1">
+          <mxGeometry x="345" y="710" width="480" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-e1" edge="1" source="actor-student" target="uc03" parent="1" style="endArrow=none;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e2" edge="1" source="actor-student" target="uc-detail" parent="1" style="endArrow=none;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e3" edge="1" source="actor-lecturer" target="uc04" parent="1" style="endArrow=none;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e4" edge="1" source="actor-lecturer" target="uc-detail" parent="1" style="endArrow=none;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e5" edge="1" source="uc03" target="uc-bak" parent="uc-system" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e6" edge="1" source="uc03" target="uc-log" parent="uc-system" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e7" edge="1" source="uc04" target="uc-bak" parent="uc-system" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e8" edge="1" source="uc04" target="uc-log" parent="uc-system" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="uc-e9" edge="1" source="uc-detail" target="uc-history" parent="uc-system" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="activity-uc03" name="02 - Activity UC03 Dang ky de tai">
+    <mxGraphModel dx="1000" dy="1180" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+        <mxCell id="a-title" value="Activity Diagram - UC-03 Đăng ký đề tài nghiên cứu có BakDb và LogDb" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;fontFamily=Times New Roman" vertex="1" parent="1"><mxGeometry x="55" y="25" width="740" height="40" as="geometry" /></mxCell>
+        <mxCell id="a-start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000" vertex="1" parent="1"><mxGeometry x="410" y="85" width="30" height="30" as="geometry" /></mxCell>
+        <mxCell id="a1" value="Sinh viên/Nhóm chọn tự đề xuất hoặc chọn đề tài giảng viên đề xuất" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="260" y="145" width="330" height="60" as="geometry" /></mxCell>
+        <mxCell id="a2" value="Kiểm tra nhóm đã có giảng viên hướng dẫn" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="285" y="235" width="280" height="55" as="geometry" /></mxCell>
+        <mxCell id="ad1" value="Hợp lệ?" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="365" y="320" width="120" height="80" as="geometry" /></mxCell>
+        <mxCell id="a3" value="Kiểm tra dữ liệu đề tài và quyền chuyển đổi đề tài cũ nếu có" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="270" y="435" width="310" height="65" as="geometry" /></mxCell>
+        <mxCell id="ad2" value="Đề tài hợp lệ?" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="350" y="535" width="150" height="85" as="geometry" /></mxCell>
+        <mxCell id="a4" value="Ghi DeTaiNghienCuu vào MainDb&#xa;trangThai = CHO_GIANG_VIEN_DUYET" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="285" y="650" width="280" height="70" as="geometry" /></mxCell>
+        <mxCell id="a5" value="Cập nhật NhomNghienCuu trong MainDb&#xa;trangThai = CHO_DUYET_DE_TAI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="285" y="750" width="280" height="70" as="geometry" /></mxCell>
+        <mxCell id="a6" value="Ghi snapshot DeTaiNghienCuu và NhomNghienCuu sang BakDb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="270" y="850" width="310" height="65" as="geometry" /></mxCell>
+        <mxCell id="a7" value="Ghi change log vào LogDb&#xa;action = NOP_DE_TAI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="300" y="945" width="250" height="65" as="geometry" /></mxCell>
+        <mxCell id="a8" value="Gửi thông báo cho giảng viên hướng dẫn" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="300" y="1040" width="250" height="55" as="geometry" /></mxCell>
+        <mxCell id="a-ok" value="Trả kết quả đăng ký đề tài thành công" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="290" y="1125" width="270" height="55" as="geometry" /></mxCell>
+        <mxCell id="a-error" value="Trả lỗi và không ghi tiếp BakDb/LogDb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="610" y="475" width="205" height="65" as="geometry" /></mxCell>
+        <mxCell id="a-end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000" vertex="1" parent="1"><mxGeometry x="410" y="1205" width="30" height="30" as="geometry" /></mxCell>
+        <mxCell id="ae1" edge="1" source="a-start" target="a1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae2" edge="1" source="a1" target="a2" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae3" edge="1" source="a2" target="ad1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae4" edge="1" source="ad1" target="a3" parent="1" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae5" edge="1" source="ad1" target="a-error" parent="1" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae6" edge="1" source="a3" target="ad2" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae7" edge="1" source="ad2" target="a4" parent="1" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae8" edge="1" source="ad2" target="a-error" parent="1" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae9" edge="1" source="a4" target="a5" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae10" edge="1" source="a5" target="a6" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae11" edge="1" source="a6" target="a7" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae12" edge="1" source="a7" target="a8" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae13" edge="1" source="a8" target="a-ok" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae14" edge="1" source="a-ok" target="a-end" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ae15" edge="1" source="a-error" target="a-end" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="activity-uc04" name="03 - Activity UC04 Phe duyet de tai">
+    <mxGraphModel dx="1000" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+        <mxCell id="b-title" value="Activity Diagram - UC-04 Phê duyệt đề tài nghiên cứu có BakDb và LogDb" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;fontFamily=Times New Roman" vertex="1" parent="1"><mxGeometry x="60" y="25" width="730" height="40" as="geometry" /></mxCell>
+        <mxCell id="b-start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000" vertex="1" parent="1"><mxGeometry x="410" y="85" width="30" height="30" as="geometry" /></mxCell>
+        <mxCell id="b1" value="Giảng viên/cán bộ chọn quyết định&#xa;Phê duyệt / Chỉnh sửa / Từ chối / Chốt" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="275" y="145" width="300" height="70" as="geometry" /></mxCell>
+        <mxCell id="b2" value="Kiểm tra quyền xử lý đề tài" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="315" y="250" width="220" height="55" as="geometry" /></mxCell>
+        <mxCell id="bd1" value="Có quyền?" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="365" y="335" width="120" height="80" as="geometry" /></mxCell>
+        <mxCell id="b3" value="Kiểm tra trạng thái đề tài và trạng thái nhóm" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="285" y="450" width="280" height="55" as="geometry" /></mxCell>
+        <mxCell id="bd2" value="Transition hợp lệ?" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="345" y="535" width="160" height="85" as="geometry" /></mxCell>
+        <mxCell id="b4" value="Kiểm tra nhận xét/lý do bắt buộc" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="285" y="655" width="280" height="55" as="geometry" /></mxCell>
+        <mxCell id="bd3" value="Hợp lệ?" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="365" y="740" width="120" height="80" as="geometry" /></mxCell>
+        <mxCell id="b5" value="Cập nhật DeTaiNghienCuu, PheDuyetDeTai, NhomNghienCuu trong MainDb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="250" y="855" width="350" height="70" as="geometry" /></mxCell>
+        <mxCell id="b6" value="Ghi snapshot dữ liệu sau thay đổi vào BakDb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="285" y="955" width="280" height="55" as="geometry" /></mxCell>
+        <mxCell id="b7" value="Ghi change log vào LogDb&#xa;DUYET / YEU_CAU_CHINH_SUA / TU_CHOI / CHOT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="260" y="1040" width="330" height="70" as="geometry" /></mxCell>
+        <mxCell id="b8" value="Gửi thông báo cho nhóm sinh viên" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="305" y="1140" width="240" height="55" as="geometry" /></mxCell>
+        <mxCell id="b-error" value="Trả lỗi và không ghi tiếp BakDb/LogDb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Times New Roman;fontSize=14" vertex="1" parent="1"><mxGeometry x="610" y="565" width="205" height="65" as="geometry" /></mxCell>
+        <mxCell id="b-end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000" vertex="1" parent="1"><mxGeometry x="410" y="1220" width="30" height="30" as="geometry" /></mxCell>
+        <mxCell id="be1" edge="1" source="b-start" target="b1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be2" edge="1" source="b1" target="b2" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be3" edge="1" source="b2" target="bd1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be4" edge="1" source="bd1" target="b3" parent="1" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be5" edge="1" source="bd1" target="b-error" parent="1" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be6" edge="1" source="b3" target="bd2" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be7" edge="1" source="bd2" target="b4" parent="1" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be8" edge="1" source="bd2" target="b-error" parent="1" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be9" edge="1" source="b4" target="bd3" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be10" edge="1" source="bd3" target="b5" parent="1" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be11" edge="1" source="bd3" target="b-error" parent="1" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be12" edge="1" source="b5" target="b6" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be13" edge="1" source="b6" target="b7" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be14" edge="1" source="b7" target="b8" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be15" edge="1" source="b8" target="b-end" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="be16" edge="1" source="b-error" target="b-end" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="sequence-uc03" name="04 - Sequence UC03 Dang ky de tai">
+    <mxGraphModel dx="1300" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+        <mxCell id="s-title" value="Sequence Diagram - UC-03 Đăng ký đề tài nghiên cứu có BakDb và LogDb" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;fontFamily=Times New Roman" vertex="1" parent="1"><mxGeometry x="210" y="25" width="870" height="40" as="geometry" /></mxCell>
+        <mxCell id="s-ui" value="Sinh viên/UI" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="45" y="90" width="120" height="45" as="geometry" /></mxCell>
+        <mxCell id="s-controller" value="NopDeTaiController" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="235" y="90" width="155" height="45" as="geometry" /></mxCell>
+        <mxCell id="s-service" value="NopDeTaiService" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="465" y="90" width="145" height="45" as="geometry" /></mxCell>
+        <mxCell id="s-coord" value="DataChangeCoordinator" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="680" y="90" width="180" height="45" as="geometry" /></mxCell>
+        <mxCell id="s-main" value="MainDbRepository" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="930" y="90" width="150" height="45" as="geometry" /></mxCell>
+        <mxCell id="s-bak" value="BackupRepository&#xa;BakDb" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="1110" y="90" width="150" height="55" as="geometry" /></mxCell>
+        <mxCell id="s-log" value="ChangeLogRepository&#xa;LogDb" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="1110" y="660" width="150" height="55" as="geometry" /></mxCell>
+        <mxCell id="sl1" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="105" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="sl2" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="312" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="sl3" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="537" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="sl4" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="770" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="sl5" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="1005" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="sl6" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="1185" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="se1" edge="1" source="s-ui" target="s-controller" parent="1" value="POST /topic-submissions" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="105" y="180" as="sourcePoint" /><mxPoint x="312" y="180" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se2" edge="1" source="s-controller" target="s-service" parent="1" value="nopDeTai(input)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="312" y="240" as="sourcePoint" /><mxPoint x="537" y="240" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se3" edge="1" source="s-service" target="s-coord" parent="1" value="commitChange(NOP_DE_TAI)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="537" y="310" as="sourcePoint" /><mxPoint x="770" y="310" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se4" edge="1" source="s-coord" target="s-main" parent="1" value="create/update DeTai + Nhom" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="770" y="380" as="sourcePoint" /><mxPoint x="1005" y="380" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se5" edge="1" source="s-coord" target="s-bak" parent="1" value="saveSnapshot(DeTai,Nhom)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="770" y="455" as="sourcePoint" /><mxPoint x="1185" y="455" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se6" edge="1" source="s-coord" target="s-log" parent="1" value="createChangeLog(NOP_DE_TAI)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="770" y="535" as="sourcePoint" /><mxPoint x="1185" y="535" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se7" edge="1" source="s-service" target="s-controller" parent="1" value="Kết quả đề tài" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="537" y="620" as="sourcePoint" /><mxPoint x="312" y="620" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="se8" edge="1" source="s-controller" target="s-ui" parent="1" value="Thông báo thành công" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="312" y="690" as="sourcePoint" /><mxPoint x="105" y="690" as="targetPoint" /></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="sequence-uc04" name="05 - Sequence UC04 Phe duyet de tai">
+    <mxGraphModel dx="1300" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+        <mxCell id="t-title" value="Sequence Diagram - UC-04 Phê duyệt đề tài nghiên cứu có BakDb và LogDb" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;fontFamily=Times New Roman" vertex="1" parent="1"><mxGeometry x="210" y="25" width="870" height="40" as="geometry" /></mxCell>
+        <mxCell id="t-ui" value="Giảng viên/UI" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="45" y="90" width="120" height="45" as="geometry" /></mxCell>
+        <mxCell id="t-controller" value="DuyetDeTaiController" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="220" y="90" width="175" height="45" as="geometry" /></mxCell>
+        <mxCell id="t-service" value="DuyetDeTaiService" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1"><mxGeometry x="465" y="90" width="155" height="45" as="geometry" /></mxCell>
+        <mxCell id="t-coord" value="DataChangeCoordinator" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="690" y="90" width="180" height="45" as="geometry" /></mxCell>
+        <mxCell id="t-main" value="MainDbRepository" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="940" y="90" width="150" height="45" as="geometry" /></mxCell>
+        <mxCell id="t-bak" value="BackupRepository&#xa;BakDb" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="1120" y="90" width="150" height="55" as="geometry" /></mxCell>
+        <mxCell id="t-log" value="ChangeLogRepository&#xa;LogDb" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="1120" y="660" width="150" height="55" as="geometry" /></mxCell>
+        <mxCell id="tl1" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="105" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="tl2" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="307" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="tl3" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="542" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="tl4" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="780" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="tl5" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="1015" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="tl6" value="" style="line;html=1;strokeColor=#999999;dashed=1" vertex="1" parent="1"><mxGeometry x="1195" y="145" width="1" height="570" as="geometry" /></mxCell>
+        <mxCell id="te1" edge="1" source="t-ui" target="t-controller" parent="1" value="POST /approve | request-changes | reject | finalize" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="105" y="180" as="sourcePoint" /><mxPoint x="307" y="180" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te2" edge="1" source="t-controller" target="t-service" parent="1" value="xuLyQuyetDinh(input)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="307" y="240" as="sourcePoint" /><mxPoint x="542" y="240" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te3" edge="1" source="t-service" target="t-service" parent="1" value="Kiểm tra quyền, trạng thái, nhận xét/lý do" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="542" y="305" as="sourcePoint" /><mxPoint x="612" y="305" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te4" edge="1" source="t-service" target="t-coord" parent="1" value="commitChange(DUYET/YCCS/TU_CHOI/CHOT)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="542" y="370" as="sourcePoint" /><mxPoint x="780" y="370" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te5" edge="1" source="t-coord" target="t-main" parent="1" value="update DeTai + PheDuyet + Nhom" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="445" as="sourcePoint" /><mxPoint x="1015" y="445" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te6" edge="1" source="t-coord" target="t-bak" parent="1" value="saveSnapshot(afterState)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="520" as="sourcePoint" /><mxPoint x="1195" y="520" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te7" edge="1" source="t-coord" target="t-log" parent="1" value="createChangeLog(oldState,newState)" style="endArrow=block;html=1;rounded=0;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="780" y="595" as="sourcePoint" /><mxPoint x="1195" y="595" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te8" edge="1" source="t-service" target="t-controller" parent="1" value="Kết quả xử lý đề tài" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="542" y="675" as="sourcePoint" /><mxPoint x="307" y="675" as="targetPoint" /></mxGeometry></mxCell>
+        <mxCell id="te9" edge="1" source="t-controller" target="t-ui" parent="1" value="Thông báo kết quả" style="endArrow=open;html=1;rounded=0;dashed=1;fontFamily=Times New Roman;fontSize=13"><mxGeometry relative="1" as="geometry"><mxPoint x="307" y="735" as="sourcePoint" /><mxPoint x="105" y="735" as="targetPoint" /></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="class-bo-sung" name="06 - Class Diagram bo sung">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+        <mxCell id="c-title" value="Class Diagram bổ sung - Không thay thế class diagram gốc, chỉ thêm thành phần BakDb/LogDb" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=18;fontFamily=Times New Roman" vertex="1" parent="1"><mxGeometry x="120" y="25" width="930" height="40" as="geometry" /></mxCell>
+        <mxCell id="cls-nop" value="NopDeTaiService|+ nopDeTaiTuDeXuat()&#xa;+ chonDeTaiGiangVienDeXuat()&#xa;+ capNhatNoiDungDeTai()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="70" y="120" width="260" height="150" as="geometry" /></mxCell>
+        <mxCell id="cls-duyet" value="DuyetDeTaiService|+ pheDuyet()&#xa;+ yeuCauChinhSua()&#xa;+ tuChoi()&#xa;+ chotDeTai()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="70" y="360" width="260" height="165" as="geometry" /></mxCell>
+        <mxCell id="cls-coord" value="DataChangeCoordinator|+ mainDbClient&#xa;+ bakDbClient&#xa;+ logDbClient|+ commitChange()&#xa;+ backupSnapshot()&#xa;+ writeChangeLog()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="450" y="230" width="280" height="210" as="geometry" /></mxCell>
+        <mxCell id="cls-backup" value="BackupRepository|+ bakDbClient|+ saveSnapshot()&#xa;+ findSnapshotByEntity()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="840" y="115" width="250" height="165" as="geometry" /></mxCell>
+        <mxCell id="cls-log" value="ChangeLogRepository|+ logDbClient|+ createChangeLog()&#xa;+ findByEntity()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="840" y="350" width="250" height="165" as="geometry" /></mxCell>
+        <mxCell id="cls-history-svc" value="ChangeHistoryService|+ changeLogRepository|+ getHistoryByEntity()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="450" y="585" width="280" height="135" as="geometry" /></mxCell>
+        <mxCell id="cls-history-ctl" value="ChangeHistoryController|+ changeHistoryService|+ getHistory()" style="swimlane;html=1;whiteSpace=wrap;childLayout=stackLayout;horizontal=1;startSize=28;fontStyle=1;fontFamily=Times New Roman;fontSize=14;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="70" y="595" width="260" height="125" as="geometry" /></mxCell>
+        <mxCell id="ce1" edge="1" source="cls-nop" target="cls-coord" parent="1" value="uses" style="endArrow=open;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ce2" edge="1" source="cls-duyet" target="cls-coord" parent="1" value="uses" style="endArrow=open;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ce3" edge="1" source="cls-coord" target="cls-backup" parent="1" value="writes snapshot" style="endArrow=open;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ce4" edge="1" source="cls-coord" target="cls-log" parent="1" value="writes log" style="endArrow=open;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ce5" edge="1" source="cls-history-ctl" target="cls-history-svc" parent="1" value="uses" style="endArrow=open;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ce6" edge="1" source="cls-history-svc" target="cls-log" parent="1" value="reads history" style="endArrow=open;html=1;rounded=0;fontFamily=Times New Roman"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

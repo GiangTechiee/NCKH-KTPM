@@ -5,6 +5,7 @@
   "main": "dist/may-chu.js",
   "scripts": {
     "build": "tsc",
+    "test": "npm run build && node --test dist/modules/duyet-de-tai/business-layer/duyet-de-tai.service.test.js",
     "start": "node dist/may-chu.js",
     "dev": "ts-node -r tsconfig-paths/register src/may-chu.ts",
     "dev:watch": "nodemon --exec ts-node -r tsconfig-paths/register src/may-chu.ts",
